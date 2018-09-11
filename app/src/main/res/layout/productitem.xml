@@ -10,165 +10,138 @@
             type="personal.wl.jspos.pos.Product" />
 
     </data>
-
-    <android.support.constraint.ConstraintLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="30dp">
-
-
-        <TextView
-            android:id="@+id/bianhao"
-            android:layout_width="70dp"
-            android:layout_height="match_parent"
-            android:text="编号："
-            android:textSize="20dp"
-            tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="6dp" />
-
-        <TextView
-            android:id="@+id/proid"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:padding="2dp"
-            android:text="@{ product.Proid}"
-            android:textSize="30dp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/bianhao"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/bianhao"
-            app:layout_constraintTop_toTopOf="@+id/bianhao" />
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tiaoma"
-            android:layout_width="70dp"
-            android:layout_height="match_parent"
-            android:layout_marginTop="8dp"
-            android:text="条码："
-            android:textSize="20dp"
-            app:layout_constraintEnd_toEndOf="@+id/bianhao"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/bianhao" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
+                <TextView
+                    android:id="@+id/bianhao"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"
+                    android:text="编号："
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/barcode"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginEnd="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:padding="2dp"
-            android:text="@{product.barcode}"
-            android:textSize="30dp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/tiaoma"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tiaoma"
-            app:layout_constraintTop_toTopOf="@+id/tiaoma"
-            app:layout_constraintVertical_bias="0.617" />
+                <TextView
+                    android:id="@+id/proid"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="left"
+                    android:text="@{ product.Proid}"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
+            </LinearLayout>
 
-        <TextView
-            android:id="@+id/pronamelabel"
-            android:layout_width="70dp"
-            android:layout_height="match_parent"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginTop="8dp"
-            android:text="名称："
-            android:textSize="20dp"
-            app:layout_constraintEnd_toEndOf="@+id/tiaoma"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tiaoma" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
+                <TextView
+                    android:id="@+id/tiaoma"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"
+                    android:text="条码："
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/proname"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginEnd="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginStart="8dp"
-            android:gravity="center"
-            android:padding="2dp"
-            android:text="@{product.ProName}"
-            android:textSize="30dp"
+                <TextView
+                    android:id="@+id/barcode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="left"
+                    android:text="@{product.barcode}"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
+            </LinearLayout>
 
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/pronamelabel"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/pronamelabel"
-            app:layout_constraintTop_toTopOf="@+id/pronamelabel" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/speclabel"
-            android:layout_width="70dp"
-            android:layout_height="match_parent"
-            android:layout_marginTop="8dp"
-            android:text="规格："
-            android:textSize="20dp"
-            app:layout_constraintEnd_toEndOf="@+id/pronamelabel"
-            app:layout_constraintTop_toBottomOf="@+id/pronamelabel" />
+                <TextView
+                    android:id="@+id/pronamelabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"
+                    android:text="名称："
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
 
+                <TextView
+                    android:id="@+id/proname"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="left"
+                    android:padding="2dp"
+                    android:text="@{product.ProName}"
 
-        <TextView
-            android:id="@+id/spec"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginEnd="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginStart="8dp"
-            android:gravity="center"
-            android:padding="2dp"
-            android:text="@{product.spec }"
-            android:textSize="30dp"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
+            </LinearLayout>
 
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/speclabel"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/speclabel"
-            app:layout_constraintTop_toTopOf="@+id/speclabel" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="5"
+                android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/pricelabel"
-            android:layout_width="70dp"
-            android:layout_height="match_parent"
-            android:layout_marginTop="8dp"
-            android:text="价格："
-            android:textSize="20dp"
-            app:layout_constraintEnd_toEndOf="@+id/speclabel"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/speclabel" />
+                <TextView
+                    android:id="@+id/speclabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"
+                    android:text="规格："
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
 
+                <TextView
+                    android:id="@+id/spec"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="left"
+                    android:text="@{product.spec }"
 
-        <TextView
-            android:id="@+id/price"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:gravity="right"
-            android:text="@{ Double.toString(product.NormalPrice)}"
-            android:textSize="30dp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/pricelabel"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/pricelabel"
-            app:layout_constraintTop_toTopOf="@+id/pricelabel" />
-    </android.support.constraint.ConstraintLayout>
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/pricelabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"
+                    android:text="价格："
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/price"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:text="@{ Double.toString(product.NormalPrice)}"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
 </layout>

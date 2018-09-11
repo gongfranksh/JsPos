@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="saleproduct"
+            type="personal.wl.jspos.pos.SaleDaily" />
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:stretchColumns="*">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_height="40dp"
+                    android:gravity="center"
+                    android:text="商品编号"
+                    android:textStyle="bold" />
+
+
+                <TextView
+                    android:layout_height="40dp"
+                    android:gravity="center"
+                    android:text="数量"
+                    android:textStyle="bold" />
+
+
+                <TextView
+                    android:layout_height="40dp"
+                    android:gravity="center"
+                    android:text="单价"
+                    android:textStyle="bold" />
+
+
+                <TextView
+                    android:layout_height="40dp"
+                    android:gravity="center"
+                    android:text="总价"
+                    android:textStyle="bold" />
+
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
+                    android:id="@+id/orderproid"
+                    android:gravity="right"
+                    android:text="@{saleproduct.proId}"
+                    android:textSize="40dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/orderunitqty"
+                    android:gravity="right"
+
+                    android:text="@{Double.toString(saleproduct.saleQty)}"
+                    android:textSize="40dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/orderunitprice"
+                    android:gravity="right"
+
+                    android:text="@{Double.toString(saleproduct.normalPrice)}"
+                    android:textSize="40dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/orderunitamout"
+                    android:gravity="right"
+
+                    android:text="@{Double.toString(saleproduct.saleAmt)}"
+                    android:textSize="40dp"
+                    android:textStyle="bold" />
+            </TableRow>
+
+        </TableLayout>
+    </android.support.constraint.ConstraintLayout>
+</layout>
