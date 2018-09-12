@@ -87,12 +87,12 @@
                 android:layout_weight="3"
                 android:background="#40f1"></android.support.v7.widget.RecyclerView>
 
-            <com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView
+            <android.support.v7.widget.RecyclerView
                 android:id="@+id/saleorder"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="#4f21"></com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView>
+                android:background="#4f21"></android.support.v7.widget.RecyclerView>
         </LinearLayout>
 
         <LinearLayout

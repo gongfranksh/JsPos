@@ -15,6 +15,8 @@ import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
 import android.view.Gravity;
+import android.view.MotionEvent;
+import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -22,6 +24,13 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.yanzhenjie.recyclerview.swipe.SwipeMenu;
+import com.yanzhenjie.recyclerview.swipe.SwipeMenuBridge;
+import com.yanzhenjie.recyclerview.swipe.SwipeMenuCreator;
+import com.yanzhenjie.recyclerview.swipe.SwipeMenuItem;
+import com.yanzhenjie.recyclerview.swipe.SwipeMenuItemClickListener;
+import com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,10 +53,10 @@ public class POS extends Activity {
     private SaleDaily saleDaily;
     private SaleOrderAdapter saleOrderAdapter;
     private ProductAdapter productAdapter;
+    private VelocityTracker mVelocityTracker;
 
-
-    private String branch_selected=null;
-    private String pos_machine_selected=null;
+    private String branch_selected = null;
+    private String pos_machine_selected = null;
 
     private TextView totalamt;
 
@@ -62,11 +71,10 @@ public class POS extends Activity {
 
         showPreference();
         TextView branch = findViewById(R.id.branch);
-        branch.setText(branch.getText()+branch_selected);
+        branch.setText(branch.getText() + branch_selected);
 
         TextView posmachine = findViewById(R.id.posmachine);
-        posmachine.setText(posmachine.getText()+pos_machine_selected);
-
+        posmachine.setText(posmachine.getText() + pos_machine_selected);
 
 
         searchView = findViewById(R.id.searchproduct);
@@ -80,7 +88,7 @@ public class POS extends Activity {
         searchView.setQueryHint(spanText);
 
         EditText textView = (EditText) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
-        android.widget.LinearLayout.LayoutParams textLayoutParams = (android.widget.LinearLayout.LayoutParams) searchView.getLayoutParams();
+        LinearLayout.LayoutParams textLayoutParams = (LinearLayout.LayoutParams) searchView.getLayoutParams();
         textLayoutParams.height = textLayoutParams.WRAP_CONTENT;
         textView.setLayoutParams(textLayoutParams);
         textView.setTextSize(40);// 设置输入字体大小
@@ -91,23 +99,48 @@ public class POS extends Activity {
 
         final RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.productlist);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
-
-        final RecyclerView salesorderview = findViewById(R.id.saleorder);
-
-
-        salesorderview.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(POS.this, DividerItemDecoration.VERTICAL));
 
-        //        productAdapter = new ProductAdapter(this, prolist);
+
+//        final RecyclerView salesorderview = findViewById(R.id.saleorder);
 
 
-        saleOrderAdapter = new SaleOrderAdapter(POS.this, saleDailyList);
+        final SwipeMenuRecyclerView salesorderview = findViewById(R.id.saleorder);
+
+        salesorderview.setSwipeMenuCreator(swipeMenuCreator);
+        salesorderview.setSwipeMenuItemClickListener(mMenuItemClickListener);
 
 
-        salesorderview.setAdapter(saleOrderAdapter);
+        salesorderview.setLayoutManager(new LinearLayoutManager(this));
         salesorderview.addItemDecoration(new DividerItemDecoration(POS.this, DividerItemDecoration.VERTICAL));
+        saleOrderAdapter = new SaleOrderAdapter(POS.this, saleDailyList);
+        salesorderview.setAdapter(saleOrderAdapter);
 
+
+//        saleOrderAdapter.setOnItemClickListener(new SaleOrderAdapter.onItemClickListener() {
+//            @Override
+//            public void onItemClick(int position) {
+//                Toast.makeText(POS.this, "单击：" + position + "个Item", Toast.LENGTH_SHORT).show();
+//            }
+//
+//            @Override
+//            public void onItemLongClick(int position) {
+//                Toast.makeText(POS.this, "长按了：" + position + "个Item", Toast.LENGTH_SHORT).show();
+//
+//            }
+//        });
+//
+//
+//        salesorderview.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//
+//                Toast.makeText(POS.this, "be touch", Toast.LENGTH_LONG).show();
+//                return false;
+//            }
+//        });
+//
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -127,12 +160,6 @@ public class POS extends Activity {
                     productAdapter = new ProductAdapter(POS.this, prolist);
                     mRecyclerView.setAdapter(productAdapter);
 
-//                    productAdapter.notifyDataSetChanged();
-//                    for (int k = 0; k < getresult.size() ; k++) {
-//                        prolist.add(getresult.get(k));
-//                    }
-//
-//                   productAdapter.notifyDataSetChanged();
                     double tmp_qty = 1.00;
                     double tmp_price = 0.00;
                     double tmp_amount = 0.00;
@@ -149,15 +176,10 @@ public class POS extends Activity {
 
 
                     saleDailyList.add(saleDaily);
+                    total_amount();
                     saleOrderAdapter.notifyDataSetChanged();
 
-                    double tmp_subtotal = 0.00;
-                    for (int k = 0; k < saleDailyList.size() ; k++) {
 
-                        tmp_subtotal=tmp_subtotal+saleDailyList.get(k).getSaleAmt();
-                    }
-
-                    totalamt.setText(Double.toString(tmp_subtotal));
                     searchView.setQuery("", false);
                     return true;
                 }
@@ -172,12 +194,156 @@ public class POS extends Activity {
     }
 
 
-
-
     private void showPreference() {
         SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(this);
         branch_selected = pre.getString("branch_selected", "0");
         pos_machine_selected = pre.getString("pos_machine", "0");
         String[] branch = getResources().getStringArray(R.array.pref_branch_list_name);
+    }
+
+
+    /**
+     * 菜单创建器，在Item要创建菜单的时候调用。
+     */
+    private SwipeMenuCreator swipeMenuCreator = new SwipeMenuCreator() {
+        @Override
+        public void onCreateMenu(SwipeMenu swipeLeftMenu, SwipeMenu swipeRightMenu, int viewType) {
+            int width = getResources().getDimensionPixelSize(R.dimen.dp_70);
+            // 1. MATCH_PARENT 自适应高度，保持和Item一样高;
+            // 2. 指定具体的高，比如80;
+            // 3. WRAP_CONTENT，自身高度，不推荐;
+            int height = ViewGroup.LayoutParams.MATCH_PARENT;
+
+            // 添加左侧的，如果不添加，则左侧不会出现菜单。
+            {
+                SwipeMenuItem addItem = new SwipeMenuItem(POS.this)
+                        .setBackground(R.drawable.selector_green)
+                        .setImage(R.mipmap.ic_action_add)
+                        .setWidth(width)
+                        .setHeight(height);
+                swipeLeftMenu.addMenuItem(addItem); // 添加菜单到左侧。
+
+                SwipeMenuItem closeItem = new SwipeMenuItem(POS.this)
+                        .setBackground(R.drawable.selector_red)
+                        .setImage(R.mipmap.ic_action_close)
+                        .setWidth(width)
+                        .setHeight(height);
+                swipeLeftMenu.addMenuItem(closeItem); // 添加菜单到左侧。
+            }
+
+            // 添加右侧的，如果不添加，则右侧不会出现菜单。
+            {
+                SwipeMenuItem deleteItem = new SwipeMenuItem(POS.this)
+                        .setBackground(R.drawable.selector_red)
+                        .setImage(R.mipmap.ic_action_delete)
+                        .setText("删除")
+                        .setTextColor(Color.WHITE)
+                        .setWidth(width)
+                        .setHeight(height);
+                swipeRightMenu.addMenuItem(deleteItem);// 添加菜单到右侧。
+
+                SwipeMenuItem addItem = new SwipeMenuItem(POS.this)
+                        .setBackground(R.drawable.selector_green)
+                        .setText("添加")
+                        .setTextColor(Color.WHITE)
+                        .setWidth(width)
+                        .setHeight(height);
+                swipeRightMenu.addMenuItem(addItem); // 添加菜单到右侧。
+            }
+        }
+    };
+
+    /**
+     * RecyclerView的Item的Menu点击监听。
+     */
+    private SwipeMenuItemClickListener mMenuItemClickListener = new SwipeMenuItemClickListener() {
+        @Override
+        public void onItemClick(SwipeMenuBridge menuBridge) {
+            menuBridge.closeMenu();
+
+            int direction = menuBridge.getDirection(); // 左侧还是右侧菜单。
+            int adapterPosition = menuBridge.getAdapterPosition(); // RecyclerView的Item的position。
+            int menuPosition = menuBridge.getPosition(); // 菜单在RecyclerView的Item中的Position。
+
+            if (direction == SwipeMenuRecyclerView.RIGHT_DIRECTION) {
+                Toast.makeText(POS.this, "list第" + adapterPosition + "; 右侧菜单第" + menuPosition, Toast.LENGTH_SHORT).show();
+
+                switch (menuPosition) {
+                    case 0:
+                        posorderdelete(adapterPosition);
+                        break;
+                    default:
+                        break;
+                }
+            } else if (direction == SwipeMenuRecyclerView.LEFT_DIRECTION) {
+
+
+                switch (menuPosition) {
+                    case 0:
+                        addorderqty(adapterPosition);
+                        break;
+                    case 1:
+                        removeorderqty(adapterPosition);
+                        break;
+
+                    default:
+                        break;
+                }
+                Toast.makeText(POS.this, "list第" + adapterPosition + "; 左侧菜单第" + menuPosition, Toast.LENGTH_SHORT).show();
+            }
+        }
+    };
+
+
+    private void posorderdelete(int position) {
+        saleDailyList.remove(position);
+        saleOrderAdapter.notifyDataSetChanged();
+        total_amount();
+    }
+
+
+    private void addorderqty(int position) {
+        SaleDaily needUpdate = saleDailyList.get(position);
+        final double item_qty;
+        final double item_amt;
+        item_qty = needUpdate.getSaleQty() + 1;
+        needUpdate.setSaleQty(item_qty);
+        item_amt = item_qty * needUpdate.getNormalPrice();
+        needUpdate.setSaleAmt(item_amt);
+        saleDailyList.set(position, needUpdate);
+        saleOrderAdapter.notifyDataSetChanged();
+        total_amount();
+    }
+
+    private void removeorderqty(int position) {
+        SaleDaily needUpdate = saleDailyList.get(position);
+        final double item_qty;
+        final double item_amt;
+
+        item_qty = needUpdate.getSaleQty() - 1;
+        if (item_qty > 0) {
+
+            needUpdate.setSaleQty(item_qty);
+            item_amt = item_qty * needUpdate.getNormalPrice();
+            needUpdate.setSaleAmt(item_amt);
+            saleDailyList.set(position, needUpdate);
+            saleOrderAdapter.notifyDataSetChanged();
+        } else {
+
+            posorderdelete(position);
+        }
+        total_amount();
+    }
+
+
+    private void total_amount() {
+        double tmp_subtotal = 0.00;
+        for (int k = 0; k < saleDailyList.size(); k++) {
+
+            tmp_subtotal = tmp_subtotal + saleDailyList.get(k).getSaleAmt();
+        }
+
+        totalamt.setText(Double.toString(tmp_subtotal));
+
     }
 }

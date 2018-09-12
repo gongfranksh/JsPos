@@ -36,5 +36,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation 'org.greenrobot:greendao-generator:3.2.2'
     implementation 'org.greenrobot:greendao:3.2.2'
+    implementation 'com.yanzhenjie:recyclerview-swipe:1.1.4'
     implementation files('libs/jtds-1.2.7.jar')
+
 }

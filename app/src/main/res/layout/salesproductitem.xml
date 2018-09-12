@@ -11,6 +11,7 @@
     </data>
 
     <LinearLayout
+        android:id="@+id/li_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -55,6 +56,11 @@
             android:textSize="30dp"
             android:textStyle="bold" />
 
-    </LinearLayout>
+        <TextView
+            android:id="@+id/textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
 
+    </LinearLayout>
 </layout>
