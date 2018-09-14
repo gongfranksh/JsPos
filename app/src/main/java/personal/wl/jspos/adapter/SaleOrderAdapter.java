@@ -20,8 +20,10 @@ import java.util.List;
 import personal.wl.jspos.BR;
 import personal.wl.jspos.R;
 import personal.wl.jspos.pos.BranchEmployee;
+import personal.wl.jspos.pos.Product;
 import personal.wl.jspos.pos.SaleDaily;
 
+import static personal.wl.jspos.method.PosHandleDB.QueryProductByCode;
 import static personal.wl.jspos.method.PosHandleDB.getSaleid;
 import static personal.wl.jspos.method.PosHandleDB.isSaleid;
 
@@ -99,6 +101,14 @@ public class SaleOrderAdapter extends RecyclerView.Adapter<SaleOrderAdapter.Sale
     public class SaleOrderViewHolder extends RecyclerView.ViewHolder {
         private EditText et_saleid;
         private TextView tv_salename;
+
+        private TextView tv_proname;
+        private TextView tv_proid;
+
+        private EditText et_saleqty;
+        private TextView tv_unitamout;
+
+        private TextView tv_price;
         private LinearLayout li_layout;
 
         public ViewDataBinding getBinding() {
@@ -116,6 +126,59 @@ public class SaleOrderAdapter extends RecyclerView.Adapter<SaleOrderAdapter.Sale
             et_saleid = (EditText) itemView.findViewById(R.id.ordersalerid);
             li_layout = (LinearLayout) itemView.findViewById(R.id.li_layout);
             tv_salename = itemView.findViewById(R.id.ordersalename);
+
+
+            tv_proid = itemView.findViewById(R.id.orderproid);
+            tv_proname = itemView.findViewById(R.id.ordeproname);
+            et_saleqty = itemView.findViewById(R.id.orderinputqty);
+            tv_unitamout = itemView.findViewById(R.id.orderunitamout);
+
+
+            tv_price = itemView.findViewById(R.id.orderunitprice);
+
+
+            et_saleqty.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+//                    double tmp_price, tmp_qty, tmp_lineamount;
+//                    tmp_price = Double.parseDouble(tv_price.getText().toString());
+//                    tmp_qty = Double.parseDouble(s.toString());
+//                    tmp_lineamount = tmp_price * tmp_qty;
+//                    tv_unitamout.setText(Double.toString(tmp_lineamount));
+                }
+            });
+
+
+            tv_proid.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    List<Product> tmp_products = QueryProductByCode(s.toString().trim());
+                    if (tmp_products.size() != 0) {
+                        tv_proname.setText(tmp_products.get(0).getProSName());
+                    }
+                }
+            });
+
 
             et_saleid.addTextChangedListener(new TextWatcher() {
                 @Override
