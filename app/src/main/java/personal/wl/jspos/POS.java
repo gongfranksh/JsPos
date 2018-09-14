@@ -173,11 +173,12 @@ public class POS extends Activity {
                     saleDaily.setNormalPrice(tmp_price);
                     saleDaily.setSaleAmt(tmp_amount);
                     saleDaily.setSaleQty(tmp_qty);
+                    saleDaily.setSalerId("");
 
-
-                    saleDailyList.add(saleDaily);
-                    total_amount();
-                    saleOrderAdapter.notifyDataSetChanged();
+                    addsalesdaily(saleDaily);
+//                    saleDailyList.add(saleDaily);
+//                    total_amount();
+//                    saleOrderAdapter.notifyDataSetChanged();
 
 
                     searchView.setQuery("", false);
@@ -295,6 +296,26 @@ public class POS extends Activity {
     };
 
 
+    private void addsalesdaily(SaleDaily sd) {
+        Boolean isFound = false;
+        sd.getProId();
+        int offset = 0;
+        for (offset = 0; offset < saleDailyList.size(); offset++) {
+            if (sd.getProId().equals(saleDailyList.get(offset).getProId())) {
+                isFound = true;
+                break;
+            }
+        }
+        if (isFound) {
+            addorderqty(offset);
+        } else {
+            saleDailyList.add(sd);
+            saleOrderAdapter.notifyDataSetChanged();
+            total_amount();
+        }
+    }
+
+
     private void posorderdelete(int position) {
         saleDailyList.remove(position);
         saleOrderAdapter.notifyDataSetChanged();
@@ -322,14 +343,12 @@ public class POS extends Activity {
 
         item_qty = needUpdate.getSaleQty() - 1;
         if (item_qty > 0) {
-
             needUpdate.setSaleQty(item_qty);
             item_amt = item_qty * needUpdate.getNormalPrice();
             needUpdate.setSaleAmt(item_amt);
             saleDailyList.set(position, needUpdate);
             saleOrderAdapter.notifyDataSetChanged();
         } else {
-
             posorderdelete(position);
         }
         total_amount();
@@ -342,8 +361,7 @@ public class POS extends Activity {
 
             tmp_subtotal = tmp_subtotal + saleDailyList.get(k).getSaleAmt();
         }
-
-        totalamt.setText(Double.toString(tmp_subtotal));
+        totalamt.setText(String.format("%1$,.1f",tmp_subtotal));
 
     }
 }

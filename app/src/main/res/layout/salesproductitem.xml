@@ -5,6 +5,8 @@
 
     <data>
 
+        <import type="personal.wl.jspos.db.InverseMethodTools" />
+
         <variable
             name="saleproduct"
             type="personal.wl.jspos.pos.SaleDaily" />
@@ -27,12 +29,11 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/orderunitqty"
+            android:id="@+id/ordeproname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="right"
-            android:text="@{Double.toString(saleproduct.saleQty)}"
             android:textSize="30dp"
             android:textStyle="bold" />
 
@@ -46,6 +47,42 @@
             android:textSize="30dp"
             android:textStyle="bold" />
 
+        <EditText
+            android:id="@+id/ordersalerid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:inputType="number"
+            android:lines="1"
+            android:maxLength="5"
+            android:text="@={saleproduct.SalerId}"
+            android:textSize="30dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/ordersalename"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:lines="1"
+            android:textSize="30dp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/orderinputqty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:inputType="number"
+            android:lines="1"
+            android:maxLength="5"
+            android:text="@={ saleproduct.saleQty}"
+            android:textSize="30dp"
+            android:textStyle="bold" />
+
         <TextView
             android:id="@+id/orderunitamout"
             android:layout_width="match_parent"
@@ -55,12 +92,5 @@
             android:text="@{Double.toString(saleproduct.saleAmt)}"
             android:textSize="30dp"
             android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/textview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
-
     </LinearLayout>
 </layout>

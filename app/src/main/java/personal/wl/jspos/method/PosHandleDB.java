@@ -9,6 +9,7 @@ import org.greenrobot.greendao.query.QueryBuilder;
 import java.util.List;
 
 import personal.wl.jspos.db.DBConnect;
+import personal.wl.jspos.pos.BranchEmployee;
 import personal.wl.jspos.pos.BranchEmployeeDao;
 import personal.wl.jspos.pos.DaoSession;
 import personal.wl.jspos.pos.Product;
@@ -43,14 +44,37 @@ public class PosHandleDB {
 
         condn.whereOr(ProductBarCodeDao.Properties.Barcode.like("%" + BarCode + "%"),
                 ProductBarCodeDao.Properties.Proid.like("%" + BarCode + "%")
-                );
+        );
         barcodelist = condn.build().list();
         for (ProductBarCode pb : barcodelist) {
             QueryBuilder cond = productDao.queryBuilder();
             cond.where(ProductDao.Properties.Proid.eq((pb.getProid())));
-            productList =cond.build().list();
+            productList = cond.build().list();
         }
-        return  productList;
+        return productList;
+    }
+
+
+    public static Boolean isSaleid(String saleidcode) {
+        BranchEmployeeDao branchEmployeeDao = DBConnect.getInstances().getDaoSession().getBranchEmployeeDao();
+        QueryBuilder cond = branchEmployeeDao.queryBuilder();
+        cond.where(BranchEmployeeDao.Properties.Empid.eq(saleidcode));
+        List<BranchEmployee> emplist = cond.build().list();
+        if (emplist.size() != 0) {
+            return true;
+        }
+        return false;
+    }
+
+    public static BranchEmployee getSaleid(String saleidcode) {
+        BranchEmployeeDao branchEmployeeDao = DBConnect.getInstances().getDaoSession().getBranchEmployeeDao();
+        QueryBuilder cond = branchEmployeeDao.queryBuilder();
+        cond.where(BranchEmployeeDao.Properties.Empid.eq(saleidcode));
+        List<BranchEmployee> emplist = cond.build().list();
+        if (emplist.size() != 0) {
+            return emplist.get(0);
+        }
+        return null;
     }
 
 
