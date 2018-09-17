@@ -407,6 +407,7 @@ public class SyncJspotDB extends AsyncTask<String, Integer, Integer>
         pr.setBrandId((String) item.get("BrandId"));
         pr.setSpec((String) item.get("Spec"));
         pr.setStatus((String) item.get("Status"));
+        pr.setInTax(Double2String(item.get("InTax").toString()));
         pr.setNormalPrice(Double2String(item.get("NormalPrice").toString()));
         pr.setPosdiscount(Double2String(item.get("posdiscount").toString()));
         pr.setTimeStamp(Long2String(item.get("timestamp").toString()));

@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -136,28 +137,20 @@ public class SaleOrderAdapter extends RecyclerView.Adapter<SaleOrderAdapter.Sale
 
             tv_price = itemView.findViewById(R.id.orderunitprice);
 
-
-            et_saleqty.addTextChangedListener(new TextWatcher() {
+            et_saleqty.setOnEditorActionListener(new TextView.OnEditorActionListener() {
                 @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                    Toast.makeText(itemView.getContext(), v.getText(), Toast.LENGTH_LONG).show();
+                    double tmp_price, tmp_qty, tmp_lineamount;
+                    tmp_price = Double.parseDouble(tv_price.getText().toString());
+                    tmp_qty = Double.parseDouble(v.getText().toString());
+                    tmp_lineamount = tmp_price * tmp_qty;
+                    tv_unitamout.setText(Double.toString(tmp_lineamount));
 
-                }
+                    return false;
 
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-//                    double tmp_price, tmp_qty, tmp_lineamount;
-//                    tmp_price = Double.parseDouble(tv_price.getText().toString());
-//                    tmp_qty = Double.parseDouble(s.toString());
-//                    tmp_lineamount = tmp_price * tmp_qty;
-//                    tv_unitamout.setText(Double.toString(tmp_lineamount));
                 }
             });
-
 
             tv_proid.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -205,8 +198,6 @@ public class SaleOrderAdapter extends RecyclerView.Adapter<SaleOrderAdapter.Sale
 
                     {
                         Toast.makeText(itemView.getContext(), "5位编码", Toast.LENGTH_LONG).show();
-
-
                     }
                 }
             });

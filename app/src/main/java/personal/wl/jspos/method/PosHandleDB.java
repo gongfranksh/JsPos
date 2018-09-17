@@ -18,7 +18,6 @@ import personal.wl.jspos.pos.ProductBarCodeDao;
 import personal.wl.jspos.pos.ProductDao;
 
 public class PosHandleDB {
-
     public static List<Product> getProductList() {
 
         ProductDao productDao = DBConnect.getInstances().getDaoSession().getProductDao();

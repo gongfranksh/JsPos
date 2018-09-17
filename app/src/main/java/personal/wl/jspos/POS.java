@@ -1,9 +1,12 @@
 package personal.wl.jspos;
 
+import android.app.AlertDialog;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.app.Activity;
+import android.os.Handler;
+import android.os.Message;
 import android.preference.PreferenceManager;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,6 +15,7 @@ import android.support.v7.widget.SearchView;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
+import android.text.format.DateFormat;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
 import android.view.Gravity;
@@ -33,19 +37,35 @@ import com.yanzhenjie.recyclerview.swipe.SwipeMenuItemClickListener;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.PriorityQueue;
 
 import personal.wl.jspos.adapter.ProductAdapter;
 import personal.wl.jspos.adapter.SaleOrderAdapter;
+import personal.wl.jspos.method.PosPayMent;
+import personal.wl.jspos.method.PosTabInfo;
+import personal.wl.jspos.method.PosTranscation;
 import personal.wl.jspos.pos.Product;
 import personal.wl.jspos.pos.SaleDaily;
 
 import static personal.wl.jspos.method.PosHandleDB.QueryProductBarCodeByCode;
 import static personal.wl.jspos.method.PosHandleDB.QueryProductByCode;
 import static personal.wl.jspos.method.PosHandleDB.getProductList;
+import static personal.wl.jspos.method.PosPayMent.PAYMENT_ALIPAY;
+import static personal.wl.jspos.method.PosPayMent.PAYMENT_ALIPAY_CODE;
+import static personal.wl.jspos.method.PosPayMent.PAYMENT_CASH;
+import static personal.wl.jspos.method.PosPayMent.PAYMENT_CASH_CODE;
+import static personal.wl.jspos.method.PosPayMent.PAYMENT_WEIXIN;
+import static personal.wl.jspos.method.PosPayMent.PAYMENT_WEIXIN_CODE;
+import static personal.wl.jspos.method.PosPayMent.getPayMentCode;
 
 public class POS extends Activity {
+
+
+    private static final int msgKey = 901;
+
+
     private SearchView searchView;
     private List<Product> prolist = new ArrayList<>();
     private List<SaleDaily> saleDailyList = new ArrayList<SaleDaily>();
@@ -54,11 +74,14 @@ public class POS extends Activity {
     private SaleOrderAdapter saleOrderAdapter;
     private ProductAdapter productAdapter;
     private VelocityTracker mVelocityTracker;
+    private Button bt_submit;
 
     private String branch_selected = null;
     private String pos_machine_selected = null;
 
     private TextView totalamt;
+
+    private TextView saletransdate;
 
 
     @Override
@@ -66,14 +89,18 @@ public class POS extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pos);
 
-
+        saletransdate = findViewById(R.id.saletransdate);
         totalamt = findViewById(R.id.totoalamount);
+        bt_submit = findViewById(R.id.submitOrder);
+
+        new TimeThread().start();
+
 
         showPreference();
         TextView branch = findViewById(R.id.branch);
         branch.setText(branch.getText() + branch_selected);
 
-        TextView posmachine = findViewById(R.id.posmachine);
+        final TextView posmachine = findViewById(R.id.posmachine);
         posmachine.setText(posmachine.getText() + pos_machine_selected);
 
 
@@ -142,6 +169,21 @@ public class POS extends Activity {
 //        });
 //
 
+        bt_submit.setOnClickListener(new View.OnClickListener() {
+            PosTranscation posTranscation = new PosTranscation(POS.this);
+
+            @Override
+            public void onClick(View v) {
+
+                posTranscation.SaleTranstion(saleDailyList);
+//                showPaymentDialog(this);
+                cleartranstion();
+
+
+            }
+        });
+
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
@@ -170,10 +212,10 @@ public class POS extends Activity {
                     saleDaily = new SaleDaily();
                     saleDaily.setProId(prolist.get(0).getProid());
                     saleDaily.setBarCode(prolist.get(0).getBarcode());
-                    saleDaily.setNormalPrice(tmp_price);
+                    saleDaily.setCurPrice(tmp_price);
                     saleDaily.setSaleAmt(tmp_amount);
                     saleDaily.setSaleQty(tmp_qty);
-                    saleDaily.setSalerId("");
+//                    saleDaily.setSalerId("");
 
                     addsalesdaily(saleDaily);
 //                    saleDailyList.add(saleDaily);
@@ -194,6 +236,58 @@ public class POS extends Activity {
 
     }
 
+    private void insertSaleDaily(List<SaleDaily> transactions, int paymode) {
+
+        char tmp_paymode = getPayMentCode(paymode);
+        for (int i = 0; i < transactions.size(); i++) {
+
+
+        }
+    }
+
+    private void showLogonViewDialog(View.OnClickListener view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setIcon(R.mipmap.ic_launcher);
+        builder.setTitle(R.string.title_activity_login);
+
+        /**
+         * 设置内容区域为自定义View
+         */
+        LinearLayout loginDialog = (LinearLayout) getLayoutInflater().inflate(R.layout.logonviewdialog, null);
+        builder.setView(loginDialog);
+
+        builder.setCancelable(true);
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void showPaymentDialog(View.OnClickListener view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setIcon(R.mipmap.ic_launcher);
+        builder.setTitle("付款输入");
+
+        /**
+         * 设置内容区域为自定义View
+         */
+        LinearLayout PaymentDialog = (LinearLayout) getLayoutInflater().inflate(R.layout.paymentviewdialog, null);
+        builder.setView(PaymentDialog);
+
+        builder.setCancelable(true);
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+
+    private void cleartranstion() {
+
+        saleDailyList.removeAll(saleDailyList);
+        prolist.removeAll(prolist);
+//                saleDailyList.remove()
+        saleOrderAdapter.notifyDataSetChanged();
+        productAdapter.notifyDataSetChanged();
+        totalamt.setText("0.0");
+
+    }
 
     private void showPreference() {
         SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(this);
@@ -361,7 +455,46 @@ public class POS extends Activity {
 
             tmp_subtotal = tmp_subtotal + saleDailyList.get(k).getSaleAmt();
         }
-        totalamt.setText(String.format("%1$,.1f",tmp_subtotal));
+        totalamt.setText(String.format("%1$,.1f", tmp_subtotal));
 
     }
+//-----
+
+
+    public class TimeThread extends Thread {
+        @Override
+        public void run() {
+            do {
+                try {
+                    Thread.sleep(1000);
+                    Message msg = new Message();
+                    msg.what = msgKey;
+                    mHandler.sendMessage(msg);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            } while (true);
+        }
+    }
+
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case msgKey:
+                    long sysTime = System.currentTimeMillis();
+                    CharSequence sysTimeStr = DateFormat
+                            .format(" yyyy-MM-dd hh:mm:ss", sysTime);
+                    saletransdate.setText("日期：" + sysTimeStr);
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
+
+//---
+
+
 }

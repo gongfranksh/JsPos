@@ -25,7 +25,7 @@
             android:layout_weight="1"
             android:gravity="right"
             android:text="@{saleproduct.proId}"
-            android:textSize="30dp"
+            android:textSize="20dp"
             android:textStyle="bold" />
 
         <TextView
@@ -34,17 +34,17 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="right"
-            android:textSize="30dp"
+            android:textSize="20dp"
             android:textStyle="bold" />
 
-        <TextView
+        <EditText
             android:id="@+id/orderunitprice"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="right"
-            android:text="@{Double.toString(saleproduct.normalPrice)}"
-            android:textSize="30dp"
+            android:text="@={ saleproduct.curPrice}"
+            android:textSize="20dp"
             android:textStyle="bold" />
 
         <EditText
@@ -57,7 +57,7 @@
             android:lines="1"
             android:maxLength="5"
             android:text="@={saleproduct.SalerId}"
-            android:textSize="30dp"
+            android:textSize="20dp"
             android:textStyle="bold" />
 
         <TextView
@@ -67,7 +67,7 @@
             android:layout_weight="1"
             android:gravity="right"
             android:lines="1"
-            android:textSize="30dp"
+            android:textSize="20dp"
             android:textStyle="bold" />
 
         <EditText
@@ -80,7 +80,7 @@
             android:lines="1"
             android:maxLength="5"
             android:text="@={ saleproduct.saleQty}"
-            android:textSize="30dp"
+            android:textSize="20dp"
             android:textStyle="bold" />
 
         <TextView
@@ -89,8 +89,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="right"
-            android:text="@{Double.toString(saleproduct.saleAmt)}"
-            android:textSize="30dp"
+            android:text="@={ saleproduct.saleAmt}"
+            android:textSize="20dp"
             android:textStyle="bold" />
     </LinearLayout>
 </layout>
