@@ -25,6 +25,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -74,7 +75,7 @@ public class POS extends Activity {
     private SaleOrderAdapter saleOrderAdapter;
     private ProductAdapter productAdapter;
     private VelocityTracker mVelocityTracker;
-    private Button bt_submit;
+
 
     private String branch_selected = null;
     private String pos_machine_selected = null;
@@ -83,6 +84,9 @@ public class POS extends Activity {
 
     private TextView saletransdate;
     private TextView saleid;
+    private ImageButton ib_submit_cash;
+    private ImageButton ib_submit_alipay;
+    private ImageButton ib_submit_weixin;
 
 
     @Override
@@ -92,8 +96,13 @@ public class POS extends Activity {
 
         saletransdate = findViewById(R.id.saletransdate);
         totalamt = findViewById(R.id.totoalamount);
-        bt_submit = findViewById(R.id.submitOrder);
+
         saleid = findViewById(R.id.saleid);
+
+        ib_submit_cash = findViewById(R.id.submit_cash);
+        ib_submit_alipay = findViewById(R.id.submit_alipay);
+        ib_submit_weixin = findViewById(R.id.submit_weixin);
+
         new TimeThread().start();
 
 
@@ -170,16 +179,36 @@ public class POS extends Activity {
 //        });
 //
 
-        bt_submit.setOnClickListener(new View.OnClickListener() {
 
+        ib_submit_cash.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 PosTranscation posTranscation = new PosTranscation(POS.this);
-                posTranscation.SaleTranstion(saleDailyList,PAYMENT_CASH);
-//                showPaymentDialog(this);
+                posTranscation.SaleTranstion(saleDailyList, PAYMENT_CASH);
                 cleartranstion();
                 saleid.setText("交易流水:" + posTranscation.getTranscationId());
+            }
+        });
 
+
+        ib_submit_alipay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PosTranscation posTranscation = new PosTranscation(POS.this);
+                posTranscation.SaleTranstion(saleDailyList, PAYMENT_ALIPAY);
+                cleartranstion();
+                saleid.setText("交易流水:" + posTranscation.getTranscationId());
+            }
+        });
+
+
+        ib_submit_weixin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PosTranscation posTranscation = new PosTranscation(POS.this);
+                posTranscation.SaleTranstion(saleDailyList, PAYMENT_WEIXIN);
+                cleartranstion();
+                saleid.setText("交易流水:" + posTranscation.getTranscationId());
             }
         });
 

@@ -23,33 +23,33 @@
             android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/branch"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_weight="1"
                 android:background="#1111"
-                android:id="@+id/branch"
                 android:gravity="left"
                 android:text="门店信息："
                 android:textSize="30sp"
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/posmachine"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_weight="1"
                 android:gravity="left"
-                android:id="@+id/posmachine"
                 android:text="收银机号："
                 android:textSize="30sp"
                 android:textStyle="bold" />
 
 
             <TextView
+                android:id="@+id/saletransdate"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_weight="1"
                 android:gravity="left"
-                android:id="@+id/saletransdate"
                 android:text="日期："
                 android:textSize="30sp"
                 android:textStyle="bold" />
@@ -57,60 +57,67 @@
 
         </LinearLayout>
 
-
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="100dp">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" />
 
-            <android.support.v7.widget.SearchView
-                android:id="@+id/searchproduct"
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:background="#6666"
-                android:ems="13"
-                android:inputType="number"
-                android:textStyle="bold">
-
-            </android.support.v7.widget.SearchView>
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="400dp"
-            android:orientation="horizontal">
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/productlist"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="3"
-                android:background="#40f1"></android.support.v7.widget.RecyclerView>
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/saleorder"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="#4f21"></android.support.v7.widget.RecyclerView>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="right"
-            android:orientation="horizontal"
-            tools:orientation="vertical">
-
-            <TextView
-                android:id="@+id/totoalamount"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="end"
-                android:text="0.00"
-                android:textAlignment="gravity"
-                android:textSize="50dp" />
-        </LinearLayout>
 
     </LinearLayout>
-</android.support.constraint.ConstraintLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp">
+
+        <android.support.v7.widget.SearchView
+            android:id="@+id/searchproduct"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:background="#6666"
+            android:ems="13"
+            android:inputType="number"
+            android:textStyle="bold">
+
+        </android.support.v7.widget.SearchView>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:orientation="horizontal">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/productlist"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:background="#40f1"></android.support.v7.widget.RecyclerView>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/saleorder"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#4f21"></android.support.v7.widget.RecyclerView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="right"
+        android:orientation="horizontal"
+        tools:orientation="vertical">
+
+        <TextView
+            android:id="@+id/totoalamount"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="end"
+            android:text="0.00"
+            android:textAlignment="gravity"
+            android:textSize="50dp" />
+    </LinearLayout>
+
+
+    </android.support.constraint.ConstraintLayout>
