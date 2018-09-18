@@ -5,7 +5,9 @@ import android.databinding.InverseMethod;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,6 +52,19 @@ public class Tools {
         return otd;
     }
 
+    public static int dateCompare(Date date1, Date date2) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+        String dateFirst = dateFormat.format(date1);
+        String dateLast = dateFormat.format(date2);
+        int dateFirstIntVal = Integer.parseInt(dateFirst);
+        int dateLastIntVal = Integer.parseInt(dateLast);
+        if (dateFirstIntVal > dateLastIntVal) {
+            return 1;
+        } else if (dateFirstIntVal < dateLastIntVal) {
+            return -1;
+        }
+        return 0;
+    }
 
 
 }

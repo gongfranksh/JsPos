@@ -4,7 +4,7 @@ public final class PosPayMent {
     public static final int PAYMENT_CASH = 0;
     public static final int PAYMENT_ALIPAY = 1;
     public static final int PAYMENT_WEIXIN = 2;
-    public static final char PAYMENT_CASH_CODE = '0';
+    public static final char  PAYMENT_CASH_CODE = '1';
     public static final char PAYMENT_ALIPAY_CODE = '7';
     public static final char PAYMENT_WEIXIN_CODE = 'w';
 

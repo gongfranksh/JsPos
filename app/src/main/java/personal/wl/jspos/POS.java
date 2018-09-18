@@ -82,6 +82,7 @@ public class POS extends Activity {
     private TextView totalamt;
 
     private TextView saletransdate;
+    private TextView saleid;
 
 
     @Override
@@ -92,7 +93,7 @@ public class POS extends Activity {
         saletransdate = findViewById(R.id.saletransdate);
         totalamt = findViewById(R.id.totoalamount);
         bt_submit = findViewById(R.id.submitOrder);
-
+        saleid = findViewById(R.id.saleid);
         new TimeThread().start();
 
 
@@ -170,15 +171,14 @@ public class POS extends Activity {
 //
 
         bt_submit.setOnClickListener(new View.OnClickListener() {
-            PosTranscation posTranscation = new PosTranscation(POS.this);
 
             @Override
             public void onClick(View v) {
-
-                posTranscation.SaleTranstion(saleDailyList);
+                PosTranscation posTranscation = new PosTranscation(POS.this);
+                posTranscation.SaleTranstion(saleDailyList,PAYMENT_CASH);
 //                showPaymentDialog(this);
                 cleartranstion();
-
+                saleid.setText("交易流水:" + posTranscation.getTranscationId());
 
             }
         });
