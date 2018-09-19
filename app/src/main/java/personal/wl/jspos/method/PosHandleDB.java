@@ -138,6 +138,7 @@ public class PosHandleDB {
             saleDailyList.get(i).setCurPrice(tmp_CurPrice);
             saleDailyList.get(i).setNormalPrice(tmp_NormalPrice);
             saleDailyList.get(i).setSaleId(tmp_saleid);
+            saleDailyList.get(i).setSaleDate(new Date());
             Double tmp_cash = 0.0;
             switch (paycode[0]) {
                 case PAYMENT_CASH_CODE:
