@@ -1,53 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
-
-    <data>
-
-        <import type="personal.wl.jspos.db.InverseMethodTools" />
-
-        <variable
-            name="saleproduct"
-            type="personal.wl.jspos.pos.SaleDaily" />
-    </data>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="wrap_content">
 
     <LinearLayout
-        android:id="@+id/li_layout_2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
+
         <TextView
-            android:id="@+id/orderproid_2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="right"
-            android:text="@{ saleproduct.proId}"
-            android:textSize="15sp"
+            android:text="编码"
+            android:textSize="20dp"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/ordeproname_2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="right"
-            android:textSize="15sp"
-            android:textStyle="bold" />
-        <TextView
-            android:id="@+id/orderunitprice_2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="right"
-            android:text="@{ saleproduct.curPrice}"
-            android:textSize="15sp"
+            android:text="简称"
+            android:textSize="20dp"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/ordersaler_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:inputType="numberDecimal"
+            android:lines="1"
+            android:text="零售价"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -55,21 +47,21 @@
             android:inputType="number"
             android:lines="1"
             android:maxLength="5"
-            android:text="@{saleproduct.SalerId}"
-            android:textSize="15sp"
+            android:text="营业员"
+            android:textSize="20dp"
             android:textStyle="bold" />
+
         <TextView
-            android:id="@+id/ordersalename_2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="right"
             android:lines="1"
-            android:textSize="15sp"
+            android:text="营业员姓名"
+            android:textSize="20dp"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/orderinputqty_2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -77,18 +69,26 @@
             android:inputType="number"
             android:lines="1"
             android:maxLength="5"
-            android:text="@{ saleproduct.saleQty}"
-            android:textSize="15sp"
+            android:text="数量"
+            android:textSize="20dp"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/orderunitamout_2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="right"
-            android:text="@{ saleproduct.saleAmt}"
-            android:textSize="15sp"
+            android:text="小计"
+            android:textSize="20dp"
             android:textStyle="bold" />
+
     </LinearLayout>
-</layout>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/showsaleorder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#ffff"></android.support.v7.widget.RecyclerView>
+
+
+
+</LinearLayout>

@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity implements IReportBack {
                 case R.id.navigation_dashboard:
                     mTextMessage.setText(R.string.title_dashboard);
                     LoadHelp();
-                    showPreference();
+//                    showPreference();
                     return true;
                 case R.id.navigation_notifications:
                     mTextMessage.setText(R.string.title_notifications);
@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements IReportBack {
 
     private void LoadHelp(){
         Intent intent = new Intent();
-        intent.setClass(MainActivity.this,ScrollingActivity.class);
+        intent.setClass(MainActivity.this,PosTransList.class);
         startActivity(intent);
     }
 

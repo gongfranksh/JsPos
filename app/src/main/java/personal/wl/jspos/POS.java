@@ -290,21 +290,7 @@ public class POS extends Activity {
         dialog.show();
     }
 
-    private void showPaymentDialog(View.OnClickListener view) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setIcon(R.mipmap.ic_launcher);
-        builder.setTitle("付款输入");
 
-        /**
-         * 设置内容区域为自定义View
-         */
-        LinearLayout PaymentDialog = (LinearLayout) getLayoutInflater().inflate(R.layout.paymentviewdialog, null);
-        builder.setView(PaymentDialog);
-
-        builder.setCancelable(true);
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
 
 
     private void cleartranstion() {

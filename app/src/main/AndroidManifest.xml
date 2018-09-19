@@ -32,15 +32,14 @@
             android:label="@string/title_activity_settings" />
         <activity
             android:name=".LoginActivity"
-            android:label="@string/title_activity_login"></activity>
+            android:label="@string/title_activity_login" />
         <activity
             android:name=".ScrollingActivity"
             android:label="@string/title_activity_scrolling" />
         <activity
             android:name=".POS"
-            android:label="@string/title_activity_pos"></activity>
-
-
+            android:label="@string/title_activity_pos" />
+        <activity android:name=".PosTransList"></activity>
     </application>
 
 </manifest>
