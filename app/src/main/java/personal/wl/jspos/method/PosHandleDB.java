@@ -100,6 +100,23 @@ public class PosHandleDB {
         return false;
     }
 
+    public static Boolean JudgeSaler(List<SaleDaily> saleDailyList) {
+        for (int i = 0; i < saleDailyList.size(); i++) {
+            if (saleDailyList.get(i).getSalerId()==null) {
+                return false;
+            }
+            if (saleDailyList.get(i).getSalerId().length() !=5)
+            {
+                return false;
+            }
+
+            if (!isSaleid(saleDailyList.get(i).getSalerId())) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public static BranchEmployee getSaleid(String saleidcode) {
         BranchEmployeeDao branchEmployeeDao = DBConnect.getInstances().getDaoSession().getBranchEmployeeDao();
         QueryBuilder cond = branchEmployeeDao.queryBuilder();

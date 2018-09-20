@@ -25,4 +25,8 @@ public class InverseMethodTools {
             return Double.parseDouble(view.getText().toString());
         } else return 1.00;
     }
+
+
+
+
 }

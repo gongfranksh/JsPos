@@ -50,6 +50,7 @@ import personal.wl.jspos.method.PosTranscation;
 import personal.wl.jspos.pos.Product;
 import personal.wl.jspos.pos.SaleDaily;
 
+import static personal.wl.jspos.method.PosHandleDB.JudgeSaler;
 import static personal.wl.jspos.method.PosHandleDB.QueryProductBarCodeByCode;
 import static personal.wl.jspos.method.PosHandleDB.QueryProductByCode;
 import static personal.wl.jspos.method.PosHandleDB.getProductList;
@@ -140,9 +141,6 @@ public class POS extends Activity {
         mRecyclerView.addItemDecoration(new DividerItemDecoration(POS.this, DividerItemDecoration.VERTICAL));
 
 
-//        final RecyclerView salesorderview = findViewById(R.id.saleorder);
-
-
         final SwipeMenuRecyclerView salesorderview = findViewById(R.id.saleorder);
 
         salesorderview.setSwipeMenuCreator(swipeMenuCreator);
@@ -155,38 +153,10 @@ public class POS extends Activity {
         salesorderview.setAdapter(saleOrderAdapter);
 
 
-//        saleOrderAdapter.setOnItemClickListener(new SaleOrderAdapter.onItemClickListener() {
-//            @Override
-//            public void onItemClick(int position) {
-//                Toast.makeText(POS.this, "单击：" + position + "个Item", Toast.LENGTH_SHORT).show();
-//            }
-//
-//            @Override
-//            public void onItemLongClick(int position) {
-//                Toast.makeText(POS.this, "长按了：" + position + "个Item", Toast.LENGTH_SHORT).show();
-//
-//            }
-//        });
-//
-//
-//        salesorderview.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//
-//                Toast.makeText(POS.this, "be touch", Toast.LENGTH_LONG).show();
-//                return false;
-//            }
-//        });
-//
-
-
         ib_submit_cash.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PosTranscation posTranscation = new PosTranscation(POS.this);
-                posTranscation.SaleTranstion(saleDailyList, PAYMENT_CASH);
-                cleartranstion();
-                saleid.setText("交易流水:" + posTranscation.getTranscationId());
+                StartSaveTranscation(PAYMENT_CASH);
             }
         });
 
@@ -194,10 +164,7 @@ public class POS extends Activity {
         ib_submit_alipay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PosTranscation posTranscation = new PosTranscation(POS.this);
-                posTranscation.SaleTranstion(saleDailyList, PAYMENT_ALIPAY);
-                cleartranstion();
-                saleid.setText("交易流水:" + posTranscation.getTranscationId());
+                StartSaveTranscation(PAYMENT_ALIPAY);
             }
         });
 
@@ -205,10 +172,7 @@ public class POS extends Activity {
         ib_submit_weixin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PosTranscation posTranscation = new PosTranscation(POS.this);
-                posTranscation.SaleTranstion(saleDailyList, PAYMENT_WEIXIN);
-                cleartranstion();
-                saleid.setText("交易流水:" + posTranscation.getTranscationId());
+                StartSaveTranscation(PAYMENT_WEIXIN);
             }
         });
 
@@ -265,11 +229,92 @@ public class POS extends Activity {
 
     }
 
-    private void insertSaleDaily(List<SaleDaily> transactions, int paymode) {
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Toast.makeText(this,"resume",Toast.LENGTH_LONG).show();
+    }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Toast.makeText(this,"onRestart",Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Toast.makeText(this,"onPause",Toast.LENGTH_LONG).show();
+
+        if (saleDailyList.size()!=0){
+            Toast.makeText(this,"onPause==> have record",Toast.LENGTH_LONG).show();
+            this.hasWindowFocus();
+        }
+    }
+
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Toast.makeText(this,"onStop",Toast.LENGTH_LONG).show();
+
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Toast.makeText(this,"onDestroy",Toast.LENGTH_LONG).show();
+    }
+
+    private void StartSaveTranscation(int paymode) {
+
+        if (saleDailyList.size() > 0) {
+            if (JudgeSaler(saleDailyList)) {
+                PosTranscation posTranscation = new PosTranscation(POS.this);
+                posTranscation.SaleTranstion(saleDailyList, paymode);
+                cleartranstion();
+                saleid.setText("上次交易流水:" + posTranscation.getTranscationId());
+                showOkDiallog(posTranscation.getTranscationId());
+
+            } else {
+                showErrorDiallog("营业员代码错误！");
+            }
+
+
+        } else {
+            showErrorDiallog("请先输入商品");
+        }
+    }
+
+    private void showErrorDiallog(String s) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        //设置构造器标题
+        builder.setTitle("交易异常！");
+        //构造器对应的图标
+        builder.setIcon(R.mipmap.ic_launcher);
+        builder.setMessage(s);
+        builder.setNegativeButton("提示", null);
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    private void showOkDiallog(String s) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        //设置构造器标题
+        builder.setTitle("交易成功！");
+        //构造器对应的图标
+        builder.setIcon(R.mipmap.ic_launcher);
+        builder.setMessage(s);
+        builder.setNegativeButton("提示", null);
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+
+    private void insertSaleDaily(List<SaleDaily> transactions, int paymode) {
         char tmp_paymode = getPayMentCode(paymode);
         for (int i = 0; i < transactions.size(); i++) {
-
 
         }
     }
@@ -291,13 +336,10 @@ public class POS extends Activity {
     }
 
 
-
-
     private void cleartranstion() {
 
         saleDailyList.removeAll(saleDailyList);
         prolist.removeAll(prolist);
-//                saleDailyList.remove()
         saleOrderAdapter.notifyDataSetChanged();
         productAdapter.notifyDataSetChanged();
         totalamt.setText("0.0");
