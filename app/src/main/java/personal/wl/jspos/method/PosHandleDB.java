@@ -7,6 +7,7 @@ import android.widget.Switch;
 
 import org.greenrobot.greendao.query.QueryBuilder;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -28,6 +29,22 @@ import static personal.wl.jspos.method.PosPayMent.PAYMENT_CASH_CODE;
 import static personal.wl.jspos.method.PosPayMent.PAYMENT_WEIXIN_CODE;
 
 public class PosHandleDB {
+    //Common Tools
+    private static void ExecSqlVoid(String sql) {
+        try {
+            DBConnect.getInstances().getDaoSession().getDatabase().execSQL(sql);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void CleanLocalSales() {
+        String clean_trans_paymode = "delete from sale_pay_mode;";
+        String clean_trans_product = "delete from sale_daily;";
+        ExecSqlVoid(clean_trans_paymode);
+        ExecSqlVoid(clean_trans_product);
+    }
+
     public static List<Product> getProductList() {
 
         ProductDao productDao = DBConnect.getInstances().getDaoSession().getProductDao();
@@ -102,61 +119,89 @@ public class PosHandleDB {
         return salePayModeList;
     }
 
-    public SalePayMode ReturnOfGoodsPayMode(SalePayMode salePayMode) {
+    public static SalePayMode ReturnOfGoodsPayMode(SalePayMode salePayMode) {
         Double tmp_paymoney = salePayMode.getPayMoney() * (-1);
         String tmp_saleid = "R" + salePayMode.getSaleId();
-        salePayMode.setSaleDate(new Date());
-        salePayMode.setPayMoney(tmp_paymoney);
-        salePayMode.setSaleId(tmp_saleid);
-        return salePayMode;
+        SalePayMode rt_salepaymode = new SalePayMode();
+
+        rt_salepaymode.setBraid(salePayMode.getBraid());
+        rt_salepaymode.setSaleDate(new Date());
+        rt_salepaymode.setSaleId(tmp_saleid);
+        rt_salepaymode.setPayModeId(salePayMode.getPayModeId());
+        rt_salepaymode.setPayMoney(tmp_paymoney);
+        rt_salepaymode.setCardType("1");
+        return rt_salepaymode;
     }
 
-    public void InsertSalePayMode(SalePayMode salePayMode) {
+    public static void InsertSalePayMode(SalePayMode salePayMode) {
         SalePayModeDao salePayModeDao = DBConnect.getInstances().getDaoSession().getSalePayModeDao();
         salePayModeDao.insert(salePayMode);
     }
 
-    public List<SaleDaily> getSaleDailyBysaleid(String saleid) {
+    public static void InsertSaleDaily(List<SaleDaily> saleDailyList) {
+        SaleDailyDao saleDailyDao = DBConnect.getInstances().getDaoSession().getSaleDailyDao();
+        for (int i = 0; i < saleDailyList.size(); i++) {
+            saleDailyDao.insert(saleDailyList.get(i));
+        }
+    }
+
+
+    public static List<SaleDaily> getSaleDailyBysaleid(String saleid) {
         SaleDailyDao saleDailyDao = DBConnect.getInstances().getDaoSession().getSaleDailyDao();
         QueryBuilder cond = saleDailyDao.queryBuilder();
         cond.where(SaleDailyDao.Properties.SaleId.eq(saleid));
         return cond.build().list();
     }
 
-    public List<SaleDaily> ReturnOfGoodsProductDetail(SalePayMode salePayMode) {
+    public static List<SaleDaily> ReturnOfGoodsProductDetail(SalePayMode salePayMode) {
         String paymode_saleid = salePayMode.getSaleId();
         char[] paycode = salePayMode.getPayModeId().toCharArray();
+        List<SaleDaily> rt_saledailylist = new ArrayList<>();
         List<SaleDaily> saleDailyList = getSaleDailyBysaleid(paymode_saleid);
         for (int i = 0; i < saleDailyList.size(); i++) {
-            Double tmp_saleamt = saleDailyList.get(i).getSaleAmt();
-            Double tmp_saleqty = saleDailyList.get(i).getSaleQty();
-            Double tmp_CurPrice = saleDailyList.get(i).getCurPrice();
-            Double tmp_NormalPrice = saleDailyList.get(i).getNormalPrice();
+            SaleDaily tmp_saledaily = new SaleDaily();
+
+            Double tmp_saleamt = saleDailyList.get(i).getSaleAmt() * (-1);
+            Double tmp_saleqty = saleDailyList.get(i).getSaleQty() * (-1);
+            Double tmp_CurPrice = saleDailyList.get(i).getCurPrice() * (-1);
+            Double tmp_NormalPrice = saleDailyList.get(i).getNormalPrice() * (-1);
             String tmp_saleid = "R" + paymode_saleid;
-            saleDailyList.get(i).setSaleAmt(tmp_saleamt);
-            saleDailyList.get(i).setSaleQty(tmp_saleqty);
-            saleDailyList.get(i).setCurPrice(tmp_CurPrice);
-            saleDailyList.get(i).setNormalPrice(tmp_NormalPrice);
-            saleDailyList.get(i).setSaleId(tmp_saleid);
-            saleDailyList.get(i).setSaleDate(new Date());
+
+            tmp_saledaily.setBraid(saleDailyList.get(i).getBraid());
+            tmp_saledaily.setSaleDate(new Date());
+            tmp_saledaily.setProId(saleDailyList.get(i).getProId());
+            tmp_saledaily.setBarCode(saleDailyList.get(i).getBarCode());
+            tmp_saledaily.setClassId(saleDailyList.get(i).getClassId());
+            tmp_saledaily.setIsDM(saleDailyList.get(i).getIsDM());
+            tmp_saledaily.setIsPmt(saleDailyList.get(i).getIsPmt());
+            tmp_saledaily.setIsTimePrompt(saleDailyList.get(i).getIsTimePrompt());
+            tmp_saledaily.setSaleTax(saleDailyList.get(i).getSaleTax());
+            tmp_saledaily.setPosNo(saleDailyList.get(i).getPosNo());
+            tmp_saledaily.setSalerId(saleDailyList.get(i).getSalerId());
+            tmp_saledaily.setSaleId(tmp_saleid);
+            tmp_saledaily.setSaleMan(saleDailyList.get(i).getSaleMan());
+            tmp_saledaily.setSaleQty(tmp_saleqty);
+            tmp_saledaily.setSaleAmt(tmp_saleamt);
+            tmp_saledaily.setNormalPrice(tmp_NormalPrice);
+            tmp_saledaily.setCurPrice(tmp_CurPrice);
             Double tmp_cash = 0.0;
             switch (paycode[0]) {
                 case PAYMENT_CASH_CODE:
                     tmp_cash = saleDailyList.get(i).getCash1();
-                    saleDailyList.get(i).setCash1(tmp_cash * (-1));
+                    tmp_saledaily.setCash1(tmp_cash * (-1));
                     break;
                 case PAYMENT_ALIPAY_CODE:
                     tmp_cash = saleDailyList.get(i).getCash7();
-                    saleDailyList.get(i).setCash7(tmp_cash * (-1));
+                    tmp_saledaily.setCash7(tmp_cash * (-1));
                     break;
                 case PAYMENT_WEIXIN_CODE:
                     tmp_cash = saleDailyList.get(i).getCash8();
-                    saleDailyList.get(i).setCash8(tmp_cash * (-1));
+                    tmp_saledaily.setCash8(tmp_cash * (-1));
                     break;
             }
+            rt_saledailylist.add(tmp_saledaily);
         }
-
-        return saleDailyList;
+        return rt_saledailylist;
     }
 
 

@@ -54,7 +54,7 @@ public class DBC2Jspot {
                 "SupPmtFlag, Operatorid, vipdiscount, isnull(posdiscount,1.00) AS posdiscount,\n" +
                 "CONVERT (int,timestamp) as timestamp \n" +
                 "FROM product WHERE CONVERT (int,timestamp) > " + timestamp +
-                " order by CONVERT (int,timestamp) " ;
+                " order by CONVERT (int,timestamp) ";
         ;
         List list = null;
         Connection cnn = this.getMyconnection();
@@ -125,9 +125,6 @@ public class DBC2Jspot {
         }
         return list;
     }
-
-
-
 
 
     public List getProductClass() {
@@ -213,5 +210,8 @@ public class DBC2Jspot {
 
         return list;
     }
+
+
+
 
 }

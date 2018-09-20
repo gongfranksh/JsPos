@@ -28,6 +28,7 @@ import java.util.List;
 import personal.wl.jspos.adapter.SaleOrderAdapter;
 import personal.wl.jspos.adapter.SaleOrderAdapterForDialog;
 import personal.wl.jspos.adapter.SalePayModeAdapter;
+import personal.wl.jspos.method.PosHandleDB;
 import personal.wl.jspos.pos.SaleDaily;
 import personal.wl.jspos.pos.SalePayMode;
 
@@ -38,6 +39,7 @@ public class PosTransList extends AppCompatActivity {
     private List<SalePayMode> salepaymodeList = new ArrayList<SalePayMode>();
     private List<SaleDaily> saleDailyList = new ArrayList<>();
     private Context context;
+    private SalePayModeAdapter salePayModeAdapter;
 
 
     @Override
@@ -51,7 +53,7 @@ public class PosTransList extends AppCompatActivity {
         salespaymodeview.addItemDecoration(new DividerItemDecoration(PosTransList.this, DividerItemDecoration.VERTICAL));
         salespaymodeview.setSwipeMenuCreator(swipeMenuCreator);
         salespaymodeview.setSwipeMenuItemClickListener(mMenuItemClickListener);
-        SalePayModeAdapter salePayModeAdapter = new SalePayModeAdapter(PosTransList.this, salepaymodeList);
+        salePayModeAdapter = new SalePayModeAdapter(PosTransList.this, salepaymodeList);
         salespaymodeview.setAdapter(salePayModeAdapter);
 
 
@@ -97,7 +99,7 @@ public class PosTransList extends AppCompatActivity {
 //                        .setWidth(width)
 //                        .setHeight(height);
 //                swipeLeftMenu.addMenuItem(closeItem); // 添加菜单到左侧。
-           }
+            }
 
             // 添加右侧的，如果不添加，则右侧不会出现菜单。
             {
@@ -138,7 +140,7 @@ public class PosTransList extends AppCompatActivity {
 
                 switch (menuPosition) {
                     case 0:
-//                        posorderdelete(adapterPosition);
+                        CallReturnOfGoods(salepaymodeList.get(adapterPosition));
                         break;
                     default:
                         break;
@@ -191,4 +193,15 @@ public class PosTransList extends AppCompatActivity {
         dialog.show();
     }
 
+
+    private void CallReturnOfGoods(SalePayMode salePayMode) {
+
+        SalePayMode tmp_salepaymode = PosHandleDB.ReturnOfGoodsPayMode(salePayMode);
+        salepaymodeList.add(tmp_salepaymode);
+        PosHandleDB.InsertSalePayMode(tmp_salepaymode);
+        salePayModeAdapter.notifyDataSetChanged();
+        List<SaleDaily> tmp_saledailylist = PosHandleDB.ReturnOfGoodsProductDetail(salePayMode);
+        PosHandleDB.InsertSaleDaily(tmp_saledailylist);
+
+    }
 }

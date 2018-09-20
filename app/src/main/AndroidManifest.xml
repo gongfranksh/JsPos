@@ -23,7 +23,6 @@
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -39,7 +38,13 @@
         <activity
             android:name=".POS"
             android:label="@string/title_activity_pos" />
-        <activity android:name=".PosTransList"></activity>
+        <activity android:name=".PosTransList" />
+        <activity android:name=".PosInit">
+            <intent-filter>
+                <action android:name="personal.wj.jspos.posinit"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

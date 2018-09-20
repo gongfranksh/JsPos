@@ -18,4 +18,9 @@
         <intent android:action="android.settings.SYNC_SETTINGS" />
     </Preference>
 
+    <Preference android:title="资料处理">
+        <intent android:action="personal.wj.jspos.posinit" />
+    </Preference>
+
+
 </PreferenceScreen>
