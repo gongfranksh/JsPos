@@ -198,6 +198,7 @@ public class SettingsActivity extends PreferenceActivity {
 */
             bindPreferenceSummaryToValue(findPreference("branch_selected"));
             bindPreferenceSummaryToValue(findPreference("pos_machine"));
+            bindPreferenceSummaryToValue(findPreference("pos_device_id"));
         }
 
         @Override
