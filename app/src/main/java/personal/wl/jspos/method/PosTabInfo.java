@@ -24,11 +24,9 @@ public class PosTabInfo {
     }
 
     public static void setDeviceId(String s) {
-
         SharedPreferences.Editor editor =pre.edit();
         editor.putString("pos_device_id",s);
         editor.commit();
-//        pre.getStringSet("pos_device_id", Collections.singleton(s));
     }
 
     public static String getDeviceid() {

@@ -26,8 +26,8 @@ public class PosInit extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pos_init);
         bt_cleanLocalSaledata = findViewById(R.id.sync_clean_local);
-        bt_getDeviceId  = findViewById(R.id.getdeviceid);
-tv_display = findViewById(R.id.initdisplay);
+        bt_getDeviceId = findViewById(R.id.getdeviceid);
+        tv_display = findViewById(R.id.initdisplay);
 
         bt_getDeviceId.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -3,6 +3,7 @@ package personal.wl.greendao;
 import org.greenrobot.greendao.generator.DaoGenerator;
 import org.greenrobot.greendao.generator.Entity;
 import org.greenrobot.greendao.generator.Schema;
+
 public class DaoMaker {
 
     public static void main(String[] args) {
@@ -12,7 +13,7 @@ public class DaoMaker {
             Schema schema = new Schema(3, "personal.wl.jspos.pos");
             CreateAllSchema(schema);
 
-            new DaoGenerator().generateAll(schema,"H:\\mobile\\jspos\\app\\src\\main\\java\\");
+            new DaoGenerator().generateAll(schema, "H:\\mobile\\jspos\\app\\src\\main\\java\\");
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -30,6 +31,7 @@ public class DaoMaker {
         CreateTableBranch(schema);
         CreateTableBranchEmployee(schema);
         CreateTablePosMachine(schema);
+        CreateTableMobileDevice(schema);
     }
 
     private static void CreateTableProduct(Schema schema) {
@@ -67,6 +69,7 @@ public class DaoMaker {
         entity.addLongProperty("TimeStamp");
 
     }
+
     private static void CreateTableBranch(Schema schema) {
         Entity entity = schema.addEntity("Branch");
         entity.addIdProperty().autoincrement();
@@ -84,8 +87,6 @@ public class DaoMaker {
         entity.addStringProperty("posno");
         entity.addStringProperty("Status");
     }
-
-
 
 
     private static void CreateTableProductBarcode(Schema schema) {
@@ -149,6 +150,7 @@ public class DaoMaker {
         entity.addDateProperty("CreateDate");
         entity.addDateProperty("UpdateDate");
     }
+
     private static void CreateTableBranchEmployee(Schema schema) {
         Entity entity = schema.addEntity("BranchEmployee");
         entity.addIdProperty().autoincrement();
@@ -225,6 +227,15 @@ public class DaoMaker {
         entity.addDoubleProperty("PayMoney");
         entity.addStringProperty("CardType");
         entity.addStringProperty("CardNo");
+    }
+
+    private static void CreateTableMobileDevice(Schema schema) {
+        Entity entity = schema.addEntity("MobileDevice");
+        entity.addIdProperty().autoincrement();
+        entity.addStringProperty("deviceid");
+        entity.addStringProperty("posno");
+        entity.addStringProperty("Status");
+        entity.addLongProperty("SourceId");
     }
 
 }
