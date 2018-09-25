@@ -33,6 +33,8 @@ import personal.wl.jspos.pos.SaleDaily;
 import personal.wl.jspos.pos.SalePayMode;
 
 import static personal.wl.jspos.method.PosHandleDB.QuerySaleDetailBySaleid;
+import static personal.wl.jspos.method.PosHandleDB.UpdateSaleDailyForRetrun;
+import static personal.wl.jspos.method.PosHandleDB.UpdateSalePayMode;
 import static personal.wl.jspos.method.PosHandleDB.getAllSalesPayment;
 
 public class PosTransList extends AppCompatActivity {
@@ -140,7 +142,12 @@ public class PosTransList extends AppCompatActivity {
 
                 switch (menuPosition) {
                     case 0:
-                        CallReturnOfGoods(salepaymodeList.get(adapterPosition));
+                        if (!salepaymodeList.get(adapterPosition).getIsReturn()) {
+                            CallReturnOfGoods(salepaymodeList.get(adapterPosition));
+                        } else {
+                            showErrorDiallog("已经退货了过了");
+
+                        }
                         break;
                     default:
                         break;
@@ -163,6 +170,19 @@ public class PosTransList extends AppCompatActivity {
             }
         }
     };
+
+
+    private void showErrorDiallog(String s) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        //设置构造器标题
+        builder.setTitle("交易异常！");
+        //构造器对应的图标
+        builder.setIcon(R.mipmap.ic_launcher);
+        builder.setMessage(s);
+        builder.setNegativeButton("提示", null);
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
 
     private void showLogonViewDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -202,6 +222,12 @@ public class PosTransList extends AppCompatActivity {
         salePayModeAdapter.notifyDataSetChanged();
         List<SaleDaily> tmp_saledailylist = PosHandleDB.ReturnOfGoodsProductDetail(salePayMode);
         PosHandleDB.InsertSaleDaily(tmp_saledailylist);
+
+        //修改原来的记录--退货状态为已经退货了
+        salePayMode.setIsReturn(true);
+        UpdateSalePayMode(salePayMode);
+        UpdateSaleDailyForRetrun(tmp_saledailylist);
+
 
     }
 }

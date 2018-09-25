@@ -11,6 +11,7 @@ import personal.wl.jspos.db.DBC2Jspot;
 import personal.wl.jspos.db.DBConnect;
 import personal.wl.jspos.db.IReportBack;
 import personal.wl.jspos.db.Utils;
+import personal.wl.jspos.method.PosTabInfo;
 import personal.wl.jspos.pos.Branch;
 import personal.wl.jspos.pos.BranchDao;
 import personal.wl.jspos.pos.BranchEmployee;
@@ -30,6 +31,8 @@ import java.util.concurrent.Callable;
 
 import static personal.wl.jspos.db.Tools.Double2String;
 import static personal.wl.jspos.db.Tools.Long2String;
+import static personal.wl.jspos.method.PosHandleDB.CheckDeviceByLocal;
+import static personal.wl.jspos.method.PosHandleDB.InsertDeviceByLocal;
 
 public class SyncJspotDB extends AsyncTask<String, Integer, Integer>
         implements DialogInterface.OnCancelListener {
@@ -47,6 +50,7 @@ public class SyncJspotDB extends AsyncTask<String, Integer, Integer>
     private Context context = null;
     private String tag = null;
     private ProgressDialog pd = null;
+    private HashMap device = new HashMap<String, String>();
 
     private static DaoSession getDaosession() {
         return daosession;
@@ -60,11 +64,12 @@ public class SyncJspotDB extends AsyncTask<String, Integer, Integer>
     private static DaoSession daosession;
     private int length = 0;
 
-    public SyncJspotDB(IReportBack inr, Context inCont, String inTag, int inLen) {
+    public SyncJspotDB(IReportBack inr, Context inCont, String inTag, int inLen, HashMap device) {
         report = inr;
         context = inCont;
         tag = inTag;
         length = inLen;
+        this.device = device;
     }
 
     @Override
@@ -95,19 +100,24 @@ public class SyncJspotDB extends AsyncTask<String, Integer, Integer>
                 pd.setMessage("开始同步");
                 break;
 
+
             case 1:
-                pd.setMessage("操作员同步....");
+                pd.setMessage("检查设备是否授权");
                 break;
 
             case 2:
-                pd.setMessage("Branch同步....");
+                pd.setMessage("操作员同步....");
                 break;
 
             case 3:
-                pd.setMessage("Product同步....");
+                pd.setMessage("Branch同步....");
                 break;
 
             case 4:
+                pd.setMessage("Product同步....");
+                break;
+
+            case 5:
                 pd.setMessage("BarCode同步....");
                 break;
 
@@ -144,6 +154,22 @@ public class SyncJspotDB extends AsyncTask<String, Integer, Integer>
         this.setDaosession(daoSession);
         Utils.sleepForSecs(2);
         publishProgress(i);
+
+
+        i = i + 1;
+        //Check Device id
+        if (js.CheckDeviceByServer(device)) {
+            List devicelist = js.getCheckDeviceThisFromServer(device);
+            if (!CheckDeviceByLocal(device)) {
+                InsertDeviceByLocal(devicelist);
+            } else {
+
+                //已经插入本地数据库;
+            }
+        } else {
+            //授权失败推出不下载数据
+            return num;
+        }
 
 
         //Process branchEmployee Update--Begin

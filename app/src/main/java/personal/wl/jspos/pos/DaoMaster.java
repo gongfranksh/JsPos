@@ -31,6 +31,7 @@ public class DaoMaster extends AbstractDaoMaster {
         BranchDao.createTable(db, ifNotExists);
         BranchEmployeeDao.createTable(db, ifNotExists);
         PosMachineDao.createTable(db, ifNotExists);
+        MobileDeviceDao.createTable(db, ifNotExists);
     }
 
     /** Drops underlying database table using DAOs. */
@@ -45,6 +46,7 @@ public class DaoMaster extends AbstractDaoMaster {
         BranchDao.dropTable(db, ifExists);
         BranchEmployeeDao.dropTable(db, ifExists);
         PosMachineDao.dropTable(db, ifExists);
+        MobileDeviceDao.dropTable(db, ifExists);
     }
 
     /**
@@ -73,6 +75,7 @@ public class DaoMaster extends AbstractDaoMaster {
         registerDaoClass(BranchDao.class);
         registerDaoClass(BranchEmployeeDao.class);
         registerDaoClass(PosMachineDao.class);
+        registerDaoClass(MobileDeviceDao.class);
     }
 
     public DaoSession newSession() {

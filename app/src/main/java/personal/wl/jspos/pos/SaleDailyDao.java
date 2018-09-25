@@ -56,6 +56,8 @@ public class SaleDailyDao extends AbstractDao<SaleDaily, Long> {
         public final static Property Cash6 = new Property(31, Double.class, "Cash6", false, "CASH6");
         public final static Property Cash7 = new Property(32, Double.class, "Cash7", false, "CASH7");
         public final static Property Cash8 = new Property(33, Double.class, "Cash8", false, "CASH8");
+        public final static Property SourceId = new Property(34, Long.class, "SourceId", false, "SOURCE_ID");
+        public final static Property IsReturn = new Property(35, Boolean.class, "IsReturn", false, "IS_RETURN");
     }
 
 
@@ -104,7 +106,9 @@ public class SaleDailyDao extends AbstractDao<SaleDaily, Long> {
                 "\"CASH5\" REAL," + // 30: Cash5
                 "\"CASH6\" REAL," + // 31: Cash6
                 "\"CASH7\" REAL," + // 32: Cash7
-                "\"CASH8\" REAL);"); // 33: Cash8
+                "\"CASH8\" REAL," + // 33: Cash8
+                "\"SOURCE_ID\" INTEGER," + // 34: SourceId
+                "\"IS_RETURN\" INTEGER);"); // 35: IsReturn
     }
 
     /** Drops the underlying database table. */
@@ -286,6 +290,16 @@ public class SaleDailyDao extends AbstractDao<SaleDaily, Long> {
         if (Cash8 != null) {
             stmt.bindDouble(34, Cash8);
         }
+ 
+        Long SourceId = entity.getSourceId();
+        if (SourceId != null) {
+            stmt.bindLong(35, SourceId);
+        }
+ 
+        Boolean IsReturn = entity.getIsReturn();
+        if (IsReturn != null) {
+            stmt.bindLong(36, IsReturn ? 1L: 0L);
+        }
     }
 
     @Override
@@ -461,6 +475,16 @@ public class SaleDailyDao extends AbstractDao<SaleDaily, Long> {
         if (Cash8 != null) {
             stmt.bindDouble(34, Cash8);
         }
+ 
+        Long SourceId = entity.getSourceId();
+        if (SourceId != null) {
+            stmt.bindLong(35, SourceId);
+        }
+ 
+        Boolean IsReturn = entity.getIsReturn();
+        if (IsReturn != null) {
+            stmt.bindLong(36, IsReturn ? 1L: 0L);
+        }
     }
 
     @Override
@@ -504,7 +528,9 @@ public class SaleDailyDao extends AbstractDao<SaleDaily, Long> {
             cursor.isNull(offset + 30) ? null : cursor.getDouble(offset + 30), // Cash5
             cursor.isNull(offset + 31) ? null : cursor.getDouble(offset + 31), // Cash6
             cursor.isNull(offset + 32) ? null : cursor.getDouble(offset + 32), // Cash7
-            cursor.isNull(offset + 33) ? null : cursor.getDouble(offset + 33) // Cash8
+            cursor.isNull(offset + 33) ? null : cursor.getDouble(offset + 33), // Cash8
+            cursor.isNull(offset + 34) ? null : cursor.getLong(offset + 34), // SourceId
+            cursor.isNull(offset + 35) ? null : cursor.getShort(offset + 35) != 0 // IsReturn
         );
         return entity;
     }
@@ -545,6 +571,8 @@ public class SaleDailyDao extends AbstractDao<SaleDaily, Long> {
         entity.setCash6(cursor.isNull(offset + 31) ? null : cursor.getDouble(offset + 31));
         entity.setCash7(cursor.isNull(offset + 32) ? null : cursor.getDouble(offset + 32));
         entity.setCash8(cursor.isNull(offset + 33) ? null : cursor.getDouble(offset + 33));
+        entity.setSourceId(cursor.isNull(offset + 34) ? null : cursor.getLong(offset + 34));
+        entity.setIsReturn(cursor.isNull(offset + 35) ? null : cursor.getShort(offset + 35) != 0);
      }
     
     @Override

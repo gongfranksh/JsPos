@@ -214,6 +214,8 @@ public class DaoMaker {
         entity.addDoubleProperty("Cash6");
         entity.addDoubleProperty("Cash7");
         entity.addDoubleProperty("Cash8");
+        entity.addLongProperty("SourceId");
+        entity.addBooleanProperty("IsReturn");
     }
 
     private static void CreateTableSalePayMode(Schema schema) {
@@ -227,6 +229,9 @@ public class DaoMaker {
         entity.addDoubleProperty("PayMoney");
         entity.addStringProperty("CardType");
         entity.addStringProperty("CardNo");
+        entity.addLongProperty("SourceId");
+        entity.addBooleanProperty("IsReturn");
+
     }
 
     private static void CreateTableMobileDevice(Schema schema) {

@@ -2,6 +2,7 @@ package personal.wl.jspos.method;
 
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.renderscript.Sampler;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 
@@ -9,12 +10,15 @@ import org.greenrobot.greendao.query.QueryBuilder;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import personal.wl.jspos.db.DBConnect;
 import personal.wl.jspos.pos.BranchEmployee;
 import personal.wl.jspos.pos.BranchEmployeeDao;
 import personal.wl.jspos.pos.DaoSession;
+import personal.wl.jspos.pos.MobileDevice;
+import personal.wl.jspos.pos.MobileDeviceDao;
 import personal.wl.jspos.pos.Product;
 import personal.wl.jspos.pos.ProductBarCode;
 import personal.wl.jspos.pos.ProductBarCodeDao;
@@ -28,8 +32,14 @@ import static personal.wl.jspos.method.PosPayMent.PAYMENT_ALIPAY_CODE;
 import static personal.wl.jspos.method.PosPayMent.PAYMENT_CASH_CODE;
 import static personal.wl.jspos.method.PosPayMent.PAYMENT_WEIXIN_CODE;
 
+
+
 public class PosHandleDB {
     //Common Tools
+    protected static long PROID = 2000000000000L;
+    public static final String MOBILE_DEVICE_CAN_RUN = "1";
+    public static final String MOBILE_DEVICE_CANNOT_RUN = "0";
+
     private static void ExecSqlVoid(String sql) {
         try {
             DBConnect.getInstances().getDaoSession().getDatabase().execSQL(sql);
@@ -44,6 +54,53 @@ public class PosHandleDB {
         ExecSqlVoid(clean_trans_paymode);
         ExecSqlVoid(clean_trans_product);
     }
+
+    public static Boolean CheckDeviceByLocal(HashMap device) {
+        String tmp_device = (String) device.get("deviceid");
+        String tmp_posno = (String) device.get("posno");
+        MobileDeviceDao mobileDeviceDao = DBConnect.getInstances().getDaoSession().getMobileDeviceDao();
+        QueryBuilder cond = mobileDeviceDao.queryBuilder();
+        cond.where(MobileDeviceDao.Properties.Deviceid.eq(tmp_device),
+                MobileDeviceDao.Properties.Posno.eq(tmp_posno));
+        List<MobileDevice> res = cond.build().list();
+        if (res.size() == 1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public static List<MobileDevice> QueryMobileDevice(HashMap device) {
+        String tmp_device = (String) device.get("deviceid");
+        String tmp_posno = (String) device.get("posno");
+        MobileDeviceDao mobileDeviceDao = DBConnect.getInstances().getDaoSession().getMobileDeviceDao();
+        QueryBuilder cond = mobileDeviceDao.queryBuilder();
+        cond.where(MobileDeviceDao.Properties.Deviceid.eq(tmp_device),
+                MobileDeviceDao.Properties.Status.eq(MOBILE_DEVICE_CAN_RUN),
+                MobileDeviceDao.Properties.Posno.eq(tmp_posno));
+        List<MobileDevice> res = cond.build().list();
+        if (res.size() == 1) {
+            return res;
+        } else {
+            return res;
+        }
+    }
+
+
+
+    public static void InsertDeviceByLocal(List device) {
+        String tmp_device = (String) ((HashMap) device.get(0)).get("deviceid");
+        String tmp_posno = (String) ((HashMap) device.get(0)).get("posno");
+        Integer tmp_sourceid = (Integer) ((HashMap) device.get(0)).get("sourceid");
+        MobileDeviceDao mobileDeviceDao = DBConnect.getInstances().getDaoSession().getMobileDeviceDao();
+        MobileDevice mobileDevice = new MobileDevice();
+        mobileDevice.setDeviceid(tmp_device);
+        mobileDevice.setPosno(tmp_posno);
+        mobileDevice.setSourceId(Long.parseLong(String.valueOf(tmp_sourceid)));
+        mobileDevice.setStatus(MOBILE_DEVICE_CAN_RUN);
+        mobileDeviceDao.insert(mobileDevice);
+    }
+
+
 
     public static List<Product> getProductList() {
 
@@ -63,21 +120,31 @@ public class PosHandleDB {
 
 
     public static List<Product> QueryProductByCode(String proid) {
+        String tmp_proid = proid;
+        if (proid.length() != 13) {
+            tmp_proid = Long.toString(PROID + Long.parseLong(proid));
+        }
+
         ProductDao productDao = DBConnect.getInstances().getDaoSession().getProductDao();
         QueryBuilder cond = productDao.queryBuilder();
-        cond.where(ProductDao.Properties.Proid.like("%" + proid + "%")).build();
+        cond.where(ProductDao.Properties.Proid.eq(tmp_proid)).build();
         return cond.build().list();
     }
 
     public static List<Product> QueryProductBarCodeByCode(String BarCode) {
+        String tmp_proid = BarCode;
+        if (BarCode.length() != 13) {
+            tmp_proid = Long.toString(PROID + Long.parseLong(BarCode));
+        }
+
         List<ProductBarCode> barcodelist;
         List<Product> productList = null;
         ProductBarCodeDao productBarCode = DBConnect.getInstances().getDaoSession().getProductBarCodeDao();
         ProductDao productDao = DBConnect.getInstances().getDaoSession().getProductDao();
         QueryBuilder condn = productBarCode.queryBuilder();
 
-        condn.whereOr(ProductBarCodeDao.Properties.Barcode.like("%" + BarCode + "%"),
-                ProductBarCodeDao.Properties.Proid.like("%" + BarCode + "%")
+        condn.whereOr(ProductBarCodeDao.Properties.Barcode.eq(BarCode),
+                ProductBarCodeDao.Properties.Proid.eq(tmp_proid)
         );
         barcodelist = condn.build().list();
         for (ProductBarCode pb : barcodelist) {
@@ -102,11 +169,10 @@ public class PosHandleDB {
 
     public static Boolean JudgeSaler(List<SaleDaily> saleDailyList) {
         for (int i = 0; i < saleDailyList.size(); i++) {
-            if (saleDailyList.get(i).getSalerId()==null) {
+            if (saleDailyList.get(i).getSalerId() == null) {
                 return false;
             }
-            if (saleDailyList.get(i).getSalerId().length() !=5)
-            {
+            if (saleDailyList.get(i).getSalerId().length() != 5) {
                 return false;
             }
 
@@ -147,6 +213,8 @@ public class PosHandleDB {
         rt_salepaymode.setPayModeId(salePayMode.getPayModeId());
         rt_salepaymode.setPayMoney(tmp_paymoney);
         rt_salepaymode.setCardType("1");
+        rt_salepaymode.setIsReturn(true);
+        rt_salepaymode.setSourceId(salePayMode.getSourceId());
         return rt_salepaymode;
     }
 
@@ -155,10 +223,24 @@ public class PosHandleDB {
         salePayModeDao.insert(salePayMode);
     }
 
+    public static void UpdateSalePayMode(SalePayMode salePayMode) {
+        SalePayModeDao salePayModeDao = DBConnect.getInstances().getDaoSession().getSalePayModeDao();
+        salePayModeDao.update(salePayMode);
+    }
+
+
     public static void InsertSaleDaily(List<SaleDaily> saleDailyList) {
         SaleDailyDao saleDailyDao = DBConnect.getInstances().getDaoSession().getSaleDailyDao();
         for (int i = 0; i < saleDailyList.size(); i++) {
             saleDailyDao.insert(saleDailyList.get(i));
+        }
+    }
+
+    public static void UpdateSaleDailyForRetrun (List<SaleDaily> saleDailyList) {
+        SaleDailyDao saleDailyDao = DBConnect.getInstances().getDaoSession().getSaleDailyDao();
+        for (int i = 0; i < saleDailyList.size(); i++) {
+            saleDailyList.get(i).setIsReturn(true);
+            saleDailyDao.update(saleDailyList.get(i));
         }
     }
 
@@ -201,6 +283,9 @@ public class PosHandleDB {
             tmp_saledaily.setSaleAmt(tmp_saleamt);
             tmp_saledaily.setNormalPrice(tmp_NormalPrice);
             tmp_saledaily.setCurPrice(tmp_CurPrice);
+            tmp_saledaily.setIsReturn(true);
+            tmp_saledaily.setSourceId(saleDailyList.get(i).getSourceId());
+
             Double tmp_cash = 0.0;
             switch (paycode[0]) {
                 case PAYMENT_CASH_CODE:

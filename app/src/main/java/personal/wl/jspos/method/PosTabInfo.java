@@ -15,21 +15,21 @@ public class PosTabInfo {
         pre = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
-    public static String getPosMachine() {
+    public  String getPosMachine() {
         return pre.getString("pos_machine", "0");
     }
 
-    public static String getBranchCode() {
+    public  String getBranchCode() {
         return pre.getString("branch_selected", "0");
     }
 
-    public static void setDeviceId(String s) {
+    public  void setDeviceId(String s) {
         SharedPreferences.Editor editor =pre.edit();
         editor.putString("pos_device_id",s);
         editor.commit();
     }
 
-    public static String getDeviceid() {
+    public  String getDeviceid() {
         return pre.getString("pos_device_id", "0");
     }
 

@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import personal.wl.jspos.db.DBConnect;
+import personal.wl.jspos.pos.MobileDevice;
 import personal.wl.jspos.pos.Product;
 import personal.wl.jspos.pos.SaleDaily;
 import personal.wl.jspos.pos.SaleDailyDao;
@@ -19,6 +20,7 @@ import personal.wl.jspos.pos.SalePayMode;
 import personal.wl.jspos.pos.SalePayModeDao;
 
 import static personal.wl.jspos.db.Tools.dateCompare;
+import static personal.wl.jspos.method.PosHandleDB.QueryMobileDevice;
 import static personal.wl.jspos.method.PosHandleDB.QueryProductByCode;
 import static personal.wl.jspos.method.PosPayMent.PAYMENT_ALIPAY;
 import static personal.wl.jspos.method.PosPayMent.PAYMENT_ALIPAY_CODE;
@@ -33,7 +35,10 @@ public class PosTranscation {
     private String tmp_branch;
     private String tmp_posmachine;
     private String tmp_saleid;
+    private String tmp_deviceid;
+    private Long tmp_sourceid;
     private Date tmp_datetime;
+    private HashMap generate_saleid_para =new HashMap<String, String>();
 
 
     public PosTranscation(Context context) {
@@ -41,11 +46,14 @@ public class PosTranscation {
         this.posTabInfo = new PosTabInfo(this.context);
         this.tmp_branch = posTabInfo.getBranchCode();
         this.tmp_posmachine = posTabInfo.getPosMachine();
+        this.tmp_deviceid = posTabInfo.getDeviceid();
         this.tmp_datetime = new Date();
-        HashMap generate_saleid_para = new HashMap<String, String>();
+//        HashMap generate_saleid_para =
         generate_saleid_para.put("branch", tmp_branch);
         generate_saleid_para.put("posmachine", tmp_posmachine);
         generate_saleid_para.put("datetime", this.tmp_datetime);
+        generate_saleid_para.put("posno", this.tmp_posmachine);
+        generate_saleid_para.put("deviceid", this.tmp_deviceid);
 
 
         this.tmp_saleid = this.getSaleId(generate_saleid_para);
@@ -57,6 +65,12 @@ public class PosTranscation {
     }
 
     public void SaleTranstion(List<SaleDaily> saleDailyList, int pay) {
+
+        List<MobileDevice> sourcelist = QueryMobileDevice(generate_saleid_para);
+        if(sourcelist.size()!=0){
+            tmp_sourceid=sourcelist.get(0).getSourceId();
+        }
+
         SaleDailyDao saleDailyDao = DBConnect.getInstances().getDaoSession().getSaleDailyDao();
         double totalamt = 0;
         for (int i = 0; i < saleDailyList.size(); i++) {
@@ -74,6 +88,8 @@ public class PosTranscation {
             saleDailyList.get(i).setNormalPrice(tmp_product.get(0).getNormalPrice());
             saleDailyList.get(i).setSaleTax(tmp_product.get(0).getInTax());
             saleDailyList.get(i).setSaleId(this.tmp_saleid);
+            saleDailyList.get(i).setSourceId(this.tmp_sourceid);
+            saleDailyList.get(i).setIsReturn(false);
             switch (pay) {
                 case PAYMENT_CASH:
                     saleDailyList.get(i).setCash1(saleDailyList.get(i).getSaleAmt());
@@ -94,6 +110,8 @@ public class PosTranscation {
         salePayMode.setBraid(this.tmp_branch);
         salePayMode.setSaleDate(this.tmp_datetime);
         salePayMode.setSaleId(this.tmp_saleid);
+        salePayMode.setSourceId(this.tmp_sourceid);
+        salePayMode.setIsReturn(false);
         salePayMode.setPayMoney(totalamt);
         switch (pay) {
             case PAYMENT_CASH:

@@ -8,6 +8,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
 import java.util.List;
 
 import static personal.wl.jspos.db.Tools.convertList;
@@ -43,9 +44,59 @@ public class DBC2Jspot {
 
     }
 
+    public List getDeviceAll() {
+        String sql = "SELECT sourceid,deviceid,posno,updateid FROM mobile_device where status='1'";
+        List list = null;
+        Connection cnn = this.getMyconnection();
+        try {
+            list = QuerySqlGetResult(cnn, sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public List getCheckDeviceThisFromServer(HashMap device) {
+        String sql = "SELECT sourceid,deviceid,posno,updateid FROM mobile_device where status='1' ";
+        List list = null;
+        if ( device.get("deviceid")==null |  device.get("posno")==null){
+            return list;
+        }
+        sql = sql +" and deviceid='"+device.get("deviceid") +"'";
+        sql = sql +" and posno='"+device.get("posno") +"'";
+        Connection cnn = this.getMyconnection();
+        try {
+            list = QuerySqlGetResult(cnn, sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public Boolean CheckDeviceByServer(HashMap device) {
+        String sql = "SELECT sourceid,deviceid,posno,updateid FROM mobile_device where status='1' ";
+        List list = null;
+        if ( device.get("deviceid")==null |  device.get("posno")==null){
+            return false;
+        }
+        sql = sql +" and deviceid='"+device.get("deviceid") +"'";
+        sql = sql +" and posno='"+device.get("posno") +"'";
+        Connection cnn = this.getMyconnection();
+        try {
+            list = QuerySqlGetResult(cnn, sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        if (list.size()==1) return true;
+        else return false;
+    }
+
+
+
 
     public List getProductNeedUpdate(Integer timestamp) {
-        String sql = "select   ProId, Barcode, ProName, ProSName, ClassId, Spec, BrandId, StatId, Grade, \n" +
+        String sql = "select  top 100 ProId, Barcode, ProName, ProSName, ClassId, Spec, BrandId, StatId, Grade, \n" +
                 "Area, SupId, MeasureId, PacketQty, PacketQty1, Weight, Length, Width, Height, TaxType, \n" +
                 "InTax, SaleTax, InPrice, TaxPrice, isnull(NormalPrice,0.00) AS NormalPrice, MemberPrice, GroupPrice, \n" +
                 "MainFlag, ProFlag, WeightFlag, Barmode, OrderMode, MinOrderQty, OrderMultiplier, \n" +
@@ -84,10 +135,11 @@ public class DBC2Jspot {
 
 
     public List getProductBarCodeNeedUpdate(Integer timestamp) {
-        String sql = "SELECT   proid,barcode,isnull(normalprice,0) AS normalprice,mainflag,\n" +
+        String sql = "SELECT top 100  proid,barcode,isnull(normalprice,0) AS normalprice,mainflag,\n" +
                 "CONVERT (int,timestamp) as timestamp \n" +
                 "FROM product_barcode \n";
         sql = sql + "WHERE CONVERT (int,timestamp) > " + timestamp;
+//        sql = sql + " and proid  in ('2000000165332','2000000165356','2000000261263','2000000165523') ";
         sql = sql + "ORDER BY CONVERT (int,timestamp) ";
         List list = null;
         Connection cnn = this.getMyconnection();

@@ -12,7 +12,10 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.HashMap;
+
 import personal.wl.jspos.db.IReportBack;
+import personal.wl.jspos.method.PosTabInfo;
 import personal.wl.jspos.sync.SyncJspotDB;
 
 public class MainActivity extends AppCompatActivity implements IReportBack {
@@ -60,6 +63,9 @@ public class MainActivity extends AppCompatActivity implements IReportBack {
         mTextMessage = (TextView) findViewById(R.id.message);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        HashMap devicelist =null;
+
+
     }
 
     @Override
@@ -75,7 +81,13 @@ public class MainActivity extends AppCompatActivity implements IReportBack {
 
 
     private void syncjsportdb() {
-        SyncJspotDB task = new SyncJspotDB(this, this, "SyncJspotDB", 6);
+        HashMap devicelist =new HashMap<String, String>();
+        PosTabInfo posTabInfo = new PosTabInfo(MainActivity.this);
+        devicelist.put("deviceid",posTabInfo.getDeviceid());
+        devicelist.put("posno",posTabInfo.getPosMachine());
+
+
+        SyncJspotDB task = new SyncJspotDB(this, this, "SyncJspotDB", 6,devicelist);
         task.execute();
     }
 
