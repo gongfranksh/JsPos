@@ -21,6 +21,7 @@ import personal.wl.jspos.sync.SyncJspotDB;
 public class MainActivity extends AppCompatActivity implements IReportBack {
 
     private TextView mTextMessage;
+//    private  PosTabInfo posTabInfo = new PosTabInfo(MainActivity.this);
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -31,25 +32,33 @@ public class MainActivity extends AppCompatActivity implements IReportBack {
                 case R.id.navigation_home:
                     mTextMessage.setText(R.string.title_home);
                     LoadPos();
+                    showdetail();
+
                     return true;
                 case R.id.navigation_dashboard:
                     mTextMessage.setText(R.string.title_dashboard);
                     LoadHelp();
+                    showdetail();
+
 //                    showPreference();
                     return true;
                 case R.id.navigation_notifications:
                     mTextMessage.setText(R.string.title_notifications);
                     syncjsportdb();
+                    showdetail();
+
                     return true;
                 case R.id.navigation_setting:
                     mTextMessage.setText("设置启动。。。。");
                     LoadSetting();
+                    showdetail();
+
                     return true;
                 case R.id.navigation_login:
                     LoadLogin();
+                    showdetail();
+
                     return true;
-
-
             }
             return false;
         }
@@ -63,9 +72,8 @@ public class MainActivity extends AppCompatActivity implements IReportBack {
         mTextMessage = (TextView) findViewById(R.id.message);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        HashMap devicelist =null;
 
-
+        showdetail();
     }
 
     @Override
@@ -79,54 +87,50 @@ public class MainActivity extends AppCompatActivity implements IReportBack {
     }
 
 
-
     private void syncjsportdb() {
-        HashMap devicelist =new HashMap<String, String>();
+        HashMap devicelist = new HashMap<String, String>();
         PosTabInfo posTabInfo = new PosTabInfo(MainActivity.this);
-        devicelist.put("deviceid",posTabInfo.getDeviceid());
-        devicelist.put("posno",posTabInfo.getPosMachine());
-
-
-        SyncJspotDB task = new SyncJspotDB(this, this, "SyncJspotDB", 6,devicelist);
+        devicelist.put("deviceid", posTabInfo.getDeviceid());
+        devicelist.put("posno", posTabInfo.getPosMachine());
+        SyncJspotDB task = new SyncJspotDB(this, this, "SyncJspotDB", 6, devicelist);
         task.execute();
     }
 
-    private void LoadSetting(){
+    private void LoadSetting() {
         Intent intent = new Intent();
-        intent.setClass(MainActivity.this,SettingsActivity.class);
+        intent.setClass(MainActivity.this, SettingsActivity.class);
         startActivity(intent);
     }
 
-    private void LoadLogin(){
+    private void LoadLogin() {
         Intent intent = new Intent();
-        intent.setClass(MainActivity.this,LoginActivity.class);
-        startActivity(intent);
-    }
-
-
-    private void LoadHelp(){
-        Intent intent = new Intent();
-        intent.setClass(MainActivity.this,PosTransList.class);
-        startActivity(intent);
-    }
-
-    private void LoadPos(){
-        Intent intent = new Intent();
-        intent.setClass(MainActivity.this,POS.class);
+        intent.setClass(MainActivity.this, LoginActivity.class);
         startActivity(intent);
     }
 
 
-    private void showPreference(){
-        SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(this);
-        String branch_selected = pre.getString("branch_selected", "0");
-        String pos_machine_selected = pre.getString("pos_machine", "0");
-        String[] branch = getResources().getStringArray(R.array.pref_branch_list_name);
-
-
-        Toast.makeText(this,branch.toString(),Toast.LENGTH_LONG).show();
-
-
-        mTextMessage.setText(branch_selected+pos_machine_selected);
+    private void LoadHelp() {
+        Intent intent = new Intent();
+        intent.setClass(MainActivity.this, PosTransList.class);
+        startActivity(intent);
     }
+
+    private void LoadPos() {
+        Intent intent = new Intent();
+        intent.setClass(MainActivity.this, POS.class);
+        startActivity(intent);
+    }
+
+
+    private void showdetail() {
+        PosTabInfo posTabInfo = new PosTabInfo(MainActivity.this);
+        String display_msg = "门店编号：" + posTabInfo.getBranchCode() + "\n" +
+                "收银机号：" + posTabInfo.getPosMachine() + "\n" +
+                "营业员编号：" + posTabInfo.getSalerId()+ "\n";
+        mTextMessage.setText(display_msg);
+
+
+
+    }
+
 }

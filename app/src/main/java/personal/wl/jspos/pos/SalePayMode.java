@@ -15,6 +15,7 @@ public class SalePayMode {
     private String Braid;
     private java.util.Date SaleDate;
     private String SaleId;
+    private String SalerId;
     private String PayModeId;
     private Double PayMoney;
     private String CardType;
@@ -31,11 +32,12 @@ public class SalePayMode {
     }
 
     @Generated
-    public SalePayMode(Long id, String Braid, java.util.Date SaleDate, String SaleId, String PayModeId, Double PayMoney, String CardType, String CardNo, Long SourceId, Boolean IsReturn) {
+    public SalePayMode(Long id, String Braid, java.util.Date SaleDate, String SaleId, String SalerId, String PayModeId, Double PayMoney, String CardType, String CardNo, Long SourceId, Boolean IsReturn) {
         this.id = id;
         this.Braid = Braid;
         this.SaleDate = SaleDate;
         this.SaleId = SaleId;
+        this.SalerId = SalerId;
         this.PayModeId = PayModeId;
         this.PayMoney = PayMoney;
         this.CardType = CardType;
@@ -74,6 +76,14 @@ public class SalePayMode {
 
     public void setSaleId(String SaleId) {
         this.SaleId = SaleId;
+    }
+
+    public String getSalerId() {
+        return SalerId;
+    }
+
+    public void setSalerId(String SalerId) {
+        this.SalerId = SalerId;
     }
 
     public String getPayModeId() {

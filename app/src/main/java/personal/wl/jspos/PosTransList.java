@@ -204,7 +204,7 @@ public class PosTransList extends AppCompatActivity {
         RecyclerView salesorderview = view.findViewById(R.id.showsaleorder);
         salesorderview.setLayoutManager(new LinearLayoutManager(this));
         salesorderview.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        SaleOrderAdapterForDialog saleOrderAdapterForDialog = new SaleOrderAdapterForDialog(this, saleDailyList);
+        SaleOrderAdapterForDialog saleOrderAdapterForDialog = new SaleOrderAdapterForDialog(PosTransList.this, saleDailyList);
         salesorderview.setAdapter(saleOrderAdapterForDialog);
         saleOrderAdapterForDialog.notifyDataSetChanged();
         builder.setView(view);

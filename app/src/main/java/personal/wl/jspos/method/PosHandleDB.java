@@ -33,7 +33,6 @@ import static personal.wl.jspos.method.PosPayMent.PAYMENT_CASH_CODE;
 import static personal.wl.jspos.method.PosPayMent.PAYMENT_WEIXIN_CODE;
 
 
-
 public class PosHandleDB {
     //Common Tools
     protected static long PROID = 2000000000000L;
@@ -69,6 +68,7 @@ public class PosHandleDB {
             return false;
         }
     }
+
     public static List<MobileDevice> QueryMobileDevice(HashMap device) {
         String tmp_device = (String) device.get("deviceid");
         String tmp_posno = (String) device.get("posno");
@@ -86,7 +86,6 @@ public class PosHandleDB {
     }
 
 
-
     public static void InsertDeviceByLocal(List device) {
         String tmp_device = (String) ((HashMap) device.get(0)).get("deviceid");
         String tmp_posno = (String) ((HashMap) device.get(0)).get("posno");
@@ -100,6 +99,24 @@ public class PosHandleDB {
         mobileDeviceDao.insert(mobileDevice);
     }
 
+    public static Boolean CheckAccountPassword(HashMap login) {
+
+        String tmp_branch = login.get("branchid").toString();
+        String tmp_accountid = login.get("accountid").toString();
+        String tmp_password = login.get("password").toString();
+        BranchEmployeeDao branchEmployeeDao = DBConnect.getInstances().getDaoSession().getBranchEmployeeDao();
+        QueryBuilder cond = branchEmployeeDao.queryBuilder();
+        cond.where(BranchEmployeeDao.Properties.Braid.eq(tmp_branch),
+                BranchEmployeeDao.Properties.Empid.eq(tmp_accountid)).build();
+        List<BranchEmployee> tmp_branchemployeelist = cond.list();
+        if (tmp_branchemployeelist.size() != 1) return false;
+        if (tmp_branchemployeelist.get(0).getPassword().equals(tmp_password)) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
 
 
     public static List<Product> getProductList() {
@@ -202,6 +219,33 @@ public class PosHandleDB {
         return salePayModeList;
     }
 
+    public static List<SalePayMode> getSalesPaymentForUpload(HashMap device) {
+        SalePayModeDao salePayModeDao = DBConnect.getInstances().getDaoSession().getSalePayModeDao();
+        QueryBuilder cond = salePayModeDao.queryBuilder();
+        cond.where(SalePayModeDao.Properties.SourceId.eq(device.get("sourceid")),
+                SalePayModeDao.Properties.Id.gt(device.get("max")));
+        List<SalePayMode> salePayModeList = cond.build().list();
+        return salePayModeList;
+    }
+
+
+    public static List<SaleDaily> getSalesDailyUpload(List<SalePayMode> salePayModeList) {
+        List<SaleDaily> saleDailyList = new ArrayList<>();
+        SaleDailyDao saleDailyDao = DBConnect.getInstances().getDaoSession().getSaleDailyDao();
+
+        for (int i = 0; i < salePayModeList.size() ; i++) {
+            QueryBuilder cond = saleDailyDao.queryBuilder();
+            cond.where(SaleDailyDao.Properties.SaleId.eq(salePayModeList.get(i).getSaleId()));
+            List<SaleDaily> subset = cond.build().list();
+            for (int j = 0; j < subset.size(); j++) {
+                saleDailyList.add(subset.get(j));
+            }
+        }
+
+
+        return saleDailyList;
+    }
+
     public static SalePayMode ReturnOfGoodsPayMode(SalePayMode salePayMode) {
         Double tmp_paymoney = salePayMode.getPayMoney() * (-1);
         String tmp_saleid = "R" + salePayMode.getSaleId();
@@ -214,6 +258,7 @@ public class PosHandleDB {
         rt_salepaymode.setPayMoney(tmp_paymoney);
         rt_salepaymode.setCardType("1");
         rt_salepaymode.setIsReturn(true);
+        rt_salepaymode.setSalerId(salePayMode.getSalerId());
         rt_salepaymode.setSourceId(salePayMode.getSourceId());
         return rt_salepaymode;
     }
@@ -236,7 +281,7 @@ public class PosHandleDB {
         }
     }
 
-    public static void UpdateSaleDailyForRetrun (List<SaleDaily> saleDailyList) {
+    public static void UpdateSaleDailyForRetrun(List<SaleDaily> saleDailyList) {
         SaleDailyDao saleDailyDao = DBConnect.getInstances().getDaoSession().getSaleDailyDao();
         for (int i = 0; i < saleDailyList.size(); i++) {
             saleDailyList.get(i).setIsReturn(true);
@@ -285,6 +330,7 @@ public class PosHandleDB {
             tmp_saledaily.setCurPrice(tmp_CurPrice);
             tmp_saledaily.setIsReturn(true);
             tmp_saledaily.setSourceId(saleDailyList.get(i).getSourceId());
+            tmp_saledaily.setSalerId(saleDailyList.get(i).getSalerId());
 
             Double tmp_cash = 0.0;
             switch (paycode[0]) {

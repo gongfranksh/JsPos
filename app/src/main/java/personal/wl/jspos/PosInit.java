@@ -6,10 +6,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.HashMap;
+
 import javax.xml.transform.Templates;
 
 import personal.wl.jspos.method.DeviceUtils;
 import personal.wl.jspos.method.PosTabInfo;
+import personal.wl.jspos.sync.SyncJsSaleData;
+import personal.wl.jspos.sync.SyncJspotDB;
 
 import static personal.wl.jspos.method.PosHandleDB.CleanLocalSales;
 
@@ -27,7 +31,9 @@ public class PosInit extends AppCompatActivity {
         setContentView(R.layout.activity_pos_init);
         bt_cleanLocalSaledata = findViewById(R.id.sync_clean_local);
         bt_getDeviceId = findViewById(R.id.getdeviceid);
+        bt_uploadLocalSaledata = findViewById(R.id.sync_upload_sales);
         tv_display = findViewById(R.id.initdisplay);
+
 
         bt_getDeviceId.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,5 +58,23 @@ public class PosInit extends AppCompatActivity {
             }
         });
 
+        bt_uploadLocalSaledata.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                synjssales();
+            }
+        });
+
+
     }
+
+    private void synjssales() {
+        HashMap devicelist = new HashMap<String, String>();
+        PosTabInfo posTabInfo = new PosTabInfo(PosInit.this);
+        devicelist.put("deviceid", posTabInfo.getDeviceid());
+        devicelist.put("posno", posTabInfo.getPosMachine());
+        SyncJsSaleData task = new SyncJsSaleData(PosInit.this, devicelist);
+        task.execute();
+    }
+
 }

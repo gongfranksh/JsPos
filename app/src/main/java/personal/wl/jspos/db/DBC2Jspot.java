@@ -1,6 +1,7 @@
 package personal.wl.jspos.db;
 
 
+import android.content.Intent;
 import android.util.Log;
 
 import java.sql.Connection;
@@ -8,8 +9,14 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+
+import personal.wl.jspos.pos.SaleDaily;
+import personal.wl.jspos.pos.SalePayMode;
 
 import static personal.wl.jspos.db.Tools.convertList;
 
@@ -17,8 +24,11 @@ import static personal.wl.jspos.db.Tools.convertList;
 public class DBC2Jspot {
     private static final String IP = "192.168.72.21";
     private static final String DBName = "headquarters";
-    private static final String USER = "syread";
-    private static final String PWD = "buynow";
+    //    private static final String USER = "syread";
+//    private static final String PWD = "buynow";
+    private static final String USER = "syzy";
+    private static final String PWD = "7fad69fa0c";
+
     private static final String DRIVER = "net.sourceforge.jtds.jdbc.Driver";
     private static final String CONNSTR = "jdbc:jtds:sqlserver://" + IP + ":1433/"
             + DBName + ";useunicode=true;characterEncoding=UTF-8";
@@ -59,11 +69,11 @@ public class DBC2Jspot {
     public List getCheckDeviceThisFromServer(HashMap device) {
         String sql = "SELECT sourceid,deviceid,posno,updateid FROM mobile_device where status='1' ";
         List list = null;
-        if ( device.get("deviceid")==null |  device.get("posno")==null){
+        if (device.get("deviceid") == null | device.get("posno") == null) {
             return list;
         }
-        sql = sql +" and deviceid='"+device.get("deviceid") +"'";
-        sql = sql +" and posno='"+device.get("posno") +"'";
+        sql = sql + " and deviceid='" + device.get("deviceid") + "'";
+        sql = sql + " and posno='" + device.get("posno") + "'";
         Connection cnn = this.getMyconnection();
         try {
             list = QuerySqlGetResult(cnn, sql);
@@ -76,11 +86,11 @@ public class DBC2Jspot {
     public Boolean CheckDeviceByServer(HashMap device) {
         String sql = "SELECT sourceid,deviceid,posno,updateid FROM mobile_device where status='1' ";
         List list = null;
-        if ( device.get("deviceid")==null |  device.get("posno")==null){
+        if (device.get("deviceid") == null | device.get("posno") == null) {
             return false;
         }
-        sql = sql +" and deviceid='"+device.get("deviceid") +"'";
-        sql = sql +" and posno='"+device.get("posno") +"'";
+        sql = sql + " and deviceid='" + device.get("deviceid") + "'";
+        sql = sql + " and posno='" + device.get("posno") + "'";
         Connection cnn = this.getMyconnection();
         try {
             list = QuerySqlGetResult(cnn, sql);
@@ -88,11 +98,150 @@ public class DBC2Jspot {
             e.printStackTrace();
         }
 
-        if (list.size()==1) return true;
+        if (list.size() == 1) return true;
         else return false;
     }
 
 
+    public long getLastUploadTranscations(HashMap device) {
+        String sql = "SELECT isnull(max(msp.deivcetransid),0) as maxid \n" +
+                " FROM mobile_sale_paymode  msp\n" +
+                " LEFT JOIN mobile_device md ON msp.sourceid=md.sourceid\n" +
+                " WHERE msp.sourceid=" + device.get("sourceid") +
+                " AND md.deviceid='" + device.get("deviceid") + "'" +
+                " AND posno='" + device.get("posno") + "'";
+        List list = null;
+        Connection cnn = this.getMyconnection();
+        try {
+            list = QuerySqlGetResult(cnn, sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        if (list.size() != 0) {
+            return Long.parseLong(((HashMap) list.get(0)).get("maxid").toString());
+
+        } else {
+            return 0;
+        }
+    }
+
+
+    public void LastUploadTranscations(List<SalePayMode> salePayModeList) {
+        String sql = "INSERT INTO dbo.mobile_sale_paymode (BraId, SaleDate, SaleId, SalerId," +
+                " PaymodeId, PayMoney, sourceid, deivcetransid)";
+        sql = sql + "Values(";
+        String sqlvalue = null;
+        Connection cnn = this.getMyconnection();
+
+        for (int i = 0; i < salePayModeList.size(); i++) {
+            try {
+                SimpleDateFormat df = (SimpleDateFormat) DateFormat.getDateInstance();
+                df.applyPattern("yyyy-MM-dd HH:mm:ss");
+                sqlvalue = "'" + salePayModeList.get(i).getBraid() + "',";
+                sqlvalue = sqlvalue + "'" + df.format(salePayModeList.get(i).getSaleDate()) + "',";
+                sqlvalue = sqlvalue + "'" + salePayModeList.get(i).getSaleId() + "',";
+                sqlvalue = sqlvalue + "'" + salePayModeList.get(i).getSalerId() + "',";
+                sqlvalue = sqlvalue + "'" + salePayModeList.get(i).getPayModeId() + "',";
+                sqlvalue = sqlvalue + salePayModeList.get(i).getPayMoney() + ",";
+                sqlvalue = sqlvalue + salePayModeList.get(i).getSourceId() + ",";
+                sqlvalue = sqlvalue + salePayModeList.get(i).getId() + ")";
+                String sql_exec = sql + sqlvalue;
+                proc_exec(cnn, sql_exec);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    public void InSertMobileSaleDaily(List<SaleDaily> saleDailyList) {
+        SimpleDateFormat df = (SimpleDateFormat) DateFormat.getDateInstance();
+        df.applyPattern("yyyy-MM-dd HH:mm:ss");
+
+        String sql = "INSERT INTO dbo.mobile_sale_daily " +
+                "(BraId, SaleDate, ProId, Barcode, ClassId, " +
+                "IsDM, IsPmt, IsTimePrompt, SaleTax, PosNo, " +
+                "SalerId, SaleMan, SaleType, SaleQty, SaleAmt, " +
+                "NormalPrice, CurPrice,  " +
+                "SaleId,   " +
+                "cash1, cash7, cash8, " +
+//                "cash1, cash2, cash3, " +
+//                "cash4, cash5, cash6, cash7, cash8, " +
+                " sourceid, deivcetransid )";
+        sql = sql + "Values(";
+        String sqlvalue = null;
+        Connection cnn = this.getMyconnection();
+
+        for (int i = 0; i < saleDailyList.size(); i++) {
+            try {
+
+                sqlvalue = "'" + saleDailyList.get(i).getBraid() + "',";
+                sqlvalue = sqlvalue + "'" + df.format(saleDailyList.get(i).getSaleDate()) + "',";
+                sqlvalue = sqlvalue + "'" + saleDailyList.get(i).getProId() + "',";
+                sqlvalue = sqlvalue + "'" + saleDailyList.get(i).getBarCode() + "',";
+                sqlvalue = sqlvalue + "'" + saleDailyList.get(i).getClassId() + "',";
+
+                sqlvalue = sqlvalue + "'" + saleDailyList.get(i).getIsDM() + "',";
+                sqlvalue = sqlvalue + "'" + saleDailyList.get(i).getIsPmt() + "',";
+                sqlvalue = sqlvalue + "'" + saleDailyList.get(i).getIsTimePrompt() + "',";
+                sqlvalue = sqlvalue + saleDailyList.get(i).getSaleTax() + ",";
+                sqlvalue = sqlvalue + "'" + saleDailyList.get(i).getPosNo() + "',";
+
+                sqlvalue = sqlvalue + "'" + saleDailyList.get(i).getSalerId() + "',";
+                sqlvalue = sqlvalue + "'" + saleDailyList.get(i).getSaleMan() + "',";
+                sqlvalue = sqlvalue + "'" + saleDailyList.get(i).getSaleType() + "',";
+                sqlvalue = sqlvalue + saleDailyList.get(i).getSaleQty() + ",";
+                sqlvalue = sqlvalue + saleDailyList.get(i).getSaleAmt() + ",";
+
+//                sqlvalue = sqlvalue + "'" + saleDailyList.get(i).getSaleDisAmt() + "',";
+//                sqlvalue = sqlvalue + "'" + saleDailyList.get(i).getTransDisAmt() + "',";
+                sqlvalue = sqlvalue + +saleDailyList.get(i).getNormalPrice() + ",";
+                sqlvalue = sqlvalue + +saleDailyList.get(i).getCurPrice() + ",";
+//                sqlvalue = sqlvalue + "'" + saleDailyList.get(i).getAvgCostPrice() + "',";
+
+
+                sqlvalue = sqlvalue + "'" + saleDailyList.get(i).getSaleId() + "',";
+
+
+                sqlvalue = sqlvalue + saleDailyList.get(i).getCash1() + ",";
+//                sqlvalue = sqlvalue + "'" + saleDailyList.get(i).getCash2() + "',";
+//                sqlvalue = sqlvalue + "'" + saleDailyList.get(i).getCash3() + "',";
+//                sqlvalue = sqlvalue + "'" + saleDailyList.get(i).getCash4() + "',";
+//                sqlvalue = sqlvalue + "'" + saleDailyList.get(i).getCash5() + "',";
+//                sqlvalue = sqlvalue + "'" + saleDailyList.get(i).getCash6() + "',";
+                sqlvalue = sqlvalue + saleDailyList.get(i).getCash7() + ",";
+                sqlvalue = sqlvalue + saleDailyList.get(i).getCash8() + ",";
+
+
+                sqlvalue = sqlvalue + saleDailyList.get(i).getSourceId() + ",";
+                sqlvalue = sqlvalue + saleDailyList.get(i).getId() + ")";
+//                sqlvalue = sqlvalue + df.format(new Date()) + ")";
+                String sql_exec = sql + sqlvalue;
+                Statement stmt = cnn.createStatement();
+                boolean rs = stmt.execute(sql_exec);
+                stmt.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void UploadMobileDeviceLogId(List<SalePayMode> salePayModeList) {
+        String sql_exec;
+        Connection cnn = this.getMyconnection();
+        for (int i = 0; i < salePayModeList.size(); i++) {
+            try {
+                sql_exec = "UPDATE mobile_device " +
+                        " SET updateid = " + salePayModeList.get(i).getId() + "," +
+                        " updatedate=getdate() " +
+                        " where sourceid=" + salePayModeList.get(i).getSourceId();
+                proc_exec(cnn, sql_exec);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
 
     public List getProductNeedUpdate(Integer timestamp) {
@@ -139,7 +288,7 @@ public class DBC2Jspot {
                 "CONVERT (int,timestamp) as timestamp \n" +
                 "FROM product_barcode \n";
         sql = sql + "WHERE CONVERT (int,timestamp) > " + timestamp;
-//        sql = sql + " and proid  in ('2000000165332','2000000165356','2000000261263','2000000165523') ";
+        sql = sql + " and proid  in ('2000000165318','2000000165332','2000000165356','2000000261263','2000000165523') ";
         sql = sql + "ORDER BY CONVERT (int,timestamp) ";
         List list = null;
         Connection cnn = this.getMyconnection();
@@ -258,12 +407,22 @@ public class DBC2Jspot {
             Log.e(TAG, "QuerySqlGetResult:" + e.getMessage().toString());
             System.out.println(e.getMessage().toString());
         }
-
-
         return list;
     }
 
 
-
+    protected static void proc_exec(Connection con, String sql) throws SQLException {
+        // TODO QuerySqlGetResult
+        run = System.currentTimeMillis();
+        Log.i(TAG, "proc_exec t-->" + run);
+        try {
+            Statement stmt = con.createStatement();
+            boolean rs = stmt.execute(sql);
+            stmt.close();
+        } catch (SQLException e) {
+            Log.e(TAG, "proc_exec:" + e.getMessage().toString());
+            System.out.println(e.getMessage().toString());
+        }
+    }
 
 }

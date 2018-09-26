@@ -112,6 +112,7 @@ public class PosTranscation {
         salePayMode.setSaleId(this.tmp_saleid);
         salePayMode.setSourceId(this.tmp_sourceid);
         salePayMode.setIsReturn(false);
+        salePayMode.setSalerId(posTabInfo.getSalerId());
         salePayMode.setPayMoney(totalamt);
         switch (pay) {
             case PAYMENT_CASH:

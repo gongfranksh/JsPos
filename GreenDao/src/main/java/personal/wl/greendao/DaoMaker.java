@@ -225,6 +225,7 @@ public class DaoMaker {
         entity.addStringProperty("Braid");
         entity.addDateProperty("SaleDate");
         entity.addStringProperty("SaleId");
+        entity.addStringProperty("SalerId");
         entity.addStringProperty("PayModeId");
         entity.addDoubleProperty("PayMoney");
         entity.addStringProperty("CardType");

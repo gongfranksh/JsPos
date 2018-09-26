@@ -21,6 +21,8 @@ import personal.wl.jspos.pos.Product;
 import personal.wl.jspos.pos.ProductBarCode;
 import personal.wl.jspos.pos.ProductBarCodeDao;
 import personal.wl.jspos.pos.ProductDao;
+import personal.wl.jspos.pos.SaleDaily;
+import personal.wl.jspos.pos.SalePayMode;
 
 import org.greenrobot.greendao.query.QueryBuilder;
 import org.greenrobot.greendao.query.WhereCondition;
@@ -33,6 +35,8 @@ import static personal.wl.jspos.db.Tools.Double2String;
 import static personal.wl.jspos.db.Tools.Long2String;
 import static personal.wl.jspos.method.PosHandleDB.CheckDeviceByLocal;
 import static personal.wl.jspos.method.PosHandleDB.InsertDeviceByLocal;
+import static personal.wl.jspos.method.PosHandleDB.getSalesDailyUpload;
+import static personal.wl.jspos.method.PosHandleDB.getSalesPaymentForUpload;
 
 public class SyncJspotDB extends AsyncTask<String, Integer, Integer>
         implements DialogInterface.OnCancelListener {
@@ -142,7 +146,7 @@ public class SyncJspotDB extends AsyncTask<String, Integer, Integer>
     protected Integer doInBackground(String... params) {
         // TODO SYNC Data do in backgroud
 //        int num = params.length;
-        int num = 6;
+        int num = 7;
         int i = 0;
         Integer rec = 0;
 
@@ -163,11 +167,12 @@ public class SyncJspotDB extends AsyncTask<String, Integer, Integer>
             if (!CheckDeviceByLocal(device)) {
                 InsertDeviceByLocal(devicelist);
             } else {
-
                 //已经插入本地数据库;
             }
+            this.device.put("sourceid", (Integer) ((HashMap) devicelist.get(0)).get("sourceid"));
+
         } else {
-            //授权失败推出不下载数据
+            //授权失败退出不下载数据
             return num;
         }
 
@@ -202,6 +207,21 @@ public class SyncJspotDB extends AsyncTask<String, Integer, Integer>
         rec = getProductBarCodeTimeStamp();
         List productcode = js.getProductBarCodeNeedUpdate(rec);
         this.ProcessProductBarCode2LocalDB(productcode);
+        Utils.sleepForSecs(2);
+        publishProgress(i);
+
+
+        //Upload Sale Transcation
+        i = i + 1;
+        long maxnumber = js.getLastUploadTranscations(device);
+        device.put("max", maxnumber);
+        List<SalePayMode> needupdatesalepaymode = getSalesPaymentForUpload(device);
+        js.LastUploadTranscations(needupdatesalepaymode);
+        List<SaleDaily> needuploadsalesdailylist = getSalesDailyUpload(needupdatesalepaymode);
+        js.InSertMobileSaleDaily(needuploadsalesdailylist);
+        js.UploadMobileDeviceLogId(needupdatesalepaymode);
+
+
         Utils.sleepForSecs(2);
         publishProgress(i);
 

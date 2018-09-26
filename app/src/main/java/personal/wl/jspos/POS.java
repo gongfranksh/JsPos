@@ -1,6 +1,7 @@
 package personal.wl.jspos;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -88,13 +89,14 @@ public class POS extends Activity {
     private ImageButton ib_submit_cash;
     private ImageButton ib_submit_alipay;
     private ImageButton ib_submit_weixin;
+    private PosTabInfo posTabInfo;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pos);
-
+        posTabInfo = new PosTabInfo(POS.this);
         saletransdate = findViewById(R.id.saletransdate);
         totalamt = findViewById(R.id.totoalamount);
 
@@ -106,13 +108,7 @@ public class POS extends Activity {
 
         new TimeThread().start();
 
-
-        showPreference();
-        TextView branch = findViewById(R.id.branch);
-        branch.setText(branch.getText() + branch_selected);
-
-        final TextView posmachine = findViewById(R.id.posmachine);
-        posmachine.setText(posmachine.getText() + pos_machine_selected);
+        showtitle();
 
 
         searchView = findViewById(R.id.searchproduct);
@@ -206,8 +202,11 @@ public class POS extends Activity {
                     saleDaily.setProId(prolist.get(0).getProid());
                     saleDaily.setBarCode(prolist.get(0).getBarcode());
                     saleDaily.setCurPrice(tmp_price);
+                    saleDaily.setNormalPrice(tmp_price);
                     saleDaily.setSaleAmt(tmp_amount);
                     saleDaily.setSaleQty(tmp_qty);
+                    saleDaily.setSalerId(posTabInfo.getSalerId());
+                    saleDaily.setSaleMan(posTabInfo.getSalerId());
 //                    saleDaily.setSalerId("");
 
                     addsalesdaily(saleDaily);
@@ -232,31 +231,37 @@ public class POS extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        Toast.makeText(this,"resume",Toast.LENGTH_LONG).show();
+        if (posTabInfo.getSalerId() == "00000") {
+            showErrorDiallog("请先登陆");
+            Intent intent = new Intent();
+            intent.setClass(POS.this, LoginActivity.class);
+            startActivity(intent);
+        }
+//        Toast.makeText(this, "resume", Toast.LENGTH_LONG).show();
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
-        Toast.makeText(this,"onRestart",Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "onRestart", Toast.LENGTH_LONG).show();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        Toast.makeText(this,"onPause",Toast.LENGTH_LONG).show();
-
-        if (saleDailyList.size()!=0){
-            Toast.makeText(this,"onPause==> have record",Toast.LENGTH_LONG).show();
-            this.hasWindowFocus();
-        }
+//        Toast.makeText(this, "onPause", Toast.LENGTH_LONG).show();
+//
+//        if (saleDailyList.size() != 0) {
+//            Toast.makeText(this, "onPause==> have record", Toast.LENGTH_LONG).show();
+//            this.hasWindowFocus();
+//        }
     }
 
 
     @Override
     protected void onStop() {
         super.onStop();
-        Toast.makeText(this,"onStop",Toast.LENGTH_LONG).show();
+//        Toast.makeText(this, "onStop", Toast.LENGTH_LONG).show();
 
     }
 
@@ -264,7 +269,7 @@ public class POS extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Toast.makeText(this,"onDestroy",Toast.LENGTH_LONG).show();
+//        Toast.makeText(this, "onDestroy", Toast.LENGTH_LONG).show();
     }
 
     private void StartSaveTranscation(int paymode) {
@@ -480,7 +485,7 @@ public class POS extends Activity {
         final double item_amt;
         item_qty = needUpdate.getSaleQty() + 1;
         needUpdate.setSaleQty(item_qty);
-        item_amt = item_qty * needUpdate.getNormalPrice();
+        item_amt = item_qty * needUpdate.getCurPrice();
         needUpdate.setSaleAmt(item_amt);
         saleDailyList.set(position, needUpdate);
         saleOrderAdapter.notifyDataSetChanged();
@@ -495,7 +500,7 @@ public class POS extends Activity {
         item_qty = needUpdate.getSaleQty() - 1;
         if (item_qty > 0) {
             needUpdate.setSaleQty(item_qty);
-            item_amt = item_qty * needUpdate.getNormalPrice();
+            item_amt = item_qty * needUpdate.getCurPrice();
             needUpdate.setSaleAmt(item_amt);
             saleDailyList.set(position, needUpdate);
             saleOrderAdapter.notifyDataSetChanged();
@@ -551,7 +556,16 @@ public class POS extends Activity {
         }
     };
 
-//---
+    //---
+    private void showtitle() {
+//        showPreference();
+        TextView branch = findViewById(R.id.branch);
+        branch.setText(branch.getText() + posTabInfo.getBranchCode());
+        final TextView posmachine = findViewById(R.id.posmachine);
+        posmachine.setText(posmachine.getText() + posTabInfo.getPosMachine());
+        TextView casherid = findViewById(R.id.casherid);
+        casherid.setText(casherid.getText() + posTabInfo.getSalerId());
 
+    }
 
 }

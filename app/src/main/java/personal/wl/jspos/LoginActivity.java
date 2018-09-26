@@ -33,11 +33,14 @@ import android.widget.TextView;
 
 import org.greenrobot.greendao.query.QueryBuilder;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import personal.wl.jspos.db.DBConnect;
 import personal.wl.jspos.db.IGetOperator;
+import personal.wl.jspos.method.PosTabInfo;
 import personal.wl.jspos.pos.BranchEmployee;
 import personal.wl.jspos.pos.BranchEmployeeDao;
 import personal.wl.jspos.pos.DaoSession;
@@ -45,6 +48,7 @@ import personal.wl.jspos.sync.SyncJspotDB;
 
 import static android.Manifest.permission.READ_CONTACTS;
 import static personal.wl.jspos.db.Utils.isLoginAccount;
+import static personal.wl.jspos.method.PosHandleDB.CheckAccountPassword;
 
 /**
  * A login screen that offers login via email/password.
@@ -304,11 +308,12 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean>  implements IGetOperator{
+    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> implements IGetOperator {
 
         private final String maccount;
         private final String mPassword;
-        private  BranchEmployee operator;
+        private BranchEmployee operator;
+        private PosTabInfo posTabInfo = new PosTabInfo(getApplication());
 
         UserLoginTask(String account, String password) {
             maccount = account;
@@ -318,44 +323,17 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         @Override
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
-            List<BranchEmployee> returnBranchEmployee;
             try {
-                // Simulate network access.
-                DaoSession daoSession = DBConnect.getInstances().getDaoSession();
-                SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(getApplication());
-                String branch_selected = pre.getString("branch_selected", "0");
-                BranchEmployeeDao branchEmployeeDao = daoSession.getBranchEmployeeDao();
-                QueryBuilder cond = branchEmployeeDao.queryBuilder();
-                cond.where(BranchEmployeeDao.Properties.Braid.eq(branch_selected),
-                        BranchEmployeeDao.Properties.Empid.eq(this.maccount)).build();
-                returnBranchEmployee = cond.list();
+//                PosTabInfo posTabInfo = new PosTabInfo(getApplication());
+                HashMap<String, String> tmp_login = new HashMap<String, String>();
+                tmp_login.put("branchid", posTabInfo.getBranchCode());
+                tmp_login.put("accountid", this.maccount);
+                tmp_login.put("password", this.mPassword);
                 Thread.sleep(2000);
-
-
+                return CheckAccountPassword(tmp_login);
             } catch (InterruptedException e) {
                 return false;
             }
-
-
-            if (returnBranchEmployee.size() != 1) return false;
-
-            operator = returnBranchEmployee.get(0);
-
-            return returnBranchEmployee.get(0).getPassword().equals(mPassword);
-
-
-/*
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(maccount)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }
-
-            // TODO: register the new account here.
-            return false;
-*/
         }
 
         @Override
@@ -364,8 +342,10 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             showProgress(false);
 
             if (success) {
+                posTabInfo.setSalerid(this.maccount);
                 finish();
             } else {
+                posTabInfo.setSalerid("00000");
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
             }

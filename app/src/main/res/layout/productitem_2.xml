@@ -38,7 +38,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:padding="2dp"
-            android:text="@{ product.Proid}"
+            android:text="@={ product.Proid}"
             android:textSize="20dp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/bianhao"

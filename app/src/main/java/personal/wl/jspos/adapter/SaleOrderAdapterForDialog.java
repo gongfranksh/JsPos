@@ -128,16 +128,49 @@ public class SaleOrderAdapterForDialog extends RecyclerView.Adapter<SaleOrderAda
             tv_saler = itemView.findViewById(R.id.ordersaler_2);
             tv_salename = itemView.findViewById(R.id.ordersalename_2);
 
+            tv_saler.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-            List<Product> tmp_products = QueryProductByCode(tv_proid.getText().toString().trim());
-            if (tmp_products.size() != 0) {
-                tv_proname.setText(tmp_products.get(0).getProSName());
-            }
+                }
 
-//            if (tv_saler.getText() != null) {
-//                BranchEmployee tmp_employee = getSaleid(tv_saler.getText().toString().trim());
-//                tv_salename.setText(tmp_employee.getEmpName());
-//            }
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if (s != null) {
+                        BranchEmployee tmp_employee = getSaleid(s.toString().trim());
+                        tv_salename.setText(tmp_employee.getEmpName());
+                    }
+
+                }
+            });
+
+            tv_proid.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if (s != null) {
+                        List<Product> tmp_products = QueryProductByCode(s.toString().trim());
+                        if (tmp_products.size() != 0) {
+                            tv_proname.setText(tmp_products.get(0).getProSName());
+                        }
+                    }
+                }
+            });
+
 
         }
     }
