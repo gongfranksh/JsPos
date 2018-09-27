@@ -49,6 +49,8 @@ import personal.wl.jspos.sync.SyncJspotDB;
 import static android.Manifest.permission.READ_CONTACTS;
 import static personal.wl.jspos.db.Utils.isLoginAccount;
 import static personal.wl.jspos.method.PosHandleDB.CheckAccountPassword;
+import static personal.wl.jspos.method.PosHandleDB.getSalerName;
+import static personal.wl.jspos.method.PosTabInfo.NOBODY_LOGIN;
 
 /**
  * A login screen that offers login via email/password.
@@ -75,18 +77,21 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
     // UI references.
     private AutoCompleteTextView mAccountView;
     private EditText mPasswordView;
+    private TextView mShowLogon;
     private View mProgressView;
 
     private View mLoginFormView;
+    private PosTabInfo posTabInfo;
+    private Button mLoginLogoff;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         // Set up the login form.
+
         mAccountView = (AutoCompleteTextView) findViewById(R.id.account);
         populateAutoComplete();
-
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -99,7 +104,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             }
         });
 
-        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
+        final Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -109,6 +114,22 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+        mLoginLogoff = findViewById(R.id.logon_logoff);
+        mShowLogon = findViewById(R.id.show_logon);
+        posTabInfo = new PosTabInfo(this);
+
+        if (!posTabInfo.getSalerId().equals(NOBODY_LOGIN)) {
+            mShowLogon.setText(posTabInfo.getShowLogon());
+        }
+
+        mLoginLogoff.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                posTabInfo.setSalerid(NOBODY_LOGIN);
+                mShowLogon.setText(posTabInfo.getShowLogon());
+            }
+        });
+
     }
 
     private void populateAutoComplete() {
@@ -345,7 +366,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
                 posTabInfo.setSalerid(this.maccount);
                 finish();
             } else {
-                posTabInfo.setSalerid("00000");
+                posTabInfo.setSalerid(NOBODY_LOGIN);
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
             }

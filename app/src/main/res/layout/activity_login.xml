@@ -61,6 +61,24 @@
                 android:text="登录"
                 android:textStyle="bold" />
 
+
+            <Button
+                android:id="@+id/logon_logoff"
+                style="?android:textAppearanceSmall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="注销"
+                android:textStyle="bold" />
+            <TextView
+                android:id="@+id/show_logon"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="30sp"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:text="" />
+
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

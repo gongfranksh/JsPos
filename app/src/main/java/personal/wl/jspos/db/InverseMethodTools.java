@@ -34,7 +34,9 @@ public class InverseMethodTools {
     @InverseBindingAdapter(attribute = "android:text")
     public static Double getText(TextView view) {
         if (!view.getText().toString().isEmpty()) {
-            return Double.parseDouble(view.getText().toString());
+            String s = view.getText().toString().trim();
+            s = s.replaceAll("\r|\n|\t", "");
+            return Double.parseDouble(s);
         } else return 1.00;
     }
 

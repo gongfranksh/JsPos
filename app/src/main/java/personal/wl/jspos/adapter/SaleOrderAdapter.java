@@ -109,7 +109,7 @@ public class SaleOrderAdapter extends RecyclerView.Adapter<SaleOrderAdapter.Sale
         private EditText et_saleqty;
         private TextView tv_unitamout;
 
-        private TextView tv_price;
+        private EditText et_price;
         private LinearLayout li_layout;
 
         public ViewDataBinding getBinding() {
@@ -121,6 +121,7 @@ public class SaleOrderAdapter extends RecyclerView.Adapter<SaleOrderAdapter.Sale
         }
 
         private ViewDataBinding binding;
+
 
         public SaleOrderViewHolder(@NonNull final View itemView) {
             super(itemView);
@@ -135,22 +136,42 @@ public class SaleOrderAdapter extends RecyclerView.Adapter<SaleOrderAdapter.Sale
             tv_unitamout = itemView.findViewById(R.id.orderunitamout);
 
 
-            tv_price = itemView.findViewById(R.id.orderunitprice);
+            et_price = itemView.findViewById(R.id.orderunitprice);
+
+
+            et_price.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                @Override
+                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                    ChangeItemLine();
+//                    double tmp_price, tmp_qty, tmp_lineamount;
+//                    tmp_price = Double.parseDouble(et_price.getText().toString());
+//                    tmp_qty = Double.parseDouble(et_saleqty.getText().toString());
+//                    tmp_lineamount = tmp_price * tmp_qty;
+//                    tv_unitamout.setText(Double.toString(tmp_lineamount));
+
+                    return false;
+                }
+            });
 
             et_saleqty.setOnEditorActionListener(new TextView.OnEditorActionListener() {
                 @Override
                 public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                     Toast.makeText(itemView.getContext(), v.getText(), Toast.LENGTH_LONG).show();
-                    double tmp_price, tmp_qty, tmp_lineamount;
-                    tmp_price = Double.parseDouble(tv_price.getText().toString());
-                    tmp_qty = Double.parseDouble(v.getText().toString());
-                    tmp_lineamount = tmp_price * tmp_qty;
-                    tv_unitamout.setText(Double.toString(tmp_lineamount));
+
+                    ChangeItemLine();
+//                    double tmp_price, tmp_qty, tmp_lineamount;
+//                    tmp_price = Double.parseDouble(et_price.getText().toString());
+//                    tmp_qty = Double.parseDouble(et_saleqty.getText().toString());
+//                    tmp_lineamount = tmp_price * tmp_qty;
+//                    tv_unitamout.setText(Double.toString(tmp_lineamount));
 
                     return false;
 
                 }
             });
+
+
+
 
             tv_proid.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -203,6 +224,13 @@ public class SaleOrderAdapter extends RecyclerView.Adapter<SaleOrderAdapter.Sale
             });
 
 
+        }
+        private void ChangeItemLine() {
+            double tmp_price, tmp_qty, tmp_lineamount;
+            tmp_price = Double.parseDouble(et_price.getText().toString());
+            tmp_qty = Double.parseDouble(et_saleqty.getText().toString());
+            tmp_lineamount = tmp_price * tmp_qty;
+            tv_unitamout.setText(Double.toString(tmp_lineamount));
         }
     }
 }

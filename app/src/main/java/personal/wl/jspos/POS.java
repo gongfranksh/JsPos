@@ -62,6 +62,7 @@ import static personal.wl.jspos.method.PosPayMent.PAYMENT_CASH_CODE;
 import static personal.wl.jspos.method.PosPayMent.PAYMENT_WEIXIN;
 import static personal.wl.jspos.method.PosPayMent.PAYMENT_WEIXIN_CODE;
 import static personal.wl.jspos.method.PosPayMent.getPayMentCode;
+import static personal.wl.jspos.method.PosTabInfo.NOBODY_LOGIN;
 
 public class POS extends Activity {
 
@@ -178,7 +179,7 @@ public class POS extends Activity {
         ib_submit_logoff.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                posTabInfo.setSalerid("00000");
+                posTabInfo.setSalerid(NOBODY_LOGIN);
             }
         });
 
@@ -240,7 +241,7 @@ public class POS extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (posTabInfo.getSalerId() == "00000") {
+        if (posTabInfo.getSalerId().equals(NOBODY_LOGIN)) {
             showErrorDiallog("请先登陆");
             Intent intent = new Intent();
             intent.setClass(POS.this, LoginActivity.class);
