@@ -139,6 +139,7 @@ public class SyncJspotDB extends AsyncTask<String, Integer, Integer>
         //super.onPostExecute(result);
         report.reportBack(tag, "result: i = " + result);
         pd.cancel();
+
     }
 
 

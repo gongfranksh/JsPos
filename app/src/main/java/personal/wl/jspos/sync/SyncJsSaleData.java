@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import java.util.HashMap;
 import java.util.List;
 
+import personal.wl.jspos.PosInit;
 import personal.wl.jspos.db.DBC2Jspot;
 import personal.wl.jspos.db.Utils;
 import personal.wl.jspos.pos.SaleDaily;
@@ -26,6 +27,12 @@ public class SyncJsSaleData extends AsyncTask<HashMap, Integer, Integer>
 
 
     private static final String TAG = "SyncJsSaleData";
+
+    @Override
+    protected void onPostExecute(Integer integer) {
+        super.onPostExecute(integer);
+
+    }
 
     public SyncJsSaleData(Context context, HashMap device) {
         this.context = context;

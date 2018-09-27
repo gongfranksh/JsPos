@@ -211,6 +211,17 @@ public class PosHandleDB {
         return null;
     }
 
+    public static String getSalerName(String saleidcode) {
+        BranchEmployeeDao branchEmployeeDao = DBConnect.getInstances().getDaoSession().getBranchEmployeeDao();
+        QueryBuilder cond = branchEmployeeDao.queryBuilder();
+        cond.where(BranchEmployeeDao.Properties.Empid.eq(saleidcode));
+        List<BranchEmployee> emplist = cond.build().list();
+        if (emplist.size() != 0) {
+            return emplist.get(0).getEmpName();
+        }
+        return "不存在";
+    }
+
     public static List<SalePayMode> getAllSalesPayment() {
         SalePayModeDao salePayModeDao = DBConnect.getInstances().getDaoSession().getSalePayModeDao();
         QueryBuilder cond = salePayModeDao.queryBuilder();

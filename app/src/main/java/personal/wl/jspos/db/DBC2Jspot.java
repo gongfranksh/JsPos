@@ -194,29 +194,20 @@ public class DBC2Jspot {
                 sqlvalue = sqlvalue + saleDailyList.get(i).getSaleQty() + ",";
                 sqlvalue = sqlvalue + saleDailyList.get(i).getSaleAmt() + ",";
 
-//                sqlvalue = sqlvalue + "'" + saleDailyList.get(i).getSaleDisAmt() + "',";
-//                sqlvalue = sqlvalue + "'" + saleDailyList.get(i).getTransDisAmt() + "',";
                 sqlvalue = sqlvalue + +saleDailyList.get(i).getNormalPrice() + ",";
                 sqlvalue = sqlvalue + +saleDailyList.get(i).getCurPrice() + ",";
-//                sqlvalue = sqlvalue + "'" + saleDailyList.get(i).getAvgCostPrice() + "',";
 
 
                 sqlvalue = sqlvalue + "'" + saleDailyList.get(i).getSaleId() + "',";
 
 
                 sqlvalue = sqlvalue + saleDailyList.get(i).getCash1() + ",";
-//                sqlvalue = sqlvalue + "'" + saleDailyList.get(i).getCash2() + "',";
-//                sqlvalue = sqlvalue + "'" + saleDailyList.get(i).getCash3() + "',";
-//                sqlvalue = sqlvalue + "'" + saleDailyList.get(i).getCash4() + "',";
-//                sqlvalue = sqlvalue + "'" + saleDailyList.get(i).getCash5() + "',";
-//                sqlvalue = sqlvalue + "'" + saleDailyList.get(i).getCash6() + "',";
                 sqlvalue = sqlvalue + saleDailyList.get(i).getCash7() + ",";
                 sqlvalue = sqlvalue + saleDailyList.get(i).getCash8() + ",";
 
 
                 sqlvalue = sqlvalue + saleDailyList.get(i).getSourceId() + ",";
                 sqlvalue = sqlvalue + saleDailyList.get(i).getId() + ")";
-//                sqlvalue = sqlvalue + df.format(new Date()) + ")";
                 String sql_exec = sql + sqlvalue;
                 Statement stmt = cnn.createStatement();
                 boolean rs = stmt.execute(sql_exec);
@@ -245,7 +236,7 @@ public class DBC2Jspot {
 
 
     public List getProductNeedUpdate(Integer timestamp) {
-        String sql = "select  top 100 ProId, Barcode, ProName, ProSName, ClassId, Spec, BrandId, StatId, Grade, \n" +
+        String sql = "select  ProId, Barcode, ProName, ProSName, ClassId, Spec, BrandId, StatId, Grade, \n" +
                 "Area, SupId, MeasureId, PacketQty, PacketQty1, Weight, Length, Width, Height, TaxType, \n" +
                 "InTax, SaleTax, InPrice, TaxPrice, isnull(NormalPrice,0.00) AS NormalPrice, MemberPrice, GroupPrice, \n" +
                 "MainFlag, ProFlag, WeightFlag, Barmode, OrderMode, MinOrderQty, OrderMultiplier, \n" +
@@ -284,11 +275,10 @@ public class DBC2Jspot {
 
 
     public List getProductBarCodeNeedUpdate(Integer timestamp) {
-        String sql = "SELECT top 100  proid,barcode,isnull(normalprice,0) AS normalprice,mainflag,\n" +
+        String sql = "SELECT   proid,barcode,isnull(normalprice,0) AS normalprice,mainflag,\n" +
                 "CONVERT (int,timestamp) as timestamp \n" +
                 "FROM product_barcode \n";
         sql = sql + "WHERE CONVERT (int,timestamp) > " + timestamp;
-        sql = sql + " and proid  in ('2000000165318','2000000165332','2000000165356','2000000261263','2000000165523') ";
         sql = sql + "ORDER BY CONVERT (int,timestamp) ";
         List list = null;
         Connection cnn = this.getMyconnection();

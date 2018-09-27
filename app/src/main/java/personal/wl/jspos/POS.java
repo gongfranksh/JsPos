@@ -89,6 +89,7 @@ public class POS extends Activity {
     private ImageButton ib_submit_cash;
     private ImageButton ib_submit_alipay;
     private ImageButton ib_submit_weixin;
+    private ImageButton ib_submit_logoff;
     private PosTabInfo posTabInfo;
 
 
@@ -105,6 +106,7 @@ public class POS extends Activity {
         ib_submit_cash = findViewById(R.id.submit_cash);
         ib_submit_alipay = findViewById(R.id.submit_alipay);
         ib_submit_weixin = findViewById(R.id.submit_weixin);
+        ib_submit_logoff = findViewById(R.id.submit_logoff);
 
         new TimeThread().start();
 
@@ -172,6 +174,13 @@ public class POS extends Activity {
             }
         });
 
+
+        ib_submit_logoff.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                posTabInfo.setSalerid("00000");
+            }
+        });
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override

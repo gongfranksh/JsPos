@@ -293,7 +293,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:src="@mipmap/cashrmb"
+                android:src="@mipmap/rmb"
                 android:text="现金"
                 android:textAlignment="gravity"
                 android:textSize="50dp" />
@@ -319,6 +319,15 @@
                 android:textAlignment="gravity"
                 android:textSize="50dp" />
 
+            <ImageButton
+                android:id="@+id/submit_logoff"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:src="@mipmap/logoff"
+                android:text="退出"
+                android:textAlignment="gravity"
+                android:textSize="50dp" />
 
             <TextView
                 android:id="@+id/totoalamount"
