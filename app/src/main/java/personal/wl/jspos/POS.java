@@ -37,6 +37,9 @@ import com.yanzhenjie.recyclerview.swipe.SwipeMenuCreator;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuItem;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuItemClickListener;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView;
+import com.yanzhenjie.recyclerview.swipe.touch.OnItemMoveListener;
+import com.yanzhenjie.recyclerview.swipe.touch.OnItemMovementListener;
+import com.yanzhenjie.recyclerview.swipe.touch.OnItemStateChangedListener;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -45,6 +48,7 @@ import java.util.PriorityQueue;
 
 import personal.wl.jspos.adapter.ProductAdapter;
 import personal.wl.jspos.adapter.SaleOrderAdapter;
+import personal.wl.jspos.db.AdapterChange;
 import personal.wl.jspos.method.PosPayMent;
 import personal.wl.jspos.method.PosTabInfo;
 import personal.wl.jspos.method.PosTranscation;
@@ -64,7 +68,7 @@ import static personal.wl.jspos.method.PosPayMent.PAYMENT_WEIXIN_CODE;
 import static personal.wl.jspos.method.PosPayMent.getPayMentCode;
 import static personal.wl.jspos.method.PosTabInfo.NOBODY_LOGIN;
 
-public class POS extends Activity {
+public class POS extends Activity  {
 
 
     private static final int msgKey = 901;
@@ -151,6 +155,18 @@ public class POS extends Activity {
         saleOrderAdapter = new SaleOrderAdapter(POS.this, saleDailyList);
         salesorderview.setAdapter(saleOrderAdapter);
 
+//        salesorderview.setOnItemMoveListener(new OnItemMoveListener() {
+//            @Override
+//            public boolean onItemMove(RecyclerView.ViewHolder srcHolder, RecyclerView.ViewHolder targetHolder) {
+//                return false;
+//            }
+//
+//            @Override
+//            public void onItemDismiss(RecyclerView.ViewHolder srcHolder) {
+//                Toast.makeText(POS.this,"Missitem",Toast.LENGTH_LONG).show();
+//            }
+//        });
+//
 
         ib_submit_cash.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -182,6 +198,9 @@ public class POS extends Activity {
                 posTabInfo.setSalerid(NOBODY_LOGIN);
             }
         });
+
+
+
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -217,12 +236,10 @@ public class POS extends Activity {
                     saleDaily.setSaleQty(tmp_qty);
                     saleDaily.setSalerId(posTabInfo.getSalerId());
                     saleDaily.setSaleMan(posTabInfo.getSalerId());
-//                    saleDaily.setSalerId("");
+
 
                     addsalesdaily(saleDaily);
-//                    saleDailyList.add(saleDaily);
-//                    total_amount();
-//                    saleOrderAdapter.notifyDataSetChanged();
+
 
 
                     searchView.setQuery("", false);
@@ -247,7 +264,7 @@ public class POS extends Activity {
             intent.setClass(POS.this, LoginActivity.class);
             startActivity(intent);
         }
-//        Toast.makeText(this, "resume", Toast.LENGTH_LONG).show();
+
     }
 
     @Override
@@ -259,12 +276,7 @@ public class POS extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
-//        Toast.makeText(this, "onPause", Toast.LENGTH_LONG).show();
-//
-//        if (saleDailyList.size() != 0) {
-//            Toast.makeText(this, "onPause==> have record", Toast.LENGTH_LONG).show();
-//            this.hasWindowFocus();
-//        }
+
     }
 
 
@@ -456,7 +468,7 @@ public class POS extends Activity {
                     default:
                         break;
                 }
-                Toast.makeText(POS.this, "list第" + adapterPosition + "; 左侧菜单第" + menuPosition, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(POS.this, "list第" + adapterPosition + "; 左侧菜单第" + menuPosition, Toast.LENGTH_SHORT).show();
             }
         }
     };
@@ -530,7 +542,7 @@ public class POS extends Activity {
         totalamt.setText(String.format("%1$,.1f", tmp_subtotal));
 
     }
-//-----
+
 
 
     public class TimeThread extends Thread {
@@ -559,6 +571,7 @@ public class POS extends Activity {
                     CharSequence sysTimeStr = DateFormat
                             .format(" yyyy-MM-dd hh:mm:ss", sysTime);
                     saletransdate.setText("日期：" + sysTimeStr);
+                    total_amount();
                     break;
                 default:
                     break;

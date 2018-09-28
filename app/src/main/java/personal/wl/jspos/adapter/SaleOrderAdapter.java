@@ -20,6 +20,7 @@ import java.util.List;
 
 import personal.wl.jspos.BR;
 import personal.wl.jspos.R;
+import personal.wl.jspos.db.AdapterChange;
 import personal.wl.jspos.pos.BranchEmployee;
 import personal.wl.jspos.pos.Product;
 import personal.wl.jspos.pos.SaleDaily;
@@ -66,6 +67,7 @@ public class SaleOrderAdapter extends RecyclerView.Adapter<SaleOrderAdapter.Sale
     public void onBindViewHolder(@NonNull SaleOrderViewHolder saleOrderViewHolder, final int i) {
         saleOrderViewHolder.getBinding().setVariable(BR.saleproduct, saleDailyList.get(i));
         saleOrderViewHolder.getBinding().executePendingBindings();
+
         if (onItemClickListener != null) {
             saleOrderViewHolder.li_layout.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -111,6 +113,12 @@ public class SaleOrderAdapter extends RecyclerView.Adapter<SaleOrderAdapter.Sale
 
         private EditText et_price;
         private LinearLayout li_layout;
+        private AdapterChange adapterChange;
+
+        public void setAdapterChange(AdapterChange adapterChange) {
+            this.adapterChange = adapterChange;
+        }
+
 
         public ViewDataBinding getBinding() {
             return binding;
@@ -129,7 +137,6 @@ public class SaleOrderAdapter extends RecyclerView.Adapter<SaleOrderAdapter.Sale
             li_layout = (LinearLayout) itemView.findViewById(R.id.li_layout);
             tv_salename = itemView.findViewById(R.id.ordersalename);
 
-
             tv_proid = itemView.findViewById(R.id.orderproid);
             tv_proname = itemView.findViewById(R.id.ordeproname);
             et_saleqty = itemView.findViewById(R.id.orderinputqty);
@@ -143,12 +150,6 @@ public class SaleOrderAdapter extends RecyclerView.Adapter<SaleOrderAdapter.Sale
                 @Override
                 public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                     ChangeItemLine();
-//                    double tmp_price, tmp_qty, tmp_lineamount;
-//                    tmp_price = Double.parseDouble(et_price.getText().toString());
-//                    tmp_qty = Double.parseDouble(et_saleqty.getText().toString());
-//                    tmp_lineamount = tmp_price * tmp_qty;
-//                    tv_unitamout.setText(Double.toString(tmp_lineamount));
-
                     return false;
                 }
             });
@@ -156,21 +157,11 @@ public class SaleOrderAdapter extends RecyclerView.Adapter<SaleOrderAdapter.Sale
             et_saleqty.setOnEditorActionListener(new TextView.OnEditorActionListener() {
                 @Override
                 public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                    Toast.makeText(itemView.getContext(), v.getText(), Toast.LENGTH_LONG).show();
-
                     ChangeItemLine();
-//                    double tmp_price, tmp_qty, tmp_lineamount;
-//                    tmp_price = Double.parseDouble(et_price.getText().toString());
-//                    tmp_qty = Double.parseDouble(et_saleqty.getText().toString());
-//                    tmp_lineamount = tmp_price * tmp_qty;
-//                    tv_unitamout.setText(Double.toString(tmp_lineamount));
-
                     return false;
 
                 }
             });
-
-
 
 
             tv_proid.addTextChangedListener(new TextWatcher() {
@@ -210,7 +201,7 @@ public class SaleOrderAdapter extends RecyclerView.Adapter<SaleOrderAdapter.Sale
                     if (s.toString().trim().length() == 5) {
                         BranchEmployee tmp_employee = getSaleid(s.toString().trim());
                         if (tmp_employee != null) {
-                            Toast.makeText(itemView.getContext(), tmp_employee.getEmpName(), Toast.LENGTH_LONG).show();
+//                            Toast.makeText(itemView.getContext(), tmp_employee.getEmpName(), Toast.LENGTH_LONG).show();
                             tv_salename.setText(tmp_employee.getEmpName());
                         } else {
                             Toast.makeText(itemView.getContext(), "营业员编号错误", Toast.LENGTH_LONG).show();
@@ -225,6 +216,7 @@ public class SaleOrderAdapter extends RecyclerView.Adapter<SaleOrderAdapter.Sale
 
 
         }
+
         private void ChangeItemLine() {
             double tmp_price, tmp_qty, tmp_lineamount;
             tmp_price = Double.parseDouble(et_price.getText().toString());
@@ -232,5 +224,6 @@ public class SaleOrderAdapter extends RecyclerView.Adapter<SaleOrderAdapter.Sale
             tmp_lineamount = tmp_price * tmp_qty;
             tv_unitamout.setText(Double.toString(tmp_lineamount));
         }
+
     }
 }
