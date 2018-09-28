@@ -19,7 +19,7 @@ public class PosTabInfo {
 
     public PosTabInfo(Context context) {
         pre = PreferenceManager.getDefaultSharedPreferences(context);
-        context = context;
+        this.context = context;
     }
 
     public String getPosMachine() {
@@ -58,7 +58,7 @@ public class PosTabInfo {
         return str_showlogon;
     }
 
-    public int packageCode() {
+    public int getPackageCode() {
         PackageManager manager = context.getPackageManager();
         int code = 0;
         try {
@@ -70,7 +70,7 @@ public class PosTabInfo {
         return code;
     }
 
-    public  String packageName(Context context) {
+    public  String getPackageName() {
         PackageManager manager = context.getPackageManager();
         String name = null;
         try {
