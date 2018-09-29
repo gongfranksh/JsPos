@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.Date;
 import java.util.HashMap;
 
 import javax.xml.transform.Templates;
@@ -73,8 +74,10 @@ public class PosInit extends AppCompatActivity {
         PosTabInfo posTabInfo = new PosTabInfo(PosInit.this);
         devicelist.put("deviceid", posTabInfo.getDeviceid());
         devicelist.put("posno", posTabInfo.getPosMachine());
+
         SyncJsSaleData task = new SyncJsSaleData(PosInit.this, devicelist);
         task.execute();
+        posTabInfo.setLastUploadDate(new Date());
     }
 
 }

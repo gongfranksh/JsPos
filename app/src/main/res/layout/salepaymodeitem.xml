@@ -25,21 +25,21 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="@{ String.valueOf(salepaymode.id) }"
-            android:textSize="25sp" />
+            android:textSize="20sp" />
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@{ salepaymode.Braid}"
-            android:textSize="25sp" />
+            android:textSize="20sp" />
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
             android:text="@{ InverseMethodTools.DateToString(salepaymode.SaleDate)}"
-            android:textSize="25sp"
+            android:textSize="18sp"
             />
 
         <TextView
@@ -47,28 +47,28 @@
             android:layout_height="wrap_content"
             android:layout_weight="2"
             android:text="@{ salepaymode.SaleId}"
-            android:textSize="25sp" />
+            android:textSize="20sp" />
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@{InverseMethodTools.PaymentToDisplay(salepaymode.PayModeId) }"
-            android:textSize="25sp" />
+            android:textSize="20sp" />
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@{salepaymode.salerId}"
-            android:textSize="25sp" />
+            android:textSize="20sp" />
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@{InverseMethodTools.SalerIdToDisplayName(salepaymode.salerId)}"
-            android:textSize="25sp" />
+            android:textSize="20sp" />
 
 
 

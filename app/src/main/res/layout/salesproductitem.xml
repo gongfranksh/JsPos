@@ -20,26 +20,26 @@
 
         <TextView
             android:id="@+id/orderproid"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="2"
             android:gravity="right"
             android:text="@{saleproduct.proId}"
-            android:textSize="20dp"
+            android:textSize="15sp"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/ordeproname"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="2"
             android:gravity="right"
-            android:textSize="20dp"
+            android:textSize="15sp"
             android:textStyle="bold" />
 
         <EditText
             android:id="@+id/orderunitprice"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:inputType="numberDecimal"
@@ -51,7 +51,7 @@
 
         <EditText
             android:id="@+id/ordersalerid"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="right"
@@ -64,7 +64,7 @@
 
         <TextView
             android:id="@+id/ordersalename"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="right"
@@ -74,7 +74,7 @@
 
         <EditText
             android:id="@+id/orderinputqty"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="right"
@@ -87,7 +87,7 @@
 
         <TextView
             android:id="@+id/orderunitamout"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="right"

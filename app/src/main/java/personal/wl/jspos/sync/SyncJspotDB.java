@@ -55,6 +55,7 @@ public class SyncJspotDB extends AsyncTask<String, Integer, Integer>
     private String tag = null;
     private ProgressDialog pd = null;
     private HashMap device = new HashMap<String, String>();
+    private int num = 7;
 
     private static DaoSession getDaosession() {
         return daosession;
@@ -125,6 +126,9 @@ public class SyncJspotDB extends AsyncTask<String, Integer, Integer>
                 pd.setMessage("BarCode同步....");
                 break;
 
+            case 8:
+                pd.setMessage("设备未注册不能同步");
+                break;
             default:
                 break;
         }
@@ -138,6 +142,9 @@ public class SyncJspotDB extends AsyncTask<String, Integer, Integer>
         // TODO Auto-generated method stub
         //super.onPostExecute(result);
         report.reportBack(tag, "result: i = " + result);
+        if (result.equals(num+1)){
+            report.reportBack(tag,"设备未注册");
+        }
         pd.cancel();
 
     }
@@ -147,7 +154,7 @@ public class SyncJspotDB extends AsyncTask<String, Integer, Integer>
     protected Integer doInBackground(String... params) {
         // TODO SYNC Data do in backgroud
 //        int num = params.length;
-        int num = 7;
+//        int num = 7;
         int i = 0;
         Integer rec = 0;
 
@@ -174,7 +181,10 @@ public class SyncJspotDB extends AsyncTask<String, Integer, Integer>
 
         } else {
             //授权失败退出不下载数据
-            return num;
+            publishProgress(num+1);
+            Utils.sleepForSecs(2);
+            return num+1;
+
         }
 
 

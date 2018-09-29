@@ -52,7 +52,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="收款类别"
+            android:text="收款"
             android:textSize="20sp"
             android:textStyle="bold"
             />
@@ -61,7 +61,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="收银员编号"
+            android:text="操作员"
             android:textSize="20sp"
             android:textStyle="bold"
             />

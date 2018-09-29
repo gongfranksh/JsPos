@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Date;
 import java.util.HashMap;
 
 import personal.wl.jspos.db.IReportBack;
@@ -94,6 +95,7 @@ public class MainActivity extends AppCompatActivity implements IReportBack {
         devicelist.put("posno", posTabInfo.getPosMachine());
         SyncJspotDB task = new SyncJspotDB(this, this, "SyncJspotDB", 6, devicelist);
         task.execute();
+        posTabInfo.setLastUploadDate(new Date());
     }
 
     private void LoadSetting() {
@@ -127,7 +129,8 @@ public class MainActivity extends AppCompatActivity implements IReportBack {
         String display_msg = "门店编号：" + posTabInfo.getBranchCode() + "\n" +
                 "收银机号：" + posTabInfo.getPosMachine() + "\n" +
                 "营业员编号：" + posTabInfo.getSalerId()+ "\n" +
-                "版本号：" + posTabInfo.getPackageName()+ "\n";
+                "版本号：" + posTabInfo.getPackageName()+ "\n"+
+                "最后同步时间:" + posTabInfo.getLastUploadDate();
         mTextMessage.setText(display_msg);
 
 
