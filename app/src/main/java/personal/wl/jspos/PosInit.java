@@ -1,7 +1,7 @@
 package personal.wl.jspos;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -9,12 +9,11 @@ import android.widget.TextView;
 import java.util.Date;
 import java.util.HashMap;
 
-import javax.xml.transform.Templates;
-
 import personal.wl.jspos.method.DeviceUtils;
 import personal.wl.jspos.method.PosTabInfo;
 import personal.wl.jspos.sync.SyncJsSaleData;
-import personal.wl.jspos.sync.SyncJspotDB;
+import personal.wl.jspos.update.utils.UpgradeUI;
+import personal.wl.jspos.update.view.CommonProgressDialog;
 
 import static personal.wl.jspos.method.PosHandleDB.CleanLocalSales;
 
@@ -23,7 +22,9 @@ public class PosInit extends AppCompatActivity {
     private Button bt_uploadLocalSaledata;
     private Button bt_syncdata;
     private Button bt_getDeviceId;
+    private Button bt_checkversion;
     private TextView tv_display;
+    private CommonProgressDialog pBar;
 
 
     @Override
@@ -33,6 +34,7 @@ public class PosInit extends AppCompatActivity {
         bt_cleanLocalSaledata = findViewById(R.id.sync_clean_local);
         bt_getDeviceId = findViewById(R.id.getdeviceid);
         bt_uploadLocalSaledata = findViewById(R.id.sync_upload_sales);
+        bt_checkversion = findViewById(R.id.check_apk);
         tv_display = findViewById(R.id.initdisplay);
 
 
@@ -66,6 +68,15 @@ public class PosInit extends AppCompatActivity {
             }
         });
 
+        bt_checkversion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                UpgradeUI ugui = new UpgradeUI(PosInit.this);
+                ugui.getversion();
+
+            }
+        });
 
     }
 
@@ -79,5 +90,7 @@ public class PosInit extends AppCompatActivity {
         task.execute();
         posTabInfo.setLastUploadDate(new Date());
     }
+
+
 
 }

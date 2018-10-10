@@ -4,11 +4,10 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.os.Environment;
 import android.preference.PreferenceManager;
-import android.view.View;
 
 import java.text.SimpleDateFormat;
-import java.util.Collections;
 import java.util.Date;
 
 import static personal.wl.jspos.method.PosHandleDB.getSalerName;
@@ -99,6 +98,16 @@ public class PosTabInfo {
         }
         return code;
     }
+
+    public static boolean hasSdcard() {
+        String state = Environment.getExternalStorageState();
+        if (state.equals(Environment.MEDIA_MOUNTED)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 
     public  String getPackageName() {
         PackageManager manager = context.getPackageManager();
