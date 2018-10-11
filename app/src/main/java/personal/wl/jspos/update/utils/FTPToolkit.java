@@ -9,6 +9,8 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 public final class FTPToolkit {
 
@@ -314,5 +316,29 @@ public final class FTPToolkit {
             }
         }
         return true;
+    }
+
+
+    public static void downloadmethod(FTPClient client, String remoteFileName,
+                                      String localPath) throws Exception {
+        try {
+            File file = new File(localPath);
+            OutputStream out = new FileOutputStream(file);
+            InputStream inputfile = client.retrieveFileStream(remoteFileName);
+            long fileLength = FTPToolkit.getFileLength(client, remoteFileName);
+            byte[] data = new byte[1024];
+            int total = 0;
+            int count;
+            while ((count = inputfile.read(data)) != -1) {
+                total += count;
+                if (fileLength > 0) // only if total length is known
+                    out.write(data, 0, count);
+            }
+            out.flush();
+            out.close();
+            inputfile.close();
+        } catch (Exception e) {
+            throw new Exception(e);
+        }
     }
 }

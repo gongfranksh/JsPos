@@ -30,16 +30,18 @@ public class DownloadTask extends AsyncTask<String, Integer, String> {
         InputStream input = null;
         OutputStream output = null;
         try {
-            FtpInfo mFtpInfo = new FtpInfo();
             mFtpClient = FTPToolkit
-                    .makeFtpConnection(mFtpInfo.ip, mFtpInfo.port,
-                            mFtpInfo.username, mFtpInfo.password);
+                    .makeFtpConnection(FtpInfo.IP, FtpInfo.PORT,
+                            FtpInfo.LOGIN_ACCOUNT, FtpInfo.LOGIN_PASSWORD);
 
-            long fileLength = FTPToolkit.getFileLength(mFtpClient, mFtpInfo.remoteFile);
+            File getversionfilejson = new File(context.getFilesDir().getPath() + "/"+FtpInfo.UPGRADE_JSON_FILE_NAME);
+            FTPToolkit.download(mFtpClient, FtpInfo.UPGRADE_JSON_FILE_ADDRESS, getversionfilejson.getPath());
 
-            File file = new File(context.getFilesDir().getPath() + mFtpInfo.localFile);
+            long fileLength = FTPToolkit.getFileLength(mFtpClient, FtpInfo.remoteFile);
+
+            File file = new File(context.getFilesDir().getPath() + "/"+FtpInfo.localFile);
             OutputStream out = new FileOutputStream(file);
-            InputStream inputfile = mFtpClient.retrieveFileStream(mFtpInfo.remoteFile);
+            InputStream inputfile = mFtpClient.retrieveFileStream(FtpInfo.remoteFile);
             byte[] data = new byte[1024];
             int total = 0;
             int count;
@@ -60,7 +62,6 @@ public class DownloadTask extends AsyncTask<String, Integer, String> {
             out.close();
             inputfile.close();
 
-//            FTPToolkit.download(mFtpClient, "/posapp/headquarters.zip", file.getPath());
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

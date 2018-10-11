@@ -4,8 +4,15 @@ import android.content.Context;
 import android.os.Build;
 import android.provider.Settings;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Map;
+
+import personal.wl.jspos.update.utils.FtpInfo;
 
 public class DeviceUtils {
     public static String getUniqueId(Context context){
@@ -41,5 +48,56 @@ public class DeviceUtils {
         //返回整个结果
         return sb.toString();
     }
+
+    public static String jsonreplace(String str){
+        String dest = null;
+        if(str == null){
+            return dest;
+        }else{
+//            String regEx=regEx="[\\[\\]]";
+//            Pattern p = Pattern.compile(regEx);
+//            Matcher m = p.matcher(str);
+//            dest = m.replaceAll("").trim();
+            dest=str.substring(1, str.length()-1);
+
+            return dest;
+        }
+    }
+
+    public static Map<String, Object>  getVersion_JSON(Context context){
+        try {
+            FtpInfo mFtpInfo = new FtpInfo();
+            InputStream jsonversion = new FileInputStream(context.getFilesDir().getPath() + "/"+mFtpInfo.UPGRADE_JSON_FILE_NAME);
+            InputStreamReader isr = new InputStreamReader(jsonversion,"UTF-8");
+            BufferedReader br = new BufferedReader(isr);
+            String line;
+            StringBuilder builder = new StringBuilder();
+            while((line = br.readLine()) != null){
+                builder.append(line);
+            }
+            br.close();
+            isr.close();
+
+
+            CommonJSONParser commonJSONParser = new CommonJSONParser();
+            Map<String, Object> checkversion = commonJSONParser.parse(jsonreplace(builder.toString()));
+            return checkversion;
+//
+//            JSONObject testjson = new JSONObject();
+//            testjson.getJSONObject(builder.toString());
+////            JSONObject testjson = new JSONObject(builder.toString());//builder读取了JSON中的数据。
+//            //直接传入JSONObject来构造一个实例
+//            JSONArray array = testjson.getJSONArray("role");         //从JSONObject中取出数组对象
+//            for (int i = 0; i < array.length(); i++) {
+//                JSONObject role = array.getJSONObject(i);    //取出数组中的对象
+//            }//
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null ;
+    }
+
+
 
 }

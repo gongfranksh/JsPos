@@ -41,4 +41,5 @@ dependencies {
     implementation 'com.nineoldandroids:parent:2.4.0'
     implementation 'com.nineoldandroids:library:2.4.0'
     implementation 'commons-net:commons-net:20030805.205232'
+    implementation 'com.yanzhenjie:permission:2.0.0-rc12'
 }

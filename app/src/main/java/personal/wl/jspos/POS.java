@@ -1,11 +1,11 @@
 package personal.wl.jspos;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.app.Activity;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
@@ -20,11 +20,9 @@ import android.text.format.DateFormat;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
 import android.view.Gravity;
-import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -37,19 +35,12 @@ import com.yanzhenjie.recyclerview.swipe.SwipeMenuCreator;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuItem;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuItemClickListener;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView;
-import com.yanzhenjie.recyclerview.swipe.touch.OnItemMoveListener;
-import com.yanzhenjie.recyclerview.swipe.touch.OnItemMovementListener;
-import com.yanzhenjie.recyclerview.swipe.touch.OnItemStateChangedListener;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.PriorityQueue;
 
 import personal.wl.jspos.adapter.ProductAdapter;
 import personal.wl.jspos.adapter.SaleOrderAdapter;
-import personal.wl.jspos.db.AdapterChange;
-import personal.wl.jspos.method.PosPayMent;
 import personal.wl.jspos.method.PosTabInfo;
 import personal.wl.jspos.method.PosTranscation;
 import personal.wl.jspos.pos.Product;
@@ -57,14 +48,9 @@ import personal.wl.jspos.pos.SaleDaily;
 
 import static personal.wl.jspos.method.PosHandleDB.JudgeSaler;
 import static personal.wl.jspos.method.PosHandleDB.QueryProductBarCodeByCode;
-import static personal.wl.jspos.method.PosHandleDB.QueryProductByCode;
-import static personal.wl.jspos.method.PosHandleDB.getProductList;
 import static personal.wl.jspos.method.PosPayMent.PAYMENT_ALIPAY;
-import static personal.wl.jspos.method.PosPayMent.PAYMENT_ALIPAY_CODE;
 import static personal.wl.jspos.method.PosPayMent.PAYMENT_CASH;
-import static personal.wl.jspos.method.PosPayMent.PAYMENT_CASH_CODE;
 import static personal.wl.jspos.method.PosPayMent.PAYMENT_WEIXIN;
-import static personal.wl.jspos.method.PosPayMent.PAYMENT_WEIXIN_CODE;
 import static personal.wl.jspos.method.PosPayMent.getPayMentCode;
 import static personal.wl.jspos.method.PosTabInfo.NOBODY_LOGIN;
 
