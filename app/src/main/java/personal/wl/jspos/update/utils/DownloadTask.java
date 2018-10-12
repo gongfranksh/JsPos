@@ -39,7 +39,7 @@ public class DownloadTask extends AsyncTask<String, Integer, String> {
 
             long fileLength = FTPToolkit.getFileLength(mFtpClient, FtpInfo.remoteFile);
 
-            File file = new File(context.getFilesDir().getPath() + "/"+FtpInfo.localFile);
+            File file = new File(context.getFilesDir().getPath() + "/"+FtpInfo.APK_FIlE);
             OutputStream out = new FileOutputStream(file);
             InputStream inputfile = mFtpClient.retrieveFileStream(FtpInfo.remoteFile);
             byte[] data = new byte[1024];
