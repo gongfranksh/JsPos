@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Message;
 import android.view.LayoutInflater;
+import android.widget.Toast;
 
 import org.apache.commons.net.ftp.FTPClient;
 
@@ -13,11 +14,20 @@ import java.io.File;
 import personal.wl.jspos.R;
 import personal.wl.jspos.update.view.CommonProgressDialog;
 
+import static personal.wl.jspos.update.utils.FtpInfo.DOWNLOAD_OVER;
+import static personal.wl.jspos.update.utils.FtpInfo.DOWNLOAD_UPDATE;
+import static personal.wl.jspos.update.utils.FtpInfo.UPGRADE_JSON_FILE_ADDRESS;
+import static personal.wl.jspos.update.utils.FtpInfo.UPGRADE_JSON_FILE_NAME;
+import static personal.wl.jspos.update.utils.FtpInfo.UPGRADE_JSON_FILE_NAME_README;
+import static personal.wl.jspos.update.utils.FtpInfo.UPGRADE_README_FILE_ADDRESS;
+
+
 public class UpgradeUI {
     private Context context;
     private CommonProgressDialog pBar;
     private FTPClient mFtpClient;
     private File getversionfilejson;
+    private File getversionfilejsonreadme;
 
     public UpgradeUI(Context context) {
         this.context = context;
@@ -72,13 +82,12 @@ public class UpgradeUI {
                 mFtpClient = FTPToolkit
                         .makeFtpConnection(FtpInfo.IP, FtpInfo.PORT,
                                 FtpInfo.LOGIN_ACCOUNT, FtpInfo.LOGIN_PASSWORD);
-
-
-                getversionfilejson = new File(context.getFilesDir().getPath() + "/" + "output.json");
-                FTPToolkit.download(mFtpClient, "/posapp/output.json", getversionfilejson.getPath());
-
+                getversionfilejson = new File(context.getFilesDir().getPath() + "/" + UPGRADE_JSON_FILE_NAME);
+                getversionfilejsonreadme = new File(context.getFilesDir().getPath() + "/" + UPGRADE_JSON_FILE_NAME_README);
+                FTPToolkit.download(mFtpClient, UPGRADE_JSON_FILE_ADDRESS, getversionfilejson.getPath());
+                FTPToolkit.download(mFtpClient, UPGRADE_README_FILE_ADDRESS, getversionfilejsonreadme.getPath());
                 Message msg = new Message();
-                msg.what = 8888;
+                msg.what = DOWNLOAD_UPDATE;
                 mHandler.sendMessage(msg);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -92,29 +101,40 @@ public class UpgradeUI {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
-                case 8888:
-                    proc();
+                case DOWNLOAD_UPDATE:
+                    download_update_proc();
                     break;
+
+                case DOWNLOAD_OVER:
+                    download_installApk();
+                    break;
+
                 default:
                     break;
             }
         }
     };
 
-    private void proc() {
+    private void download_installApk() {
+    }
+
+    private void download_update_proc() {
         int vision = Tools.getVersion(context);
         UpgradeApk upgradeApk = new UpgradeApk(this.context);
         int cc = upgradeApk.getVersioncode();
         String newversion = upgradeApk.getVersionname();
+        String versionreadme = upgradeApk.getVersionreadme();
         String content = "\n" +
                 "---------------------\n" +
                 "本次升级版到：" +
                 upgradeApk.getVersionname() +
                 "\n" +
-                "---------------------\n";
-
+                "---------------------\n"
+                +versionreadme;
         System.out.println(newversion + "v" + vision + ",,"
                 + cc);
+
+        //检查版本是否需要更新
         if (cc != vision) {
             if (vision < cc) {
                 System.out.println(newversion + "v"
@@ -122,6 +142,8 @@ public class UpgradeUI {
                 // 版本号不同
                 ShowDialog(vision, newversion, content);
             }
+        } else {
+            Toast.makeText(this.context, "当前无更新", Toast.LENGTH_LONG).show();
         }
 
 

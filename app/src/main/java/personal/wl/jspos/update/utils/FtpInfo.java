@@ -8,6 +8,11 @@ public final class FtpInfo {
     public final static String localFile = "he.zip";
     public final static String remoteFile = "/posapp/headquarters.zip";
     public final static String UPGRADE_JSON_FILE_ADDRESS = "/posapp/output.json";
+    public final static String UPGRADE_README_FILE_ADDRESS = "/posapp/readme.txt";
     public final static String UPGRADE_JSON_FILE_NAME = "output.json";
+    public final static String UPGRADE_JSON_FILE_NAME_README = "readme.txt";
+    public final static int DOWNLOAD_OVER = 9100;
+    public final static int DOWNLOAD_UPDATE = 9110;
+
 
 }

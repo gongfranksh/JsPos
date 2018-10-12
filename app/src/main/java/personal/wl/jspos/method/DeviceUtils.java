@@ -15,7 +15,7 @@ import java.util.Map;
 import personal.wl.jspos.update.utils.FtpInfo;
 
 public class DeviceUtils {
-    public static String getUniqueId(Context context){
+    public static String getUniqueId(Context context) {
         String androidID = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
         String id = androidID + Build.SERIAL;
         try {
@@ -49,30 +49,29 @@ public class DeviceUtils {
         return sb.toString();
     }
 
-    public static String jsonreplace(String str){
+    public static String jsonreplace(String str) {
         String dest = null;
-        if(str == null){
+        if (str == null) {
             return dest;
-        }else{
+        } else {
 //            String regEx=regEx="[\\[\\]]";
 //            Pattern p = Pattern.compile(regEx);
 //            Matcher m = p.matcher(str);
 //            dest = m.replaceAll("").trim();
-            dest=str.substring(1, str.length()-1);
+            dest = str.substring(1, str.length() - 1);
 
             return dest;
         }
     }
 
-    public static Map<String, Object>  getVersion_JSON(Context context){
+    public static Map<String, Object> getVersion_JSON(Context context) {
         try {
-            FtpInfo mFtpInfo = new FtpInfo();
-            InputStream jsonversion = new FileInputStream(context.getFilesDir().getPath() + "/"+mFtpInfo.UPGRADE_JSON_FILE_NAME);
-            InputStreamReader isr = new InputStreamReader(jsonversion,"UTF-8");
+            InputStream jsonversion = new FileInputStream(context.getFilesDir().getPath() + "/" + FtpInfo.UPGRADE_JSON_FILE_NAME);
+            InputStreamReader isr = new InputStreamReader(jsonversion, "UTF-8");
             BufferedReader br = new BufferedReader(isr);
             String line;
             StringBuilder builder = new StringBuilder();
-            while((line = br.readLine()) != null){
+            while ((line = br.readLine()) != null) {
                 builder.append(line);
             }
             br.close();
@@ -95,9 +94,29 @@ public class DeviceUtils {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null ;
+        return null;
     }
 
+    public static String getVersion_Readme(Context context) {
+        try {
+            InputStream versionreadme = new FileInputStream(context.getFilesDir().getPath() + "/" + FtpInfo.UPGRADE_JSON_FILE_NAME_README);
+            InputStreamReader isr = new InputStreamReader(versionreadme, "UTF-8");
+            BufferedReader br = new BufferedReader(isr);
+            String line;
+            StringBuilder builder = new StringBuilder();
+            while ((line = br.readLine()) != null) {
+                builder.append(line+'\n');
+            }
+            br.close();
+            isr.close();
+
+            return builder.toString();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
 
 }

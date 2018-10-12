@@ -5,6 +5,7 @@ import android.content.Context;
 import java.util.Map;
 
 import static personal.wl.jspos.method.DeviceUtils.getVersion_JSON;
+import static personal.wl.jspos.method.DeviceUtils.getVersion_Readme;
 
 public class UpgradeApk {
 
@@ -14,6 +15,12 @@ public class UpgradeApk {
 
     private int versioncode;
     private String versionname;
+
+    public String getVersionreadme() {
+        return versionreadme;
+    }
+
+    private String versionreadme;
     private String path;
 
     public int getVersioncode() {
@@ -34,6 +41,7 @@ public class UpgradeApk {
     public UpgradeApk(Context context) {
         this.context = context;
         this.upgradeversion = getVersion_JSON(this.context);
+        this.versionreadme = getVersion_Readme(this.context);
         this.upgradeapkinfo = (Map<String, Object>) this.upgradeversion.get("apkInfo");
     }
 
