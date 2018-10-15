@@ -1,8 +1,11 @@
 package personal.wl.jspos.update.utils;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.PowerManager;
+import android.support.v4.content.FileProvider;
 
 import org.apache.commons.net.ftp.FTPClient;
 
@@ -11,7 +14,10 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import personal.wl.jspos.BuildConfig;
 import personal.wl.jspos.update.view.CommonProgressDialog;
+
+import static personal.wl.jspos.update.utils.FtpInfo.APK_FIlE;
 
 public class DownloadTask extends AsyncTask<String, Integer, String> {
 
@@ -80,6 +86,7 @@ public class DownloadTask extends AsyncTask<String, Integer, String> {
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
         pbar.dismiss();
+        download_installApk();
 //            finish();
     }
 
@@ -89,5 +96,19 @@ public class DownloadTask extends AsyncTask<String, Integer, String> {
         pbar.setIndeterminate(false);
         pbar.setMax(100);
         pbar.setProgress(values[0]);
+    }
+
+
+    private void download_installApk() {
+        String ss = BuildConfig.APPLICATION_ID;
+        File getapkfile = new File(context.getFilesDir().getPath() + "/" + APK_FIlE);
+        Intent install = new Intent(Intent.ACTION_VIEW);
+        install.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        install.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        Uri contentUri = FileProvider.getUriForFile(this.context, context.getApplicationContext().getPackageName() + ".provider", getapkfile);
+        install.setDataAndType(contentUri, "application/vnd.android.package-archive");
+        this.context.startActivity(install);
+
+
     }
 }

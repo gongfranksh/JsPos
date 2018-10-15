@@ -3,10 +3,7 @@ package personal.wl.jspos.update.utils;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Message;
-import android.support.v4.content.FileProvider;
 import android.view.LayoutInflater;
 import android.widget.Toast;
 
@@ -14,11 +11,9 @@ import org.apache.commons.net.ftp.FTPClient;
 
 import java.io.File;
 
-import personal.wl.jspos.BuildConfig;
 import personal.wl.jspos.R;
 import personal.wl.jspos.update.view.CommonProgressDialog;
 
-import static personal.wl.jspos.update.utils.FtpInfo.APK_FIlE;
 import static personal.wl.jspos.update.utils.FtpInfo.DOWNLOAD_OVER;
 import static personal.wl.jspos.update.utils.FtpInfo.DOWNLOAD_UPDATE;
 import static personal.wl.jspos.update.utils.FtpInfo.UPGRADE_JSON_FILE_ADDRESS;
@@ -112,7 +107,7 @@ public class UpgradeUI {
                     break;
 
                 case DOWNLOAD_OVER:
-                    download_installApk();
+//                    download_installApk();
                     break;
 
                 default:
@@ -121,18 +116,18 @@ public class UpgradeUI {
         }
     };
 
-    private void download_installApk() {
-        String ss = BuildConfig.APPLICATION_ID;
-        getapkfile=new File(context.getFilesDir().getPath() + "/" + APK_FIlE);
-        Intent install = new Intent(Intent.ACTION_VIEW);
-        install.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        install.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        Uri contentUri = FileProvider.getUriForFile(this.context, context.getApplicationContext().getPackageName() + ".provider", getapkfile);
-        install.setDataAndType(contentUri, "application/vnd.android.package-archive");
-        this.context.startActivity(install);
-
-
-    }
+//    private void download_installApk() {
+//        String ss = BuildConfig.APPLICATION_ID;
+//        getapkfile=new File(context.getFilesDir().getPath() + "/" + APK_FIlE);
+//        Intent install = new Intent(Intent.ACTION_VIEW);
+//        install.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+//        install.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//        Uri contentUri = FileProvider.getUriForFile(this.context, context.getApplicationContext().getPackageName() + ".provider", getapkfile);
+//        install.setDataAndType(contentUri, "application/vnd.android.package-archive");
+//        this.context.startActivity(install);
+//
+//
+//    }
 
     private void download_update_proc() {
         int vision = Tools.getVersion(context);
@@ -160,7 +155,7 @@ public class UpgradeUI {
                         + vision);
                 // 版本号不同
                 ShowDialog(vision, newversion, content);
-                download_installApk();
+//                download_installApk();
             }
         } else {
             Toast.makeText(this.context, "当前无更新", Toast.LENGTH_LONG).show();
