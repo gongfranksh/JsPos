@@ -1,6 +1,7 @@
 package personal.wl.jspos.update.utils;
 
 import android.content.Context;
+import android.widget.Toast;
 
 import java.util.Map;
 
@@ -39,10 +40,17 @@ public class UpgradeApk {
     }
 
     public UpgradeApk(Context context) {
+        try {
+
         this.context = context;
         this.upgradeversion = getVersion_JSON(this.context);
         this.versionreadme = getVersion_Readme(this.context);
         this.upgradeapkinfo = (Map<String, Object>) this.upgradeversion.get("apkInfo");
+        } catch (Exception e) {
+
+            e.printStackTrace();
+            Toast.makeText(context,e.toString(),Toast.LENGTH_LONG).show();
+        }
     }
 
 

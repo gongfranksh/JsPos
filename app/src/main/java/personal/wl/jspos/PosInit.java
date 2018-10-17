@@ -12,6 +12,7 @@ import java.util.HashMap;
 import personal.wl.jspos.method.DeviceUtils;
 import personal.wl.jspos.method.PosTabInfo;
 import personal.wl.jspos.sync.SyncJsSaleData;
+import personal.wl.jspos.update.http.HttpToolsKits;
 import personal.wl.jspos.update.utils.UpgradeUI;
 import personal.wl.jspos.update.view.CommonProgressDialog;
 
@@ -23,6 +24,7 @@ public class PosInit extends AppCompatActivity {
     private Button bt_syncdata;
     private Button bt_getDeviceId;
     private Button bt_checkversion;
+    private Button bt_checkversion_http;
     private TextView tv_display;
     private CommonProgressDialog pBar;
 
@@ -35,6 +37,7 @@ public class PosInit extends AppCompatActivity {
         bt_getDeviceId = findViewById(R.id.getdeviceid);
         bt_uploadLocalSaledata = findViewById(R.id.sync_upload_sales);
         bt_checkversion = findViewById(R.id.check_apk);
+        bt_checkversion_http = findViewById(R.id.check_apk_http);
         tv_display = findViewById(R.id.initdisplay);
 
 
@@ -75,6 +78,43 @@ public class PosInit extends AppCompatActivity {
                 UpgradeUI ugui = new UpgradeUI(PosInit.this);
                 ugui.getversion();
 
+            }
+        });
+
+
+        bt_checkversion_http.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                HttpToolsKits httpToolsKits = new HttpToolsKits(PosInit.this,v);
+                httpToolsKits.downloadVersionFile();
+
+//                try {
+////                    String uriString = "file:///storage/emulated/0/Android/data/personal.wl.jspos/files/Download/app-release-1.apk";
+////                    String uriString = PosInit.this.getFilesDir().getPath() + "/" + APK_FIlE;
+////                    File targetApkFile = new File(uriString);
+////                    Uri contentUri = FileProvider.getUriForFile(PosInit.this, PosInit.this.getApplicationContext().getPackageName() + ".provider", targetApkFile);
+//
+//                    String uriString = "/storage/emulated/0/Android/data/personal.wl.jspos/files/Download/app-release-1.apk";
+//                    File targetApkFile = new File(uriString);
+//                    Uri contentUri = FileProvider.getUriForFile(PosInit.this, PosInit.this.getApplicationContext().getPackageName() + ".provider", targetApkFile);
+//
+//
+//                    Intent installIntent = new Intent(Intent.ACTION_VIEW);
+//                    installIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+//                    installIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                    installIntent.setDataAndType(contentUri, "application/vnd.android.package-archive");
+//
+//
+//
+//                    startActivity(installIntent);
+//
+//
+//                } catch (Exception e) {
+//                    Toast.makeText(PosInit.this,e.toString(),Toast.LENGTH_LONG).show();
+//                    e.printStackTrace();
+//
+//                }
+//
             }
         });
 

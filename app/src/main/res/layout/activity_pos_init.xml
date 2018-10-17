@@ -38,6 +38,13 @@
 
 
         <Button
+            android:id="@+id/check_apk_http"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="检查系统更新http" />
+
+
+        <Button
             android:id="@+id/getdeviceid"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

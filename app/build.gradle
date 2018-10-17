@@ -6,8 +6,8 @@ android {
         applicationId "personal.wl.jspos"
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
+        versionCode 3
+        versionName "3.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
@@ -42,4 +42,7 @@ dependencies {
     implementation 'com.nineoldandroids:library:2.4.0'
     implementation 'commons-net:commons-net:20030805.205232'
     implementation 'com.yanzhenjie:permission:2.0.0-rc12'
+    implementation 'com.squareup.okhttp3:okhttp:3.11.0'
+    implementation 'com.squareup.okio:okio:2.1.0'
+    implementation 'com.github.xxl6097:okhttputils:2.4.1'
 }
