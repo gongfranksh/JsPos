@@ -1,7 +1,6 @@
 package personal.wl.jspos.db;
 
 
-import android.content.Intent;
 import android.util.Log;
 
 import java.sql.Connection;
@@ -11,7 +10,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -402,7 +400,7 @@ public class DBC2Jspot {
 
 
     protected static void proc_exec(Connection con, String sql) throws SQLException {
-        // TODO QuerySqlGetResult
+        // TODO proc_exec
         run = System.currentTimeMillis();
         Log.i(TAG, "proc_exec t-->" + run);
         try {
