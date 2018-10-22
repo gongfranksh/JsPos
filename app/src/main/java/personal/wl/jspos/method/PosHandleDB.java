@@ -1,5 +1,7 @@
 package personal.wl.jspos.method;
 
+import android.database.Cursor;
+
 import org.greenrobot.greendao.query.QueryBuilder;
 
 import java.util.ArrayList;
@@ -372,6 +374,50 @@ public class PosHandleDB {
             rt_saledailylist.add(tmp_saledaily);
         }
         return rt_saledailylist;
+    }
+
+    public static Integer getRecordLocalProduct() {
+        String sql = null;
+        sql = "select count(*) from product;";
+        return exce_sql(sql);
+    }
+
+    public static Integer getRecordLocalProductBarcode() {
+        String sql = null;
+        sql = "select count(*) from product_bar_code;";
+        return exce_sql(sql);
+    }
+
+    public static Integer getRecordLocalProductBranchRel() {
+        String sql = null;
+        sql = "select count(*) from product_branch_rel;";
+        return exce_sql(sql);
+    }
+
+
+    public static Integer getRecordLocalSaleDaily() {
+        String sql = null;
+        sql = "select count(distinct sale_id) from sale_daily ;";
+        return exce_sql(sql);
+    }
+
+
+
+    //Common Tools
+    private static Integer exce_sql(String sql) {
+        Integer records = 0;
+        Cursor result = null;
+        try {
+            result = DBConnect.getInstances().getDaoSession().getDatabase().rawQuery(sql, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (result != null) {
+            while (result.moveToNext()) {
+                records = result.getInt(0);
+            }
+        }
+        return records;
     }
 
 
