@@ -3,7 +3,7 @@
     package="personal.wl.jspos">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
 
@@ -40,23 +40,47 @@
         <activity
             android:name=".ScrollingActivity"
             android:label="@string/title_activity_scrolling" />
+
+        <activity
+            android:name=".LocalDatabaseCheckActivity"
+            android:label="本地数据库记录"
+            android:screenOrientation="landscape">
+            <intent-filter>
+                <action android:name="personal.wj.jspos.LocalDatabaseCheckActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+
+        <activity
+            android:name=".UpgradeActivity"
+            android:label="版本更新检查"
+            android:screenOrientation="landscape">
+            <intent-filter>
+                <action android:name="personal.wj.jspos.UpgradeActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+            </intent-filter>
+
+        </activity>
         <activity
             android:name=".POS"
             android:label="@string/title_activity_pos"
             android:screenOrientation="landscape" />
         <activity
             android:name=".PosTransList"
-
             android:screenOrientation="landscape" />
         />
         <activity
-            android:screenOrientation="landscape"
-            android:name=".PosInit">
+            android:name=".PosInit"
+            android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="personal.wj.jspos.posinit" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
+
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="${applicationId}.provider"
@@ -64,10 +88,10 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths"/>
+                android:resource="@xml/provider_paths" />
         </provider>
         <receiver android:name="personal.wl.jspos.update.http.DownLoadBroadcastReceiver">
-            <intent-filter android:priority="20" >
+            <intent-filter android:priority="20">
                 <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
             </intent-filter>
         </receiver>

@@ -8,13 +8,13 @@
         android:key="branch_selected"
         android:negativeButtonText="@null"
         android:positiveButtonText="@null"
-        android:title="@string/pref_branch_selection"/>
+        android:title="@string/pref_branch_selection" />
 
 
     <EditTextPreference
         android:capitalize="words"
-        android:inputType="textCapWords"
         android:defaultValue="000"
+        android:inputType="textCapWords"
         android:key="pos_machine"
         android:maxLines="1"
         android:selectAllOnFocus="true"
@@ -24,12 +24,16 @@
 
     <EditTextPreference
         android:capitalize="words"
-        android:inputType="textCapWords"
         android:defaultValue="000"
+        android:inputType="textCapWords"
         android:key="pos_device_id"
         android:maxLines="1"
         android:selectAllOnFocus="true"
         android:singleLine="true"
         android:title="设备号" />
+
+    <Preference android:title="版本更新">
+        <intent android:action="personal.wj.jspos.UpgradeActivity" />
+    </Preference>
 
 </PreferenceScreen>

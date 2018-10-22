@@ -44,17 +44,19 @@ import personal.wl.jspos.adapter.SaleOrderAdapter;
 import personal.wl.jspos.method.PosTabInfo;
 import personal.wl.jspos.method.PosTranscation;
 import personal.wl.jspos.pos.Product;
+import personal.wl.jspos.pos.ProductBranchRel;
 import personal.wl.jspos.pos.SaleDaily;
 
 import static personal.wl.jspos.method.PosHandleDB.JudgeSaler;
 import static personal.wl.jspos.method.PosHandleDB.QueryProductBarCodeByCode;
+import static personal.wl.jspos.method.PosHandleDB.QueryProductBranchRelByCode;
 import static personal.wl.jspos.method.PosPayMent.PAYMENT_ALIPAY;
 import static personal.wl.jspos.method.PosPayMent.PAYMENT_CASH;
 import static personal.wl.jspos.method.PosPayMent.PAYMENT_WEIXIN;
 import static personal.wl.jspos.method.PosPayMent.getPayMentCode;
 import static personal.wl.jspos.method.PosTabInfo.NOBODY_LOGIN;
 
-public class POS extends Activity  {
+public class POS extends Activity {
 
 
     private static final int msgKey = 901;
@@ -186,8 +188,6 @@ public class POS extends Activity  {
         });
 
 
-
-
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
@@ -200,8 +200,14 @@ public class POS extends Activity  {
                         Toast.makeText(POS.this, "输入编码不存在！", Toast.LENGTH_LONG).show();
                         return false;
                     }
-
                     prolist = getresult;
+
+                    List<ProductBranchRel> getproductbranchrel = QueryProductBranchRelByCode(s, posTabInfo.getBranchCode());
+                    if (getproductbranchrel == null) {
+                        Toast.makeText(POS.this, "该编码的价格不存在！", Toast.LENGTH_LONG).show();
+                        return false;
+                    }
+
 
                     productAdapter = new ProductAdapter(POS.this, prolist);
                     mRecyclerView.setAdapter(productAdapter);
@@ -209,7 +215,9 @@ public class POS extends Activity  {
                     double tmp_qty = 1.00;
                     double tmp_price = 0.00;
                     double tmp_amount = 0.00;
-                    tmp_price = prolist.get(0).getNormalPrice();
+                    //获取该产品当店的销售价格
+                    tmp_price = getproductbranchrel.get(0).getNormalPrice();
+
                     tmp_amount = tmp_qty * tmp_price;
 
 
@@ -225,7 +233,6 @@ public class POS extends Activity  {
 
 
                     addsalesdaily(saleDaily);
-
 
 
                     searchView.setQuery("", false);
@@ -528,7 +535,6 @@ public class POS extends Activity  {
         totalamt.setText(String.format("%1$,.1f", tmp_subtotal));
 
     }
-
 
 
     public class TimeThread extends Thread {

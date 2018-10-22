@@ -8,7 +8,6 @@ import android.os.AsyncTask;
 import java.util.HashMap;
 import java.util.List;
 
-import personal.wl.jspos.PosInit;
 import personal.wl.jspos.db.DBC2Jspot;
 import personal.wl.jspos.db.Utils;
 import personal.wl.jspos.pos.SaleDaily;

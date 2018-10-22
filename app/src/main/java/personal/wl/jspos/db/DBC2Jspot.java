@@ -288,6 +288,26 @@ public class DBC2Jspot {
         return list;
     }
 
+    public List getProductBranchRelNeedUpdate(Integer timestamp,HashMap device) {
+
+//        device.get("posno") == null
+
+        String sql = "SELECT   braid,proid,isnull(normalprice,0) AS normalprice,status,promtflag,\n" +
+                "CONVERT (int,timestamp) as timestamp \n" +
+                "FROM product_branch_rel \n";
+        sql = sql + "WHERE CONVERT (int,timestamp) > " + timestamp;
+        sql = sql + "and   BraId = '" +  device.get("braid") +"' ";
+        sql = sql + "ORDER BY CONVERT (int,timestamp) ";
+        List list = null;
+        Connection cnn = this.getMyconnection();
+        try {
+            list = QuerySqlGetResult(cnn, sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
 
     public List getBranchNeedUpdate(Integer timestamp) {
         String sql = "SELECT hqid,braid,braname,brasname,bratype \n" +

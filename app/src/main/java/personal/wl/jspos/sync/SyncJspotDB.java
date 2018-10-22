@@ -7,11 +7,15 @@ import android.database.Cursor;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import org.greenrobot.greendao.query.QueryBuilder;
+
+import java.util.HashMap;
+import java.util.List;
+
 import personal.wl.jspos.db.DBC2Jspot;
 import personal.wl.jspos.db.DBConnect;
 import personal.wl.jspos.db.IReportBack;
 import personal.wl.jspos.db.Utils;
-import personal.wl.jspos.method.PosTabInfo;
 import personal.wl.jspos.pos.Branch;
 import personal.wl.jspos.pos.BranchDao;
 import personal.wl.jspos.pos.BranchEmployee;
@@ -20,17 +24,13 @@ import personal.wl.jspos.pos.DaoSession;
 import personal.wl.jspos.pos.Product;
 import personal.wl.jspos.pos.ProductBarCode;
 import personal.wl.jspos.pos.ProductBarCodeDao;
+import personal.wl.jspos.pos.ProductBranchRel;
+import personal.wl.jspos.pos.ProductBranchRelDao;
 import personal.wl.jspos.pos.ProductDao;
 import personal.wl.jspos.pos.SaleDaily;
 import personal.wl.jspos.pos.SalePayMode;
 
-import org.greenrobot.greendao.query.QueryBuilder;
-import org.greenrobot.greendao.query.WhereCondition;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.concurrent.Callable;
-
+import static personal.wl.jspos.MainActivity.PROCESS_STEPS;
 import static personal.wl.jspos.db.Tools.Double2String;
 import static personal.wl.jspos.db.Tools.Long2String;
 import static personal.wl.jspos.method.PosHandleDB.CheckDeviceByLocal;
@@ -55,7 +55,7 @@ public class SyncJspotDB extends AsyncTask<String, Integer, Integer>
     private String tag = null;
     private ProgressDialog pd = null;
     private HashMap device = new HashMap<String, String>();
-    private int num = 7;
+    private int num = PROCESS_STEPS + 1;
 
     private static DaoSession getDaosession() {
         return daosession;
@@ -126,6 +126,10 @@ public class SyncJspotDB extends AsyncTask<String, Integer, Integer>
                 pd.setMessage("BarCode同步....");
                 break;
 
+            case 6:
+                pd.setMessage("ProductBranch同步....");
+                break;
+
             case 8:
                 pd.setMessage("设备未注册不能同步");
                 break;
@@ -142,8 +146,8 @@ public class SyncJspotDB extends AsyncTask<String, Integer, Integer>
         // TODO Auto-generated method stub
         //super.onPostExecute(result);
         report.reportBack(tag, "result: i = " + result);
-        if (result.equals(num+1)){
-            report.reportBack(tag,"设备未注册");
+        if (result.equals(num + 1)) {
+            report.reportBack(tag, "设备未注册");
         }
         pd.cancel();
 
@@ -181,9 +185,9 @@ public class SyncJspotDB extends AsyncTask<String, Integer, Integer>
 
         } else {
             //授权失败退出不下载数据
-            publishProgress(num+1);
+            publishProgress(num + 1);
             Utils.sleepForSecs(2);
-            return num+1;
+            return num + 1;
 
         }
 
@@ -218,6 +222,16 @@ public class SyncJspotDB extends AsyncTask<String, Integer, Integer>
         rec = getProductBarCodeTimeStamp();
         List productcode = js.getProductBarCodeNeedUpdate(rec);
         this.ProcessProductBarCode2LocalDB(productcode);
+        Utils.sleepForSecs(2);
+        publishProgress(i);
+
+
+        //Process ProductBranch
+        i = i + 1;
+        rec = getProductBranchTimeStamp();
+        List productbranchrel = js.getProductBranchRelNeedUpdate(rec, device);
+        ProcessProductBranch2LocalDB(productbranchrel);
+
         Utils.sleepForSecs(2);
         publishProgress(i);
 
@@ -322,9 +336,34 @@ public class SyncJspotDB extends AsyncTask<String, Integer, Integer>
             }
             branch = null;
         }
-
-
     }
+
+
+    private void ProcessProductBranch2LocalDB(List processtask) {
+        ProductBranchRelDao productBranchRelDao = this.getDaosession().getProductBranchRelDao();
+        for (int i = 0; i < processtask.size(); i++) {
+            ProductBranchRel productBranchRel = new ProductBranchRel();
+            HashMap item = (HashMap) processtask.get(i);
+            String tmp_proid = (String) item.get("proid");
+            List<ProductBranchRel> needupdated = getProductBranchRelByProId(tmp_proid,device);
+
+            if (needupdated.size() != 0) {
+                for (int j = 0; j < needupdated.size(); j++) {
+                    ProductBranchRel findpbr = needupdated.get(j);
+                    findpbr =  setProductBranchRelRecord(findpbr, item);
+                    Log.i(TAG, "Update ProductBranchRel -->" + item.get("proid") + "--->" + item.get("proid"));
+                    productBranchRelDao.update(findpbr);
+                }
+            } else {
+                Log.i(TAG, "Create ProductBranchRel -->" + item.get("proid") + "--->" + item.get("proid"));
+                System.out.print(item.get("proid"));
+                productBranchRel = setProductBranchRelRecord(productBranchRel, item);
+                productBranchRelDao.insert(productBranchRel);
+            }
+            productBranchRel = null;
+        }
+    }
+
 
     private List<Branch> getBranchById(String branchid) {
         BranchDao branchDao = this.getDaosession().getBranchDao();
@@ -436,6 +475,16 @@ public class SyncJspotDB extends AsyncTask<String, Integer, Integer>
         return returnProduct;
     }
 
+    private List<ProductBranchRel> getProductBranchRelByProId(String proid, HashMap device) {
+        ProductBranchRelDao productBranchRelDao = this.getDaosession().getProductBranchRelDao();
+        QueryBuilder cond = productBranchRelDao.queryBuilder();
+        cond.where(ProductBranchRelDao.Properties.Proid.eq(proid),
+                ProductBranchRelDao.Properties.Braid.eq(device.get("braid")));
+        List<ProductBranchRel> returnProductBrachRel = cond.build().list();
+        return returnProductBrachRel;
+    }
+
+
     private Integer getProductTimeStamp() {
         Integer returncode = 0;
         String sql = "SELECT max(\n" +
@@ -454,6 +503,16 @@ public class SyncJspotDB extends AsyncTask<String, Integer, Integer>
         return returncode;
     }
 
+    private Integer getProductBranchTimeStamp() {
+        Integer returncode = 0;
+        String sql = "SELECT max(\n" +
+                "       time_stamp) as timestamp\n" +
+                "  FROM PRODUCT_BRANCH_REL;\n";
+        returncode = returnTimeStamp(sql);
+        return returncode;
+    }
+
+
     private Product setProductRecord(Product pr, HashMap item) {
         pr.setProid((String) item.get("ProId"));
         pr.setProName((String) item.get("ProName"));
@@ -470,7 +529,17 @@ public class SyncJspotDB extends AsyncTask<String, Integer, Integer>
         pr.setTimeStamp(Long2String(item.get("timestamp").toString()));
         return pr;
     }
-//Product Need Function end
+
+    //Product Need Function end
+    private ProductBranchRel setProductBranchRelRecord(ProductBranchRel pbr, HashMap item) {
+        pbr.setProid((String) item.get("proid"));
+        pbr.setStatus((String) item.get("status"));
+        pbr.setBraid((String) item.get("braid"));
+        pbr.setPromtFlag((String) item.get("promtflag"));
+        pbr.setNormalPrice(Double2String(item.get("normalprice").toString()));
+        pbr.setTimeStamp(Long2String(item.get("timestamp").toString()));
+        return pbr;
+    }
 
 
 }

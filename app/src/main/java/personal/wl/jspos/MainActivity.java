@@ -22,8 +22,10 @@ import personal.wl.jspos.update.view.CommonProgressDialog;
 
 public class MainActivity extends AppCompatActivity implements IReportBack {
 
+    public static int PROCESS_STEPS=8;
     private TextView mTextMessage;
     private CommonProgressDialog pBar;
+
 
 //    private  PosTabInfo posTabInfo = new PosTabInfo(MainActivity.this);
 
@@ -97,7 +99,8 @@ public class MainActivity extends AppCompatActivity implements IReportBack {
         PosTabInfo posTabInfo = new PosTabInfo(MainActivity.this);
         devicelist.put("deviceid", posTabInfo.getDeviceid());
         devicelist.put("posno", posTabInfo.getPosMachine());
-        SyncJspotDB task = new SyncJspotDB(this, this, "SyncJspotDB", 6, devicelist);
+        devicelist.put("braid", posTabInfo.getBranchCode());
+        SyncJspotDB task = new SyncJspotDB(this, this, "SyncJspotDB", PROCESS_STEPS, devicelist);
         task.execute();
         posTabInfo.setLastUploadDate(new Date());
     }

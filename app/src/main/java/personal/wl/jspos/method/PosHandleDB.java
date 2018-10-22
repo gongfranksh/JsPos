@@ -1,11 +1,5 @@
 package personal.wl.jspos.method;
 
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import android.renderscript.Sampler;
-import android.widget.LinearLayout;
-import android.widget.Switch;
-
 import org.greenrobot.greendao.query.QueryBuilder;
 
 import java.util.ArrayList;
@@ -16,12 +10,13 @@ import java.util.List;
 import personal.wl.jspos.db.DBConnect;
 import personal.wl.jspos.pos.BranchEmployee;
 import personal.wl.jspos.pos.BranchEmployeeDao;
-import personal.wl.jspos.pos.DaoSession;
 import personal.wl.jspos.pos.MobileDevice;
 import personal.wl.jspos.pos.MobileDeviceDao;
 import personal.wl.jspos.pos.Product;
 import personal.wl.jspos.pos.ProductBarCode;
 import personal.wl.jspos.pos.ProductBarCodeDao;
+import personal.wl.jspos.pos.ProductBranchRel;
+import personal.wl.jspos.pos.ProductBranchRelDao;
 import personal.wl.jspos.pos.ProductDao;
 import personal.wl.jspos.pos.SaleDaily;
 import personal.wl.jspos.pos.SaleDailyDao;
@@ -148,6 +143,22 @@ public class PosHandleDB {
         return cond.build().list();
     }
 
+    public static List<ProductBranchRel> QueryProductBranchRelByCode(String proid, String storecode) {
+        String tmp_proid = proid;
+        String tmp_streocode = storecode;
+        if (proid.length() != 13) {
+            tmp_proid = Long.toString(PROID + Long.parseLong(proid));
+        }
+
+        ProductBranchRelDao productBranchRelDao = DBConnect.getInstances().getDaoSession().getProductBranchRelDao();
+        QueryBuilder cond = productBranchRelDao.queryBuilder();
+        cond.where(ProductBranchRelDao.Properties.Proid.eq(tmp_proid),
+                ProductBranchRelDao.Properties.Braid.eq(tmp_streocode)
+        ).build();
+        return cond.build().list();
+    }
+
+
     public static List<Product> QueryProductBarCodeByCode(String BarCode) {
         String tmp_proid = BarCode;
         if (BarCode.length() != 13) {
@@ -244,7 +255,7 @@ public class PosHandleDB {
         List<SaleDaily> saleDailyList = new ArrayList<>();
         SaleDailyDao saleDailyDao = DBConnect.getInstances().getDaoSession().getSaleDailyDao();
 
-        for (int i = 0; i < salePayModeList.size() ; i++) {
+        for (int i = 0; i < salePayModeList.size(); i++) {
             QueryBuilder cond = saleDailyDao.queryBuilder();
             cond.where(SaleDailyDao.Properties.SaleId.eq(salePayModeList.get(i).getSaleId()));
             List<SaleDaily> subset = cond.build().list();
