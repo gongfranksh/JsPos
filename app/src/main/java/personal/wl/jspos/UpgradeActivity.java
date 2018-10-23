@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
+import personal.wl.jspos.method.DeviceUtils;
 import personal.wl.jspos.method.PosTabInfo;
 import personal.wl.jspos.update.http.HttpToolsKits;
 
@@ -15,8 +16,8 @@ public class UpgradeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upgrade);
-        PosTabInfo posTabInfo = new PosTabInfo(UpgradeActivity.this);
-        displaystr = "当前系统版本为:" + posTabInfo.getPackageName();
+        getDisplaystr();
+
         upgrade_readme = findViewById(R.id.upgrade_readme);
         upgrade_readme.setText(displaystr);
 //        UpgradeUI ugui = new UpgradeUI(UpgradeActivity.this);
@@ -25,6 +26,21 @@ public class UpgradeActivity extends AppCompatActivity {
         HttpToolsKits httpToolsKits = new HttpToolsKits(UpgradeActivity.this, getWindow().getDecorView());
         httpToolsKits.downloadVersionFile();
 
+
+    }
+
+    private String getDisplaystr() {
+        try {
+            PosTabInfo posTabInfo = new PosTabInfo(UpgradeActivity.this);
+            displaystr = "当前系统版本为:" + posTabInfo.getPackageName();
+            displaystr = displaystr + "\n" +
+                    DeviceUtils.getVersion_Readme(UpgradeActivity.this);
+
+        } catch (Exception e) {
+
+
+        }
+        return displaystr;
 
     }
 }
