@@ -79,6 +79,7 @@ public class POS extends Activity {
 
     private TextView saletransdate;
     private TextView saleid;
+    private EditText textView;
     private ImageButton ib_submit_cash;
     private ImageButton ib_submit_alipay;
     private ImageButton ib_submit_weixin;
@@ -116,7 +117,7 @@ public class POS extends Activity {
                 spanText.length(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
         searchView.setQueryHint(spanText);
 
-        EditText textView = (EditText) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+        textView = (EditText) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
         LinearLayout.LayoutParams textLayoutParams = (LinearLayout.LayoutParams) searchView.getLayoutParams();
         textLayoutParams.height = textLayoutParams.WRAP_CONTENT;
         textView.setLayoutParams(textLayoutParams);
@@ -124,6 +125,9 @@ public class POS extends Activity {
         textView.setTextColor(Color.BLUE);// 设置输入字的显示
 //        textView.setHeight(300);// 设置输入框的高度
         textView.setGravity(Gravity.BOTTOM);// 设置输入字的位置
+
+
+
 
 
         final RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.productlist);
@@ -198,6 +202,7 @@ public class POS extends Activity {
                     List<Product> getresult = QueryProductBarCodeByCode(s);
                     if (getresult == null) {
                         Toast.makeText(POS.this, "输入编码不存在！", Toast.LENGTH_LONG).show();
+                        getfocus();
                         return false;
                     }
                     prolist = getresult;
@@ -245,6 +250,8 @@ public class POS extends Activity {
                 return false;
             }
         });
+
+    //  getfocus();
 
     }
 
@@ -580,6 +587,23 @@ public class POS extends Activity {
         posmachine.setText(posmachine.getText() + posTabInfo.getPosMachine());
         TextView casherid = findViewById(R.id.casherid);
         casherid.setText(casherid.getText() + posTabInfo.getSalerId());
+
+    }
+
+
+    private void getfocus(){
+        searchView.setFocusable(true);
+        searchView.setFocusableInTouchMode(true);
+        searchView.requestFocus();
+        searchView.requestFocusFromTouch();
+        textView.setFocusable(true);
+        textView.setFocusableInTouchMode(true);
+        textView.requestFocus();
+        textView.requestFocusFromTouch();
+        searchView.setQuery("", false);
+        textView.findFocus();
+        searchView.findFocus();
+
 
     }
 
