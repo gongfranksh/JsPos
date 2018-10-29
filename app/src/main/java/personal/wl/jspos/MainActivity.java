@@ -9,6 +9,7 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import java.util.Date;
@@ -78,7 +79,8 @@ public class MainActivity extends AppCompatActivity implements IReportBack {
         mTextMessage = (TextView) findViewById(R.id.message);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
+        //为了同步时间比较长的原因，禁止休眠
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 //        getVersion();
         showdetail();
     }
@@ -101,6 +103,7 @@ public class MainActivity extends AppCompatActivity implements IReportBack {
         devicelist.put("posno", posTabInfo.getPosMachine());
         devicelist.put("braid", posTabInfo.getBranchCode());
         SyncJspotDB task = new SyncJspotDB(this, this, "SyncJspotDB", PROCESS_STEPS, devicelist);
+
         task.execute();
         posTabInfo.setLastUploadDate(new Date());
     }
