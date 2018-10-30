@@ -30,6 +30,7 @@ public class SyncJsSaleData extends AsyncTask<HashMap, Integer, Integer>
     @Override
     protected void onPostExecute(Integer integer) {
         super.onPostExecute(integer);
+        pd.cancel();
 
     }
 

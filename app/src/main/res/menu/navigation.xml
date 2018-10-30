@@ -15,6 +15,10 @@
         android:id="@+id/navigation_notifications"
         android:icon="@drawable/ic_sync_black_24dp"
         android:title="@string/title_notifications" />
+    <!--<item-->
+        <!--android:id="@+id/navigation_uploadtranscation"-->
+        <!--android:icon="@drawable/ic_arrow_upward_black_24dp"-->
+        <!--android:title="@string/title_uploadtranscation" />-->
 
     <item
         android:id="@+id/navigation_login"

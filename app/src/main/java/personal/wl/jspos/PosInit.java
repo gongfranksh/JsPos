@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.Date;
@@ -26,6 +27,7 @@ public class PosInit extends AppCompatActivity {
     private Button bt_checkversion;
     private Button bt_checkversion_http;
     private TextView tv_display;
+    private EditText device_diplay;
     private CommonProgressDialog pBar;
 
 
@@ -39,16 +41,19 @@ public class PosInit extends AppCompatActivity {
         bt_checkversion = findViewById(R.id.check_apk);
         bt_checkversion_http = findViewById(R.id.check_apk_http);
         tv_display = findViewById(R.id.initdisplay);
-
+        device_diplay = findViewById(R.id.deviceno_display);
+        device_diplay.setVisibility(View.INVISIBLE);
 
         bt_getDeviceId.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String tmp_deviceid = DeviceUtils.getUniqueId(PosInit.this);
                 tv_display.setText(tmp_deviceid);
-
+                device_diplay.setText(tmp_deviceid);
                 PosTabInfo posTabInfo = new PosTabInfo(PosInit.this);
                 posTabInfo.setDeviceId(tmp_deviceid);
+                device_diplay.setVisibility(View.VISIBLE);
+
 
             }
         });

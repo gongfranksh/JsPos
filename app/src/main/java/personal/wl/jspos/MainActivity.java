@@ -9,7 +9,9 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.Date;
@@ -17,6 +19,7 @@ import java.util.HashMap;
 
 import personal.wl.jspos.db.IReportBack;
 import personal.wl.jspos.method.PosTabInfo;
+import personal.wl.jspos.sync.SyncJsSaleData;
 import personal.wl.jspos.sync.SyncJspotDB;
 import personal.wl.jspos.update.utils.Tools;
 import personal.wl.jspos.update.view.CommonProgressDialog;
@@ -26,6 +29,7 @@ public class MainActivity extends AppCompatActivity implements IReportBack {
     public static int PROCESS_STEPS=8;
     private TextView mTextMessage;
     private CommonProgressDialog pBar;
+    private ImageButton uploadtranscation;
 
 
 //    private  PosTabInfo posTabInfo = new PosTabInfo(MainActivity.this);
@@ -49,6 +53,10 @@ public class MainActivity extends AppCompatActivity implements IReportBack {
 
 //                    showPreference();
                     return true;
+//                case R.id.navigation_uploadtranscation:
+//                    LoadHelp();
+//                    return true;
+
                 case R.id.navigation_notifications:
                     mTextMessage.setText(R.string.title_notifications);
                     syncjsportdb();
@@ -77,12 +85,21 @@ public class MainActivity extends AppCompatActivity implements IReportBack {
         setContentView(R.layout.activity_main);
 
         mTextMessage = (TextView) findViewById(R.id.message);
+        uploadtranscation = findViewById(R.id.upload_transcations);
+
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         //为了同步时间比较长的原因，禁止休眠
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 //        getVersion();
         showdetail();
+
+        uploadtranscation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                synjssales();
+            }
+        });
     }
 
     @Override
@@ -94,6 +111,7 @@ public class MainActivity extends AppCompatActivity implements IReportBack {
     public void reportTransient(String tag, String message) {
 
     }
+
 
 
     private void syncjsportdb() {
@@ -227,6 +245,18 @@ public class MainActivity extends AppCompatActivity implements IReportBack {
                 })
                 .show();
     }
+
+    private void synjssales() {
+        HashMap devicelist = new HashMap<String, String>();
+        PosTabInfo posTabInfo = new PosTabInfo(MainActivity.this);
+        devicelist.put("deviceid", posTabInfo.getDeviceid());
+        devicelist.put("posno", posTabInfo.getPosMachine());
+
+        SyncJsSaleData task = new SyncJsSaleData(MainActivity.this, devicelist);
+        task.execute();
+        posTabInfo.setLastUploadDate(new Date());
+    }
+
 
 
 }

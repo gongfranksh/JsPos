@@ -183,4 +183,5 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
     <string name="title_activity_pos">POS</string>
+    <string name="title_uploadtranscation">上传交易资料</string>
 </resources>
