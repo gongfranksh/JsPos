@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -26,7 +27,7 @@ import personal.wl.jspos.update.view.CommonProgressDialog;
 
 public class MainActivity extends AppCompatActivity implements IReportBack {
 
-    public static int PROCESS_STEPS=8;
+    public static int PROCESS_STEPS = 8;
     private TextView mTextMessage;
     private CommonProgressDialog pBar;
     private ImageButton uploadtranscation;
@@ -113,16 +114,22 @@ public class MainActivity extends AppCompatActivity implements IReportBack {
     }
 
 
-
     private void syncjsportdb() {
         HashMap devicelist = new HashMap<String, String>();
         PosTabInfo posTabInfo = new PosTabInfo(MainActivity.this);
-        devicelist.put("deviceid", posTabInfo.getDeviceid());
-        devicelist.put("posno", posTabInfo.getPosMachine());
-        devicelist.put("braid", posTabInfo.getBranchCode());
-        SyncJspotDB task = new SyncJspotDB(this, this, "SyncJspotDB", PROCESS_STEPS, devicelist);
+        if (posTabInfo.isConnectingToInternet()) {
+            devicelist.put("deviceid", posTabInfo.getDeviceid());
+            devicelist.put("posno", posTabInfo.getPosMachine());
+            devicelist.put("braid", posTabInfo.getBranchCode());
+            SyncJspotDB task = new SyncJspotDB(this, this, "SyncJspotDB", PROCESS_STEPS, devicelist);
 
-        task.execute();
+            task.execute();
+
+        } else {
+            Toast.makeText(this, "无法连接网络，先连接WIFI内网", Toast.LENGTH_LONG).show();
+        }
+
+
         posTabInfo.setLastUploadDate(new Date());
     }
 
@@ -203,9 +210,8 @@ public class MainActivity extends AppCompatActivity implements IReportBack {
         }
 
 
-
-
     }
+
     private void ShowDialog(int vision, String newversion, String content,
                             final String url) {
         new android.app.AlertDialog.Builder(this)
@@ -252,11 +258,15 @@ public class MainActivity extends AppCompatActivity implements IReportBack {
         devicelist.put("deviceid", posTabInfo.getDeviceid());
         devicelist.put("posno", posTabInfo.getPosMachine());
 
-        SyncJsSaleData task = new SyncJsSaleData(MainActivity.this, devicelist);
-        task.execute();
+        if (posTabInfo.isConnectingToInternet()) {
+            SyncJsSaleData task = new SyncJsSaleData(MainActivity.this, devicelist);
+            task.execute();
+        } else {
+            Toast.makeText(this, "无法连接网络，先连接WIFI内网", Toast.LENGTH_LONG).show();
+        }
         posTabInfo.setLastUploadDate(new Date());
-    }
 
+    }
 
 
 }
