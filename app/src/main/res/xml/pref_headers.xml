@@ -5,11 +5,11 @@
     <header
         android:fragment="personal.wl.jspos.SettingsActivity$GeneralPreferenceFragment"
         android:icon="@drawable/ic_info_black_24dp"
-        android:title="通用设定" />
+        android:title="@string/general_setting" />
 
     <header
         android:fragment="personal.wl.jspos.SettingsActivity$DataSyncPreferenceFragment"
         android:icon="@drawable/ic_sync_black_24dp"
-        android:title="数据同步" />
+        android:title="@string/Sync_data" />
 
 </preference-headers>

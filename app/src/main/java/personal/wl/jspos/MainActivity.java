@@ -23,6 +23,7 @@ import java.util.Observable;
 
 import personal.wl.jspos.db.IReportBack;
 import personal.wl.jspos.method.APPNetwork;
+import personal.wl.jspos.method.DeviceUtils;
 import personal.wl.jspos.method.NetWorkStateRecevier;
 import personal.wl.jspos.method.NetworkChange;
 import personal.wl.jspos.method.NetworkWatcher;
@@ -169,7 +170,7 @@ public class MainActivity extends AppCompatActivity implements IReportBack {
         HashMap devicelist = new HashMap<String, String>();
         PosTabInfo posTabInfo = new PosTabInfo(MainActivity.this);
 
-        if (posTabInfo.isConnectingToInternet()) {
+        if (posTabInfo.isConnectingToInternet() && DeviceUtils.CheckDB2MSSQLConnect()) {
             devicelist.put("deviceid", posTabInfo.getDeviceid());
             devicelist.put("posno", posTabInfo.getPosMachine());
             devicelist.put("braid", posTabInfo.getBranchCode());
@@ -310,7 +311,7 @@ public class MainActivity extends AppCompatActivity implements IReportBack {
         devicelist.put("deviceid", posTabInfo.getDeviceid());
         devicelist.put("posno", posTabInfo.getPosMachine());
 
-        if (posTabInfo.isConnectingToInternet()) {
+        if (posTabInfo.isConnectingToInternet()&&DeviceUtils.CheckDB2MSSQLConnect()) {
             SyncJsSaleData task = new SyncJsSaleData(MainActivity.this, devicelist);
             task.execute();
         } else {

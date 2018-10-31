@@ -6,11 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.LineNumberReader;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -56,30 +52,38 @@ public class PosInit extends AppCompatActivity {
         bt_checknetwork.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    Process process = Runtime.getRuntime().exec("ping -c 1 -w 1 " + IP);
-                    InputStreamReader r = new InputStreamReader(process.getInputStream());
-                    LineNumberReader returnData = new LineNumberReader(r);
-                    String returnMsg = "";
-                    String line = "";
-                    while ((line = returnData.readLine()) != null) {
-                        System.out.println(line);
-                        returnMsg += line;
-                    }
+                tv_display.setVisibility(View.VISIBLE);
+                if (DeviceUtils.CheckDB2MSSQLConnect()) {
+                    tv_display.setText(IP + "服务器连接成功！！！！！");
 
-                    tv_display.setVisibility(View.VISIBLE);
-                    if (DeviceUtils.CheckDBConnect(returnMsg)) {
-                        tv_display.setText(IP + "服务器连接成功！！！！！");
-                        //                        System.out.println("与 " +address +" 连接不畅通.");
-                    } else {
-                        tv_display.setText(IP + "服务器连接失败");
-//                        System.out.println("与 " +address +" 连接畅通.");
-                    }
-
-                } catch (IOException e) {
-                    Toast.makeText(PosInit.this, e.toString(), Toast.LENGTH_LONG).show();
-                    e.printStackTrace();
+                } else {
+                    tv_display.setText(IP + "服务器连接失败");
                 }
+
+//                try {
+//                    Process process = Runtime.getRuntime().exec("ping -c 1 -w 1 " + IP);
+//                    InputStreamReader r = new InputStreamReader(process.getInputStream());
+//                    LineNumberReader returnData = new LineNumberReader(r);
+//                    String returnMsg = "";
+//                    String line = "";
+//                    while ((line = returnData.readLine()) != null) {
+//                        System.out.println(line);
+//                        returnMsg += line;
+//                    }
+//
+//                    tv_display.setVisibility(View.VISIBLE);
+//                    if (DeviceUtils.CheckDBConnect(returnMsg)) {
+//                        tv_display.setText(IP + "服务器连接成功！！！！！");
+//                        //                        System.out.println("与 " +address +" 连接不畅通.");
+//                    } else {
+//                        tv_display.setText(IP + "服务器连接失败");
+////                        System.out.println("与 " +address +" 连接畅通.");
+//                    }
+//
+//                } catch (IOException e) {
+//                    Toast.makeText(PosInit.this, e.toString(), Toast.LENGTH_LONG).show();
+//                    e.printStackTrace();
+//                }
             }
         });
 

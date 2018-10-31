@@ -6,13 +6,17 @@ import android.provider.Settings;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.LineNumberReader;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 
 import personal.wl.jspos.update.utils.FtpInfo;
+
+import static personal.wl.jspos.db.DBC2Jspot.IP;
 
 public class DeviceUtils {
     public static String getUniqueId(Context context) {
@@ -118,10 +122,31 @@ public class DeviceUtils {
         return null;
     }
 
-    public static Boolean CheckDBConnect(String returnMsg) {
+    private static Boolean CheckResponse(String returnMsg) {
         if (returnMsg.indexOf("100% loss") != -1) return false;
         if (returnMsg.indexOf("100% packet loss") != -1) return false;
         if (returnMsg.length() == 0) return false;
         return true;
     }
+
+    public static Boolean CheckDB2MSSQLConnect() {
+        try {
+            Process process = Runtime.getRuntime().exec("ping -c 1 -w 1 " + IP);
+            InputStreamReader r = new InputStreamReader(process.getInputStream());
+            LineNumberReader returnData = new LineNumberReader(r);
+            String rt_msg = "";
+            String line = "";
+            while ((line = returnData.readLine()) != null) {
+                System.out.println(line);
+                rt_msg += line;
+            }
+            return CheckResponse(rt_msg);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+
 }

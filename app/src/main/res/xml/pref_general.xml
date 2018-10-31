@@ -30,9 +30,9 @@
         android:maxLines="1"
         android:selectAllOnFocus="true"
         android:singleLine="true"
-        android:title="设备号" />
+        android:title="@string/device_number_id" />
 
-    <Preference android:title="版本更新">
+    <Preference android:title="@string/Upgrade_version">
         <intent android:action="personal.wj.jspos.UpgradeActivity" />
     </Preference>
 

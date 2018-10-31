@@ -19,7 +19,7 @@
         <intent android:action="personal.wj.jspos.posinit" />
     </Preference>
 
-    <Preference android:title="本地数据">
+    <Preference android:title="@string/local_data">
         <intent android:action="personal.wj.jspos.LocalDatabaseCheckActivity" />
     </Preference>
 
