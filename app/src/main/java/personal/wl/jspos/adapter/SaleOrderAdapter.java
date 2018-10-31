@@ -27,7 +27,6 @@ import personal.wl.jspos.pos.SaleDaily;
 
 import static personal.wl.jspos.method.PosHandleDB.QueryProductByCode;
 import static personal.wl.jspos.method.PosHandleDB.getSaleid;
-import static personal.wl.jspos.method.PosHandleDB.isSaleid;
 
 
 public class SaleOrderAdapter extends RecyclerView.Adapter<SaleOrderAdapter.SaleOrderViewHolder> {
@@ -223,6 +222,9 @@ public class SaleOrderAdapter extends RecyclerView.Adapter<SaleOrderAdapter.Sale
             tmp_qty = Double.parseDouble(et_saleqty.getText().toString());
             tmp_lineamount = tmp_price * tmp_qty;
             tv_unitamout.setText(Double.toString(tmp_lineamount));
+            SaleOrderChange.getInstance().notifyDataChange(tmp_lineamount);
+
+
         }
 
     }

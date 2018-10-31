@@ -38,9 +38,12 @@ import com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
 
 import personal.wl.jspos.adapter.ProductAdapter;
 import personal.wl.jspos.adapter.SaleOrderAdapter;
+import personal.wl.jspos.adapter.SaleOrderChange;
+import personal.wl.jspos.adapter.SaleOrderWatcher;
 import personal.wl.jspos.method.PosTabInfo;
 import personal.wl.jspos.method.PosTranscation;
 import personal.wl.jspos.pos.Product;
@@ -86,11 +89,19 @@ public class POS extends Activity {
     private ImageButton ib_submit_logoff;
     private PosTabInfo posTabInfo;
 
+    private SaleOrderWatcher saleOrderWatcher = new SaleOrderWatcher() {
+        @Override
+        public void update(Observable o, Object arg) {
+            super.update(o, arg);
+            total_amount();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pos);
+        SaleOrderChange.getInstance().addObserver(saleOrderWatcher);
         posTabInfo = new PosTabInfo(POS.this);
         saletransdate = findViewById(R.id.saletransdate);
         totalamt = findViewById(R.id.totoalamount);
@@ -125,9 +136,6 @@ public class POS extends Activity {
         textView.setTextColor(Color.BLUE);// 设置输入字的显示
 //        textView.setHeight(300);// 设置输入框的高度
         textView.setGravity(Gravity.BOTTOM);// 设置输入字的位置
-
-
-
 
 
         final RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.productlist);
@@ -251,7 +259,7 @@ public class POS extends Activity {
             }
         });
 
-    //  getfocus();
+        //  getfocus();
 
     }
 
@@ -276,7 +284,7 @@ public class POS extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
-
+        SaleOrderChange.getInstance().deleteObserver(saleOrderWatcher);
     }
 
 
@@ -570,7 +578,7 @@ public class POS extends Activity {
                     CharSequence sysTimeStr = DateFormat
                             .format(" yyyy-MM-dd hh:mm:ss", sysTime);
                     saletransdate.setText("日期：" + sysTimeStr);
-                    total_amount();
+//                    total_amount();
                     break;
                 default:
                     break;
@@ -591,7 +599,7 @@ public class POS extends Activity {
     }
 
 
-    private void getfocus(){
+    private void getfocus() {
         searchView.setFocusable(true);
         searchView.setFocusableInTouchMode(true);
         searchView.requestFocus();
