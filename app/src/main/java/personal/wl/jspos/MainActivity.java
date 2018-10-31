@@ -3,6 +3,8 @@ package personal.wl.jspos;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -17,8 +19,13 @@ import android.widget.Toast;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Observable;
 
 import personal.wl.jspos.db.IReportBack;
+import personal.wl.jspos.method.APPNetwork;
+import personal.wl.jspos.method.NetWorkStateRecevier;
+import personal.wl.jspos.method.NetworkChange;
+import personal.wl.jspos.method.NetworkWatcher;
 import personal.wl.jspos.method.PosTabInfo;
 import personal.wl.jspos.sync.SyncJsSaleData;
 import personal.wl.jspos.sync.SyncJspotDB;
@@ -31,9 +38,29 @@ public class MainActivity extends AppCompatActivity implements IReportBack {
     private TextView mTextMessage;
     private CommonProgressDialog pBar;
     private ImageButton uploadtranscation;
+    private ImageButton networkdisplay;
+    private NetWorkStateRecevier netWorkStateRecevier;
 
 
-//    private  PosTabInfo posTabInfo = new PosTabInfo(MainActivity.this);
+    //    private  PosTabInfo posTabInfo = new PosTabInfo(MainActivity.this);
+    private NetworkWatcher watcher = new NetworkWatcher(){
+        @Override
+        public void update(Observable o, Object arg) {
+            super.update(o, arg);
+            //观察者接受到被观察者的通知，来更新自己的数据操作。
+            APPNetwork network = (APPNetwork) arg;
+
+            if (network.isConnected()){
+                networkdisplay.setImageDrawable(getResources().getDrawable(R.drawable.ic_wifi_tethering_black_24dp));
+                Toast.makeText(MainActivity.this,"Online is ok",Toast.LENGTH_LONG).show();
+            }
+            else {
+
+                networkdisplay.setImageDrawable(getResources().getDrawable(R.drawable.ic_portable_wifi_off_black_24dp));
+                Toast.makeText(MainActivity.this,"offline",Toast.LENGTH_LONG).show();
+            }
+        }
+    };
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -87,6 +114,7 @@ public class MainActivity extends AppCompatActivity implements IReportBack {
 
         mTextMessage = (TextView) findViewById(R.id.message);
         uploadtranscation = findViewById(R.id.upload_transcations);
+        networkdisplay = findViewById(R.id.networkstatus_2);
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -101,6 +129,31 @@ public class MainActivity extends AppCompatActivity implements IReportBack {
                 synjssales();
             }
         });
+    }
+
+    @Override
+    protected void onPause() {
+        //TODO 注销广播监听
+        unregisterReceiver(netWorkStateRecevier);
+        NetworkChange.getInstance().deleteObserver(watcher);
+        System.out.println("注销广播监听");
+        super.onPause();
+
+    }
+
+    @Override
+    protected void onResume() {
+
+        NetworkChange.getInstance().addObserver(watcher);
+
+        if (netWorkStateRecevier == null) {
+            netWorkStateRecevier = new NetWorkStateRecevier();
+        }
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(netWorkStateRecevier, filter);
+        System.out.println("注册断网广播");
+        super.onResume();
     }
 
     @Override

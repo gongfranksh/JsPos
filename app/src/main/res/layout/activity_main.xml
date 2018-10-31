@@ -35,6 +35,31 @@
         app:layout_constraintBottom_toTopOf="@+id/navigation"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <ImageButton
+        android:id="@+id/networkstatus_2"
+        android:layout_width="45dp"
+        android:layout_height="wrap_content"
+
+        android:gravity="center"
+        android:src="@drawable/ic_portable_wifi_off_black_24dp"
+        android:textAlignment="gravity"
+        android:textSize="50dp"
+        app:layout_constraintBottom_toTopOf="@+id/navigation"
+        app:layout_constraintEnd_toStartOf="@+id/upload_transcations" />
+
+    <!--<ImageButton-->
+        <!--android:id="@+id/networkstatus"-->
+        <!--android:layout_width="40dp"-->
+        <!--android:layout_height="20dp"-->
+
+        <!--android:gravity="center"-->
+        <!--android:src="@mipmap/offline"-->
+        <!--android:text="上传交易资料"-->
+        <!--android:textAlignment="gravity"-->
+        <!--android:textSize="50dp"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintTop_toTopOf="parent" />-->
+
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/navigation"
         android:layout_width="0dp"
