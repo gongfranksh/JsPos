@@ -20,7 +20,7 @@ import static personal.wl.jspos.db.Tools.convertList;
 
 
 public class DBC2Jspot {
-    private static final String IP = "192.168.72.21";
+    public static final String IP = "192.168.72.21";
     private static final String DBName = "headquarters";
     //    private static final String USER = "syread";
 //    private static final String PWD = "buynow";

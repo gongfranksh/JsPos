@@ -105,7 +105,7 @@ public class DeviceUtils {
             String line;
             StringBuilder builder = new StringBuilder();
             while ((line = br.readLine()) != null) {
-                builder.append(line+'\n');
+                builder.append(line + '\n');
             }
             br.close();
             isr.close();
@@ -118,5 +118,10 @@ public class DeviceUtils {
         return null;
     }
 
-
+    public static Boolean CheckDBConnect(String returnMsg) {
+        if (returnMsg.indexOf("100% loss") != -1) return false;
+        if (returnMsg.indexOf("100% packet loss") != -1) return false;
+        if (returnMsg.length() == 0) return false;
+        return true;
+    }
 }

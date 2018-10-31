@@ -15,7 +15,7 @@
     <!-- This preference simply launches an intent when selected. Use this UI sparingly, per
          design guidelines. -->
 
-    <Preference android:title="资料处理">
+    <Preference android:title="@string/local_tools">
         <intent android:action="personal.wj.jspos.posinit" />
     </Preference>
 
