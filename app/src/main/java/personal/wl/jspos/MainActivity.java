@@ -43,21 +43,19 @@ public class MainActivity extends AppCompatActivity implements IReportBack {
 
 
     //    private  PosTabInfo posTabInfo = new PosTabInfo(MainActivity.this);
-    private NetworkWatcher watcher = new NetworkWatcher(){
+    private NetworkWatcher watcher = new NetworkWatcher() {
         @Override
         public void update(Observable o, Object arg) {
             super.update(o, arg);
             //观察者接受到被观察者的通知，来更新自己的数据操作。
             APPNetwork network = (APPNetwork) arg;
 
-            if (network.isConnected()){
+            if (network.isConnected()) {
                 networkdisplay.setImageDrawable(getResources().getDrawable(R.drawable.ic_wifi_tethering_black_24dp));
-                Toast.makeText(MainActivity.this,"Online is ok",Toast.LENGTH_LONG).show();
-            }
-            else {
+
+            } else {
 
                 networkdisplay.setImageDrawable(getResources().getDrawable(R.drawable.ic_portable_wifi_off_black_24dp));
-                Toast.makeText(MainActivity.this,"offline",Toast.LENGTH_LONG).show();
             }
         }
     };
@@ -170,6 +168,7 @@ public class MainActivity extends AppCompatActivity implements IReportBack {
     private void syncjsportdb() {
         HashMap devicelist = new HashMap<String, String>();
         PosTabInfo posTabInfo = new PosTabInfo(MainActivity.this);
+
         if (posTabInfo.isConnectingToInternet()) {
             devicelist.put("deviceid", posTabInfo.getDeviceid());
             devicelist.put("posno", posTabInfo.getPosMachine());
