@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements IReportBack {
             //观察者接受到被观察者的通知，来更新自己的数据操作。
             APPNetwork network = (APPNetwork) arg;
 
-            if (network.isConnected()) {
+            if (network.isConnected()&&DeviceUtils.CheckDB2MSSQLConnect()) {
                 networkdisplay.setImageDrawable(getResources().getDrawable(R.drawable.ic_wifi_tethering_black_24dp));
 
             } else {
