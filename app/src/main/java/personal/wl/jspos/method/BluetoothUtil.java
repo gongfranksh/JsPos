@@ -42,6 +42,8 @@ public class BluetoothUtil {
 		return deviceList;
 	}
 
+
+
 	/**
 	 * 获取所有已配对的打印类设备
 	 */

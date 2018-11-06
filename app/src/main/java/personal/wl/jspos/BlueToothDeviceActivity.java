@@ -177,7 +177,7 @@ public class BlueToothDeviceActivity extends AppCompatActivity {
             }
             socket = null;
         }
-        mThread = new PrinterConnectThread(macAddress, device, context);
+        mThread = new PrinterConnectThread(macAddress, device, context,false,null,null );
         mThread.start();
     }
 }

@@ -53,6 +53,10 @@
         android:singleLine="true"
         android:title="@string/Printer_setting_address" />
 
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="Need_Printer_InVoice"
+        android:title="@string/IsNeedPrint" />
     <Preference android:title="@string/Upgrade_version">
         <intent android:action="personal.wj.jspos.UpgradeActivity" />
     </Preference>

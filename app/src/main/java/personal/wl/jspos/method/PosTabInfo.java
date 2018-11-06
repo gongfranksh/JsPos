@@ -22,6 +22,15 @@ public class PosTabInfo {
     private String BlueToothPrinterName;
     private String BlueToothPrinterAddress;
 
+    public Boolean getNeedPrint()
+
+    {
+        pre.getBoolean("Need_Printer_InVoice", true);
+        return pre.getBoolean("Need_Printer_InVoice", true);
+    }
+
+    private Boolean isneedprint;
+
     public String getBlueToothPrinterName() {
         return pre.getString("BlueTooth_Printer_Name", "0");
     }

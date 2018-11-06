@@ -1,12 +1,12 @@
 package personal.wl.jspos.method;
 
+import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 
-import org.greenrobot.greendao.Property;
 import org.greenrobot.greendao.query.QueryBuilder;
-import org.greenrobot.greendao.query.WhereCondition;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -38,7 +38,10 @@ public class PosTranscation {
     private String tmp_deviceid;
     private Long tmp_sourceid;
     private Date tmp_datetime;
+    private Boolean needprint;
     private HashMap generate_saleid_para =new HashMap<String, String>();
+    private BluetoothDevice blueprinter;
+    private PosPrinter posprinter;
 
 
     public PosTranscation(Context context) {
@@ -48,6 +51,7 @@ public class PosTranscation {
         this.tmp_posmachine = posTabInfo.getPosMachine();
         this.tmp_deviceid = posTabInfo.getDeviceid();
         this.tmp_datetime = new Date();
+        this.needprint= posTabInfo.getNeedPrint();
 //        HashMap generate_saleid_para =
         generate_saleid_para.put("branch", tmp_branch);
         generate_saleid_para.put("posmachine", tmp_posmachine);
@@ -67,6 +71,7 @@ public class PosTranscation {
     public void SaleTranstion(List<SaleDaily> saleDailyList, int pay) {
 
         List<MobileDevice> sourcelist = QueryMobileDevice(generate_saleid_para);
+        List<SalePayMode> salePayModeList = new ArrayList<>();
         if(sourcelist.size()!=0){
             tmp_sourceid=sourcelist.get(0).getSourceId();
         }
@@ -126,6 +131,14 @@ public class PosTranscation {
                 break;
         }
         salePayModeDao.insert(salePayMode);
+        salePayModeList.add(salePayMode);
+
+
+        //增加print部分内容
+        posprinter = new PosPrinter(context);
+        blueprinter= posprinter.getPosPrinter();
+        posprinter.connect(blueprinter,saleDailyList,salePayModeList);
+
 
     }
 

@@ -40,6 +40,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 
+import personal.wl.jspos.adapter.PrintOrderStatusChange;
+import personal.wl.jspos.adapter.PrinterOrderWatcher;
 import personal.wl.jspos.adapter.ProductAdapter;
 import personal.wl.jspos.adapter.SaleOrderAdapter;
 import personal.wl.jspos.adapter.SaleOrderChange;
@@ -89,6 +91,16 @@ public class POS extends Activity {
     private ImageButton ib_submit_logoff;
     private PosTabInfo posTabInfo;
 
+    private PrinterOrderWatcher printerOrderWatcher = new PrinterOrderWatcher() {
+        @Override
+        public void update(Observable o, Object arg) {
+            super.update(o, arg);
+            cleartranstion();
+
+        }
+    };
+
+
     private SaleOrderWatcher saleOrderWatcher = new SaleOrderWatcher() {
         @Override
         public void update(Observable o, Object arg) {
@@ -102,6 +114,8 @@ public class POS extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pos);
         SaleOrderChange.getInstance().addObserver(saleOrderWatcher);
+        PrintOrderStatusChange.getInstance().addObserver(printerOrderWatcher);
+
         posTabInfo = new PosTabInfo(POS.this);
         saletransdate = findViewById(R.id.saletransdate);
         totalamt = findViewById(R.id.totoalamount);
@@ -285,6 +299,7 @@ public class POS extends Activity {
     protected void onPause() {
         super.onPause();
         SaleOrderChange.getInstance().deleteObserver(saleOrderWatcher);
+        PrintOrderStatusChange.getInstance().deleteObserver(printerOrderWatcher);
     }
 
 
@@ -308,9 +323,9 @@ public class POS extends Activity {
             if (JudgeSaler(saleDailyList)) {
                 PosTranscation posTranscation = new PosTranscation(POS.this);
                 posTranscation.SaleTranstion(saleDailyList, paymode);
-                cleartranstion();
-                saleid.setText("上次交易流水:" + posTranscation.getTranscationId());
-                showOkDiallog(posTranscation.getTranscationId());
+//                cleartranstion();
+//                saleid.setText("上次交易流水:" + posTranscation.getTranscationId());
+//                showOkDiallog(posTranscation.getTranscationId());
 
             } else {
                 showErrorDiallog("营业员代码错误！");
