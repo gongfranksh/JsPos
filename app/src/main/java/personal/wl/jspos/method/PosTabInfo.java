@@ -19,7 +19,31 @@ public class PosTabInfo {
     public static final String NOBODY_LOGIN = "00000";
     private SharedPreferences pre;
     private Context context;
+    private String BlueToothPrinterName;
+    private String BlueToothPrinterAddress;
 
+    public String getBlueToothPrinterName() {
+        return pre.getString("BlueTooth_Printer_Name", "0");
+    }
+
+    public void setBlueToothPrinterName(String blueToothPrinterName) {
+        SharedPreferences.Editor editor = pre.edit();
+        BlueToothPrinterName = blueToothPrinterName;
+        editor.putString("BlueTooth_Printer_Name", blueToothPrinterName);
+        editor.commit();
+    }
+
+    public String getBlueToothPrinterAddress() {
+
+        return pre.getString("BlueTooth_Printer_Address", "0");
+    }
+
+    public void setBlueToothPrinterAddress(String blueToothPrinterAddress) {
+        SharedPreferences.Editor editor = pre.edit();
+        BlueToothPrinterAddress = blueToothPrinterAddress;
+        editor.putString("BlueTooth_Printer_Address", blueToothPrinterAddress);
+        editor.commit();
+    }
 
     public PosTabInfo(Context context) {
         pre = PreferenceManager.getDefaultSharedPreferences(context);
@@ -138,6 +162,12 @@ public class PosTabInfo {
             }
             return false;
         }
+        return false;
+    }
+
+    public boolean HadSetPrinter() {
+        if (this.getBlueToothPrinterName().length() != 0 && this.getBlueToothPrinterName() != "0")
+            return true;
         return false;
     }
 

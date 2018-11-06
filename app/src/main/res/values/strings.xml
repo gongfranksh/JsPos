@@ -191,4 +191,10 @@
     <string name="Sync_data">数据同步</string>
     <string name="device_number_id">设备号</string>
     <string name="Upgrade_version">版本更新</string>
+    <string name="local_printer">打印机设置</string>
+    <string name="title_BlueToothSetting">设置打印机</string>
+    <string name="setting_printer_blue_tooth_button">设置蓝牙打印机</string>
+    <string name="testing_printer">打印测试</string>
+    <string name="Printer_Display_name">预设打印机</string>
+    <string name="Printer_setting_address">预设打印机地址</string>
 </resources>

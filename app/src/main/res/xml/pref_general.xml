@@ -32,6 +32,27 @@
         android:singleLine="true"
         android:title="@string/device_number_id" />
 
+    <EditTextPreference
+        android:capitalize="words"
+        android:defaultValue="000"
+        android:inputType="textCapWords"
+        android:key="BlueTooth_Printer_Name"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/Printer_Display_name" />
+
+
+    <EditTextPreference
+        android:capitalize="words"
+        android:defaultValue="000"
+        android:inputType="textCapWords"
+        android:key="BlueTooth_Printer_Address"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/Printer_setting_address" />
+
     <Preference android:title="@string/Upgrade_version">
         <intent android:action="personal.wj.jspos.UpgradeActivity" />
     </Preference>
