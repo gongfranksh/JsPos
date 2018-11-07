@@ -33,4 +33,23 @@ public final class PosPayMent {
         return tmp_paymodecode;
     }
 
+    public static String getPayMentName(char paycode) {
+        String tmp_paymodecode;
+        switch (paycode) {
+            case PAYMENT_CASH_CODE:
+                tmp_paymodecode = PAYMENT_CASH_NAME;
+                break;
+            case PAYMENT_ALIPAY_CODE:
+                tmp_paymodecode = PAYMENT_ALIPAY_NAME;
+                break;
+            case PAYMENT_WEIXIN_CODE:
+                tmp_paymodecode = PAYMENT_WEIXIN_NAME;
+                break;
+            default:
+                tmp_paymodecode = PAYMENT_CASH_NAME;
+                break;
+        }
+        return tmp_paymodecode;
+    }
+
 }

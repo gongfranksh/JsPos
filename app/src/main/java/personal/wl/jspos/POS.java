@@ -2,6 +2,7 @@ package personal.wl.jspos;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -19,6 +20,7 @@ import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.VelocityTracker;
 import android.view.View;
@@ -52,6 +54,7 @@ import personal.wl.jspos.pos.Product;
 import personal.wl.jspos.pos.ProductBranchRel;
 import personal.wl.jspos.pos.SaleDaily;
 
+import static android.support.constraint.Constraints.TAG;
 import static personal.wl.jspos.method.PosHandleDB.JudgeSaler;
 import static personal.wl.jspos.method.PosHandleDB.QueryProductBarCodeByCode;
 import static personal.wl.jspos.method.PosHandleDB.QueryProductBranchRelByCode;
@@ -90,12 +93,16 @@ public class POS extends Activity {
     private ImageButton ib_submit_weixin;
     private ImageButton ib_submit_logoff;
     private PosTabInfo posTabInfo;
+    private Context context;
+    private PosTranscation posTranscation;
 
     private PrinterOrderWatcher printerOrderWatcher = new PrinterOrderWatcher() {
         @Override
         public void update(Observable o, Object arg) {
             super.update(o, arg);
+            Log.i(TAG, "run(POS.java:102)---printerOrderWatcher> ");
             cleartranstion();
+;
 
         }
     };
@@ -113,6 +120,7 @@ public class POS extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pos);
+        this.context = POS.this;
         SaleOrderChange.getInstance().addObserver(saleOrderWatcher);
         PrintOrderStatusChange.getInstance().addObserver(printerOrderWatcher);
 
@@ -321,7 +329,7 @@ public class POS extends Activity {
 
         if (saleDailyList.size() > 0) {
             if (JudgeSaler(saleDailyList)) {
-                PosTranscation posTranscation = new PosTranscation(POS.this);
+                posTranscation = new PosTranscation(context);
                 posTranscation.SaleTranstion(saleDailyList, paymode);
 //                cleartranstion();
 //                saleid.setText("上次交易流水:" + posTranscation.getTranscationId());
@@ -393,6 +401,10 @@ public class POS extends Activity {
         saleOrderAdapter.notifyDataSetChanged();
         productAdapter.notifyDataSetChanged();
         totalamt.setText("0.0");
+        Log.i(TAG, "run(POS.java:404)---cleartranstion> ");
+//        posTranscation = new PosTranscation(context);
+        saleid.setText("上次交易流水:" + posTranscation.getTranscationId());
+        showOkDiallog(posTranscation.getTranscationId());
 
     }
 

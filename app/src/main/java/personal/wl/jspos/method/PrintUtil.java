@@ -4,14 +4,18 @@ import android.bluetooth.BluetoothSocket;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.text.format.DateFormat;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.List;
 
+import personal.wl.jspos.pos.Product;
 import personal.wl.jspos.pos.SaleDaily;
 import personal.wl.jspos.pos.SalePayMode;
+
+import static personal.wl.jspos.method.PosHandleDB.QueryProductByCode;
 
 //import com.github.promeg.pinyinhelper.Pinyin;
 
@@ -89,6 +93,13 @@ public class PrintUtil {
     public void printTabSpace(int length) throws IOException {
         for (int i = 0; i < length; i++) {
             mWriter.write("\t");
+        }
+        mWriter.flush();
+    }
+
+    public void printSpace(int length) throws IOException {
+        for (int i = 0; i < length; i++) {
+            mWriter.write(" ");
         }
         mWriter.flush();
     }
@@ -220,6 +231,206 @@ public class PrintUtil {
         print(byteBuffer);
     }
 
+
+    public void printOrderLine(String productid, String productname, String saleqty, String saleamount, String saleprice) throws IOException {
+        int iNum = 0;
+//        每行37个字符；
+        int perline = 32;
+
+        byte[] byteBuffer = new byte[200];
+        byte[] tmp = new byte[0];
+//        第一行产品名称
+        byte[] proname = new byte[32];
+//        第二行产品编码、价格、数量、小计
+
+        byte[] proid = new byte[6];
+        byte[] qty = new byte[6];
+        byte[] price = new byte[10];
+        byte[] amount = new byte[10];
+
+        tmp = getGbk(productname);
+        for (int i = 0; i < proname.length; i++) {
+            if (i < tmp.length) {
+                proname[i] = tmp[i];
+            } else {
+                break;
+            }
+        }
+
+        proname = getPrintContent(proname);
+        System.arraycopy(proname, 0, byteBuffer, iNum, proname.length);
+        iNum += proname.length;
+        tmp = getGbk("\n");
+        System.arraycopy(tmp, 0, byteBuffer, iNum, tmp.length);
+        iNum += tmp.length;
+        print(byteBuffer);
+
+
+        byteBuffer = new byte[200];
+        iNum = 0;
+        tmp = getGbk(productid);
+        for (int i = 0; i < productid.length() - 7; i++) {
+            proid[i] = tmp[i + 7];
+        }
+        System.arraycopy(proid, 0, byteBuffer, iNum, proid.length);
+        iNum += proid.length;
+
+
+        tmp = getGbk(saleqty);
+        for (int i = 0; i < qty.length; i++) {
+            if (i < tmp.length) {
+                qty[qty.length - tmp.length + i] = tmp[i];
+            } else {
+                break;
+            }
+        }
+        qty = getPrintContent(qty);
+        System.arraycopy(qty, 0, byteBuffer, iNum, qty.length);
+        iNum += qty.length;
+//        tmp = getGbk(" ");
+//        System.arraycopy(tmp, 0, byteBuffer, iNum, tmp.length);
+//        iNum += tmp.length;
+
+        tmp = getGbk(saleprice);
+        for (int i = 0; i < price.length; i++) {
+            if (i < tmp.length) {
+                price[price.length - tmp.length + i] = tmp[i];
+            } else {
+                break;
+            }
+        }
+        price = getPrintContent(price);
+        System.arraycopy(price, 0, byteBuffer, iNum, price.length);
+        iNum += price.length;
+
+        tmp = getGbk(saleamount);
+        for (int i = 0; i < amount.length; i++) {
+            if (i < tmp.length) {
+                amount[amount.length - tmp.length + i] = tmp[i];
+            } else {
+                break;
+            }
+        }
+        amount = getPrintContent(amount);
+        System.arraycopy(amount, 0, byteBuffer, iNum, amount.length);
+        iNum += amount.length;
+
+        print(byteBuffer);
+    }
+
+    public void printPayLine(String paycode, String paymentmoney) throws IOException {
+        int iNum = 0;
+//        每行37个字符；
+        int perline = 32;
+        byte[] byteBuffer = new byte[200];
+        byte[] tmp = new byte[0];
+        byte[] payname = new byte[22];
+        byte[] paymoney = new byte[10];
+        String tmp_payname;
+
+
+        tmp = getGbk(paycode);
+        tmp_payname = PosPayMent.getPayMentName((char) tmp[0]);
+        //PAYMENT_CASH_CODE
+
+
+
+        tmp = getGbk(tmp_payname);
+        for (int i = 0; i < payname.length; i++) {
+            if (i < tmp.length) {
+                payname[i] = tmp[i];
+            } else {
+                break;
+            }
+        }
+        payname = getPrintContent(payname);
+        System.arraycopy(payname, 0, byteBuffer, iNum, payname.length);
+        iNum += payname.length;
+
+
+        tmp = getGbk(paymentmoney);
+        for (int i = 0; i < paymoney.length; i++) {
+            if (i < tmp.length) {
+                paymoney[i] = tmp[i];
+            } else {
+                break;
+            }
+        }
+        paymoney = getPrintContent(paymoney);
+        System.arraycopy(paymoney, 0, byteBuffer, iNum, paymoney.length);
+        iNum += paymoney.length;
+        tmp = getGbk("\n");
+        System.arraycopy(tmp, 0, byteBuffer, iNum, tmp.length);
+        iNum += tmp.length;
+
+
+        print(byteBuffer);
+    }
+
+    public void printOrderTotal(String subtotal) throws IOException {
+        int iNum = 0;
+//        每行37个字符；
+        int perline = 32;
+        byte[] byteBuffer = new byte[200];
+        byte[] tmp = new byte[0];
+        byte[] subtotalname = new byte[22];
+        byte[] subtotalmoney = new byte[10];
+        String tmp_payname;
+        tmp_payname = "合计：";
+        tmp = getGbk(tmp_payname);
+        for (int i = 0; i < subtotalname.length; i++) {
+            if (i < tmp.length) {
+                subtotalname[i] = tmp[i];
+            } else {
+                break;
+            }
+        }
+        subtotalname = getPrintContent(subtotalname);
+        System.arraycopy(subtotalname, 0, byteBuffer, iNum, subtotalname.length);
+        iNum += subtotalname.length;
+
+
+        tmp = getGbk(subtotal);
+        for (int i = 0; i < subtotalmoney.length; i++) {
+            if (i < tmp.length) {
+                subtotalmoney[subtotalmoney.length - tmp.length + i] = tmp[i];
+            } else {
+                break;
+            }
+        }
+        subtotalmoney = getPrintContent(subtotalmoney);
+        System.arraycopy(subtotalmoney, 0, byteBuffer, iNum, subtotalmoney.length);
+        iNum += subtotalmoney.length;
+        tmp = getGbk("\n");
+        System.arraycopy(tmp, 0, byteBuffer, iNum, tmp.length);
+        iNum += tmp.length;
+
+
+        print(byteBuffer);
+    }
+
+
+    public void printMyTwoColumn(String title, String content) throws IOException {
+        int iNum = 0;
+        byte[] byteBuffer = new byte[100];
+        byte[] tmp;
+
+        tmp = getGbk(title);
+        System.arraycopy(tmp, 0, byteBuffer, iNum, tmp.length);
+        iNum += tmp.length;
+
+//        tmp = setLocation(getOffset(content));
+        tmp = getGbk(content);
+        System.arraycopy(tmp, 0, byteBuffer, iNum, tmp.length);
+        iNum += tmp.length;
+
+//        tmp = getGbk(content);
+//        System.arraycopy(tmp, 0, byteBuffer, iNum, tmp.length);
+
+        print(byteBuffer);
+    }
+
+
     public void printDashLine() throws IOException {
         printText("--------------------------------");
     }
@@ -228,6 +439,17 @@ public class PrintUtil {
         bmp = compressPic(bmp);
         byte[] bmpByteArray = draw2PxPoint(bmp);
         printRawBytes(bmpByteArray);
+    }
+
+
+    public byte[] getPrintContent(byte[] input) {
+        for (int i = 0; i < input.length; i++) {
+            if (input[i] == 0) {
+                input[i] = 32;
+//                input[i] = 48;
+            }
+        }
+        return input;
     }
 
     /*************************************************************************
@@ -352,9 +574,9 @@ public class PrintUtil {
 
             //打印商品列表
             pUtil.printText("商品");
-            pUtil.printTabSpace(2);
+            pUtil.printSpace(2);
             pUtil.printText("数量");
-            pUtil.printTabSpace(1);
+            pUtil.printSpace(2);
             pUtil.printText("    单价");
             pUtil.printLine();
 
@@ -385,62 +607,78 @@ public class PrintUtil {
     }
 
 
-    public static void print_weight_56mm(BluetoothSocket bluetoothSocket, Bitmap bitmap, List<SaleDaily> saleDailyList, List<SalePayMode> salePayModeList) {
+    public static void print_weight_56mm(BluetoothSocket bluetoothSocket, Bitmap bitmap, List<SaleDaily> saleDailyList, List<SalePayMode> salePayModeList, PosTabInfo posTabInfo) {
 
         try {
+            Double sub_total_order = 0.00;
+
             PrintUtil pUtil = new PrintUtil(bluetoothSocket.getOutputStream(), "GBK");
             // 店铺名 居中 放大
             pUtil.printAlignment(1);
-            pUtil.printLargeText("乐之店");
+            pUtil.printLargeText(posTabInfo.getBranchCode());
             pUtil.printLine();
             pUtil.printAlignment(0);
             pUtil.printLine();
 
-            pUtil.printTwoColumn("时间:", "2017-05-09 15:50:41");
-            pUtil.printLine();
+            if (saleDailyList.size() != 0) {
+                CharSequence sysTimeStr = DateFormat
+                        .format(" yyyy-MM-dd HH:mm:ss", saleDailyList.get(0).getSaleDate());
+                pUtil.printMyTwoColumn("时间:", (String) sysTimeStr);
+                pUtil.printLine();
+                pUtil.printMyTwoColumn("订单号:", saleDailyList.get(0).getSaleId() + "");
+                pUtil.printLine();
+            }
 
-            pUtil.printTwoColumn("订单号:", System.currentTimeMillis() + "");
-            pUtil.printLine();
-
-            pUtil.printTwoColumn("付款人:", "VitaminChen");
-            pUtil.printLine();
 
             // 分隔线
             pUtil.printDashLine();
             pUtil.printLine();
 
-            //打印商品列表
             pUtil.printText("商品");
-            pUtil.printTabSpace(2);
+            pUtil.printSpace(4);
             pUtil.printText("数量");
-            pUtil.printTabSpace(1);
-            pUtil.printText("    单价");
+            pUtil.printSpace(6);
+            pUtil.printText("单价");
+            pUtil.printSpace(6);
+            pUtil.printText("金额");
             pUtil.printLine();
-
-            pUtil.printThreeColumn("iphone6", "1", "4999.00");
-            pUtil.printThreeColumn("测试一个超长名字的产品看看打印出来会怎么样哈哈哈哈哈哈", "1", "4999.00");
-
             pUtil.printDashLine();
-            pUtil.printLine();
+//
+//
+            for (int i = 0; i < saleDailyList.size(); i++) {
 
-            pUtil.printTwoColumn("订单金额:", "9998.00");
-            pUtil.printLine();
-
-            pUtil.printTwoColumn("实收金额:", "10000.00");
-            pUtil.printLine();
-
-            pUtil.printTwoColumn("找零:", "2.00");
-            pUtil.printLine();
-
+                List<Product> tmp_products = QueryProductByCode(saleDailyList.get(i).getProId());
+                if (tmp_products.size() != 0) {
+                    sub_total_order += saleDailyList.get(i).getSaleAmt();
+                    pUtil.printOrderLine(saleDailyList.get(i).getProId(),
+                            tmp_products.get(0).getProSName(),
+                            saleDailyList.get(i).getSaleQty().toString(),
+                            saleDailyList.get(i).getSaleAmt().toString(),
+                            saleDailyList.get(i).getCurPrice().toString());
+                    pUtil.printLine();
+                }
+            }
             pUtil.printDashLine();
+            pUtil.printOrderTotal(sub_total_order.toString());
+            pUtil.printDashLine();
+            pUtil.printText("实际付款:");
+            pUtil.printLine();
+            for (int i = 0; i < salePayModeList.size(); i++) {
+                pUtil.printPayLine(salePayModeList.get(i).getPayModeId().toString(), salePayModeList.get(0).getPayMoney().toString());
+                pUtil.printLine();
 
-//            pUtil.printBitmap(bitmap);
-
+            }
+//
+////            pUtil.printBitmap(bitmap);
             pUtil.printLine(4);
 
         } catch (IOException e) {
 
         }
+    }
+
+
+    private void print_title() {
     }
 
 

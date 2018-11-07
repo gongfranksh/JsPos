@@ -40,12 +40,16 @@ public class PosPrinter {
     }
 
     public synchronized void connect(BluetoothDevice device, List<SaleDaily> saleDailyList, List<SalePayMode> salePayModeList) {
-        if (mThread != null) {
-            mThread.interrupt();
-            mThread = null;
-        }
-        mThread = new PrinterConnectThread(device.getAddress(), device, context, true, saleDailyList, salePayModeList);
-        mThread.start();
+
+
+        PrinterConnectAsyc printerConnectAsyc = new PrinterConnectAsyc(context,device,true,saleDailyList,salePayModeList);
+        printerConnectAsyc.execute();
+//        if (mThread != null) {
+//            mThread.interrupt();
+//            mThread = null;
+//        }
+//        mThread = new PrinterConnectThread(device.getAddress(), device, context, true, saleDailyList, salePayModeList);
+//        mThread.start();
     }
 
 

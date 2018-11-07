@@ -5,8 +5,7 @@ import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Handler;
-import android.os.Message;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import java.util.List;
@@ -18,25 +17,25 @@ import personal.wl.jspos.pos.SalePayMode;
 
 import static android.support.constraint.Constraints.TAG;
 
-public class PrinterConnectThread extends Thread {
+public class PrinterConnectAsyc extends AsyncTask {
     private String address;
     private Context context;
+
+
     private BluetoothDevice mmDevice;
     private BluetoothSocket socket;
     private Boolean nottest;
     private List<SaleDaily> saleDailyList;
     private List<SalePayMode> salePayModeList;
-    private Message msg;
+    private PosTabInfo posTabInfo;
 
-
-    public PrinterConnectThread(String mac, BluetoothDevice mmDevice, Context context, Boolean NotTest, List<SaleDaily> orderlist, List<SalePayMode> orderpayment) {
-        this.mmDevice = mmDevice;
-        this.address = mac;
+    public PrinterConnectAsyc(Context context, BluetoothDevice mmDevice, Boolean NotTest, List<SaleDaily> saleDailyList, List<SalePayMode> salePayModeList) {
         this.context = context;
+        this.mmDevice = mmDevice;
+        this.saleDailyList = saleDailyList;
         this.nottest = NotTest;
-        this.saleDailyList = orderlist;
-        this.salePayModeList = orderpayment;
-        Log.i(TAG, "run(PrinterConnectThread.java:40)---初始化-->> " + orderlist.toString());
+        this.salePayModeList = salePayModeList;
+        this.posTabInfo = new PosTabInfo(context);
         try {
             if (socket == null) {
                 socket = BluetoothUtil.connectDevice(mmDevice);
@@ -44,26 +43,20 @@ public class PrinterConnectThread extends Thread {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
     }
 
 
     @Override
-    public void run() {
-        do {
+    protected Object doInBackground(Object[] objects) {
         try {
-            Log.i(TAG, "run(PrinterConnectThread.java:58)--->> " + "连接socket");
-            msg = new Message();
-            msg.what = 555;
+            Log.i(TAG, "run(PrinterConnectAsyc.java:58)--->> " + "连接socket");
             if (socket.isConnected()) {
-                Log.i(TAG, "run(PrinterConnectThread.java:62)--->> " + "已经连接过了");
+                Log.i(TAG, "run(PrinterConnectAsyc.java:62)--->> " + "已经连接过了");
 //                    Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.test_image);
                 process_print();
-                mHandler.sendMessage(msg);
             }
         } catch (Exception connectException) {
-            Log.i(TAG, "run(PrinterConnectThread.java:67)--->> " + connectException.toString());
+            Log.i(TAG, "run(PrinterConnectAsyc.java:67)--->> " + connectException.toString());
             try {
                 if (socket != null) {
 
@@ -73,7 +66,25 @@ public class PrinterConnectThread extends Thread {
 
             }
 
-        }}while (true);
+        }
+
+        return null;
+    }
+
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+    }
+
+    @Override
+    protected void onPostExecute(Object o) {
+        super.onPostExecute(o);
+        PrintOrderStatusChange.getInstance().notifyDataChange(true);
+    }
+
+    @Override
+    protected void onProgressUpdate(Object[] values) {
+        super.onProgressUpdate(values);
     }
 
     private void process_print() {
@@ -84,26 +95,11 @@ public class PrinterConnectThread extends Thread {
 
             List<SalePayMode> tt = this.salePayModeList;
             List<SaleDaily> mm = this.saleDailyList;
-            Log.i(TAG, "run(PrinterConnectThread.java:89)---process_print---传递进入打印--收款明细>>" + this.salePayModeList.toString());
-            Log.i(TAG, "run(PrinterConnectThread.java:90)---process_print---传递进入打印--交易明细>> " + this.saleDailyList.toString());
-            //   PrintUtil.print_weight_56mm(socket, null, this.saleDailyList, this.salePayModeList);
+            Log.i(TAG, "run(PrinterConnectAsyc.java:89)---process_print---传递进入打印--收款明细>>" + this.salePayModeList.toString());
+            Log.i(TAG, "run(PrinterConnectAsyc.java:90)---process_print---传递进入打印--交易明细>> " + this.saleDailyList.toString());
+            PrintUtil.print_weight_56mm(socket, null, this.saleDailyList, this.salePayModeList,posTabInfo);
 
         }
     }
-
-    private Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what) {
-                case 555:
-                    PrintOrderStatusChange.getInstance().notifyDataChange(true);
-//                    total_amount();
-                    break;
-                default:
-                    break;
-            }
-        }
-    };
 
 }
