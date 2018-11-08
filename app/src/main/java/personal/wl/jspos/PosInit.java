@@ -1,11 +1,17 @@
 package personal.wl.jspos;
 
+import android.content.Context;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -30,13 +36,24 @@ public class PosInit extends AppCompatActivity {
     private Button bt_checknetwork;
     private TextView tv_display;
     private EditText device_diplay;
+    private EditText adminpass;
+
     private CommonProgressDialog pBar;
+
+    private View mPopupHeadViewy;//创建一个view
+    private PopupWindow mHeadPopupclly;//PopupWindow
+
+    private TextView tetle, textdz;//title,打折
+    private TextView textwzdl, textckxq;//我知道了,查看详情
+    private Context context;
+    private String ADMINPASSWORD="160023";
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pos_init);
+        context=PosInit.this;
         bt_cleanLocalSaledata = findViewById(R.id.sync_clean_local);
         bt_getDeviceId = findViewById(R.id.getdeviceid);
         bt_uploadLocalSaledata = findViewById(R.id.sync_upload_sales);
@@ -105,8 +122,11 @@ public class PosInit extends AppCompatActivity {
         bt_cleanLocalSaledata.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 try {
-                    CleanLocalSales();
+
+                    popupHeadWindowcll();
+//                    CleanLocalSales();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -180,5 +200,47 @@ public class PosInit extends AppCompatActivity {
         posTabInfo.setLastUploadDate(new Date());
     }
 
+
+    private void popupHeadWindowcll() {
+        mPopupHeadViewy = View.inflate(this, R.layout.adminlogin, null);
+        tetle = (TextView) mPopupHeadViewy.findViewById(R.id.tetle);
+//        textdz = (TextView) mPopupHeadViewy.findViewById(R.id.textdz);
+        adminpass =mPopupHeadViewy.findViewById(R.id.adminpasswordinput);
+        textwzdl = (TextView) mPopupHeadViewy.findViewById(R.id.textwzdl);
+        textckxq = (TextView) mPopupHeadViewy.findViewById(R.id.textckxq);
+//        mHeadPopupclly = new PopupWindow(mPopupHeadViewy, AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.MATCH_PARENT, true);
+        mHeadPopupclly = new PopupWindow(mPopupHeadViewy, (int) (getScreenWidth() * 0.5), -2, true);
+        // 在PopupWindow里面就加上下面代码，让键盘弹出时，不会挡住pop窗口。
+        mHeadPopupclly.setInputMethodMode(PopupWindow.INPUT_METHOD_NEEDED);
+        mHeadPopupclly.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        mHeadPopupclly.setBackgroundDrawable(new BitmapDrawable());
+        mHeadPopupclly.setOutsideTouchable(true);
+        mHeadPopupclly.showAsDropDown(bt_cleanLocalSaledata, 0, 0);
+        textwzdl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (ADMINPASSWORD.equals(adminpass.getText().toString())){
+                    Toast.makeText(context,"管理员正确",Toast.LENGTH_LONG).show();
+                    CleanLocalSales();
+                mHeadPopupclly.dismiss();}
+                else{
+                    Toast.makeText(context,"管理员密码错误",Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+        textckxq.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mHeadPopupclly.dismiss();
+                Toast.makeText(PosInit.this, "取消", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+    public int getScreenWidth() {
+        DisplayMetrics dm = new DisplayMetrics();
+        dm = PosInit.this.getResources().getDisplayMetrics();
+        return dm.widthPixels;
+    }
 
 }

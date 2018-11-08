@@ -373,6 +373,7 @@ public class PosHandleDB {
             tmp_saledaily.setSalerId(saleDailyList.get(i).getSalerId());
             tmp_saledaily.setSaleId(tmp_saleid);
             tmp_saledaily.setSaleMan(saleDailyList.get(i).getSaleMan());
+            tmp_saledaily.setSaleType(saleDailyList.get(i).getSaleType());
             tmp_saledaily.setSaleQty(tmp_saleqty);
             tmp_saledaily.setSaleAmt(tmp_saleamt);
             tmp_saledaily.setNormalPrice(tmp_NormalPrice);
