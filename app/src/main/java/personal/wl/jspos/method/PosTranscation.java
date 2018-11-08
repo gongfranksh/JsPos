@@ -83,11 +83,10 @@ public class PosTranscation {
             List<Product> tmp_product = QueryProductByCode(saleDailyList.get(i).getProId());
             saleDailyList.get(i).setPosNo(this.tmp_posmachine);
             saleDailyList.get(i).setBraid(this.tmp_branch);
-            saleDailyList.get(i).setIsDM("0");
+
             saleDailyList.get(i).setIsPmt("0");
             saleDailyList.get(i).setIsTimePrompt("0");
             saleDailyList.get(i).setSaleType("0");
-            saleDailyList.get(i).setIsDM("0");
             saleDailyList.get(i).setSaleDate(new Date());
             saleDailyList.get(i).setClassId(tmp_product.get(0).getClassId());
             saleDailyList.get(i).setNormalPrice(tmp_product.get(0).getNormalPrice());

@@ -35,7 +35,7 @@ import personal.wl.jspos.update.view.CommonProgressDialog;
 
 public class MainActivity extends AppCompatActivity implements IReportBack {
 
-    public static int PROCESS_STEPS = 8;
+    public static int PROCESS_STEPS = 9;
     private TextView mTextMessage;
     private CommonProgressDialog pBar;
     private ImageButton uploadtranscation;

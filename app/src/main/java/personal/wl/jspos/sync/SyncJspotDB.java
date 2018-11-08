@@ -9,6 +9,7 @@ import android.util.Log;
 
 import org.greenrobot.greendao.query.QueryBuilder;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -21,6 +22,8 @@ import personal.wl.jspos.pos.BranchDao;
 import personal.wl.jspos.pos.BranchEmployee;
 import personal.wl.jspos.pos.BranchEmployeeDao;
 import personal.wl.jspos.pos.DaoSession;
+import personal.wl.jspos.pos.PmtDmRel;
+import personal.wl.jspos.pos.PmtDmRelDao;
 import personal.wl.jspos.pos.Product;
 import personal.wl.jspos.pos.ProductBarCode;
 import personal.wl.jspos.pos.ProductBarCodeDao;
@@ -129,8 +132,11 @@ public class SyncJspotDB extends AsyncTask<String, Integer, Integer>
             case 6:
                 pd.setMessage("ProductBranch同步....");
                 break;
+            case 7:
+                pd.setMessage("DM同步....");
+                break;
 
-            case 8:
+            case 9:
                 pd.setMessage("设备未注册不能同步");
                 break;
             default:
@@ -207,6 +213,16 @@ public class SyncJspotDB extends AsyncTask<String, Integer, Integer>
         Utils.sleepForSecs(2);
         publishProgress(i);
 
+//----------
+//        //Process Prompt DM
+//        i = i + 1;
+//        rec = getPmtDMBranchRelTimeStamp(device);
+//        List pmtdmbranchrel = js.getPmtDMBranchRelNeedUpdate(rec, device);
+//        ProcessPmtDMBranch2LocalDB(pmtdmbranchrel);
+//-------------
+
+
+
         //Process Product Update--Begin
         i = i + 1;
         rec = getProductTimeStamp();
@@ -228,13 +244,23 @@ public class SyncJspotDB extends AsyncTask<String, Integer, Integer>
 
         //Process ProductBranch
         i = i + 1;
-        rec = getProductBranchTimeStamp();
+        rec = getProductBranchTimeStamp(device);
         List productbranchrel = js.getProductBranchRelNeedUpdate(rec, device);
         ProcessProductBranch2LocalDB(productbranchrel);
 
         Utils.sleepForSecs(2);
         publishProgress(i);
 
+
+
+        //Process Prompt DM
+        i = i + 1;
+        rec = getPmtDMBranchRelTimeStamp(device);
+        List pmtdmlist = js.getPmtDMBranchRelNeedUpdate(rec, device);
+        ProcessPmtDMBranch2LocalDB(pmtdmlist);
+
+        Utils.sleepForSecs(2);
+        publishProgress(i);
 
         //Upload Sale Transcation
         i = i + 1;
@@ -307,14 +333,6 @@ public class SyncJspotDB extends AsyncTask<String, Integer, Integer>
     }
 
 
-    private Integer getProductBarCodeTimeStamp() {
-        Integer returncode = 0;
-        String sql = "SELECT max(TIME_STAMP)\n" +
-                "  FROM PRODUCT_BAR_CODE";
-        returncode = returnTimeStamp(sql);
-        return returncode;
-    }
-
     private void ProcessBranch2LocalDB(List processtask) {
         BranchDao branchDao = this.getDaosession().getBranchDao();
         for (int i = 0; i < processtask.size(); i++) {
@@ -345,12 +363,12 @@ public class SyncJspotDB extends AsyncTask<String, Integer, Integer>
             ProductBranchRel productBranchRel = new ProductBranchRel();
             HashMap item = (HashMap) processtask.get(i);
             String tmp_proid = (String) item.get("proid");
-            List<ProductBranchRel> needupdated = getProductBranchRelByProId(tmp_proid,device);
+            List<ProductBranchRel> needupdated = getProductBranchRelByProId(tmp_proid, device);
 
             if (needupdated.size() != 0) {
                 for (int j = 0; j < needupdated.size(); j++) {
                     ProductBranchRel findpbr = needupdated.get(j);
-                    findpbr =  setProductBranchRelRecord(findpbr, item);
+                    findpbr = setProductBranchRelRecord(findpbr, item);
                     Log.i(TAG, "Update ProductBranchRel -->" + item.get("proid") + "--->" + item.get("proid"));
                     productBranchRelDao.update(findpbr);
                 }
@@ -360,7 +378,32 @@ public class SyncJspotDB extends AsyncTask<String, Integer, Integer>
                 productBranchRel = setProductBranchRelRecord(productBranchRel, item);
                 productBranchRelDao.insert(productBranchRel);
             }
-            productBranchRel = null;
+//            productBranchRel = null;
+        }
+    }
+
+    private void ProcessPmtDMBranch2LocalDB(List processtask) {
+        PmtDmRelDao pmtDmRelDao = this.getDaosession().getPmtDmRelDao();
+        for (int i = 0; i < processtask.size(); i++) {
+            PmtDmRel pmtDmRel = new PmtDmRel();
+            HashMap item = (HashMap) processtask.get(i);
+            String tmp_proid = (String) item.get("ProId");
+            List<PmtDmRel> needupdated = getPmtDMBranchRelByProId(tmp_proid, device);
+
+            if (needupdated.size() != 0) {
+                for (int j = 0; j < needupdated.size(); j++) {
+                    PmtDmRel findpbr = needupdated.get(j);
+                    findpbr = setPmtDMBranchRelRecord(findpbr, item);
+                    Log.i(TAG, "ProcessPmtDMBranch2LocalDB Update PMTDMRL -->" + item.get("ProId") + "--->" + item.get("ProId"));
+                    pmtDmRelDao.update(findpbr);
+                }
+            } else {
+                Log.i(TAG, "ProcessPmtDMBranch2LocalDB Create  PMTDMRL  -->" + item.get("ProId") + "--->" + item.get("ProId"));
+                System.out.print(item.get("ProId"));
+                pmtDmRel = setPmtDMBranchRelRecord(pmtDmRel, item);
+                pmtDmRelDao.insert(pmtDmRel);
+            }
+//            pmtDmRelDao = null;
         }
     }
 
@@ -484,6 +527,15 @@ public class SyncJspotDB extends AsyncTask<String, Integer, Integer>
         return returnProductBrachRel;
     }
 
+    private List<PmtDmRel> getPmtDMBranchRelByProId(String proid, HashMap device) {
+        PmtDmRelDao pmtDmRelDao = this.getDaosession().getPmtDmRelDao();
+        QueryBuilder cond = pmtDmRelDao.queryBuilder();
+        cond.where(PmtDmRelDao.Properties.Proid.eq(proid),
+                PmtDmRelDao.Properties.Braid.eq(device.get("braid")));
+        List<PmtDmRel> returnProductBrachRel = cond.build().list();
+        return returnProductBrachRel;
+    }
+
 
     private Integer getProductTimeStamp() {
         Integer returncode = 0;
@@ -503,11 +555,29 @@ public class SyncJspotDB extends AsyncTask<String, Integer, Integer>
         return returncode;
     }
 
-    private Integer getProductBranchTimeStamp() {
+    private Integer getProductBranchTimeStamp(HashMap device) {
         Integer returncode = 0;
         String sql = "SELECT max(\n" +
                 "       time_stamp) as timestamp\n" +
-                "  FROM PRODUCT_BRANCH_REL;\n";
+                "  FROM PRODUCT_BRANCH_REL;\n" +
+                "  where BRAID='" + device.get("braid") + "'";
+        returncode = returnTimeStamp(sql);
+        return returncode;
+    }
+
+    private Integer getProductBarCodeTimeStamp() {
+        Integer returncode = 0;
+        String sql = "SELECT max(TIME_STAMP)\n" +
+                "  FROM PRODUCT_BAR_CODE";
+        returncode = returnTimeStamp(sql);
+        return returncode;
+    }
+
+    private Integer getPmtDMBranchRelTimeStamp(HashMap device) {
+        Integer returncode = 0;
+        String sql = "SELECT max(TIME_STAMP)\n" +
+                "  FROM PMT_DM_REL" +
+                "  where BRAID='" + device.get("braid") + "'";
         returncode = returnTimeStamp(sql);
         return returncode;
     }
@@ -539,6 +609,26 @@ public class SyncJspotDB extends AsyncTask<String, Integer, Integer>
         pbr.setNormalPrice(Double2String(item.get("normalprice").toString()));
         pbr.setTimeStamp(Long2String(item.get("timestamp").toString()));
         return pbr;
+    }
+
+    //Product Need Function end
+    private PmtDmRel setPmtDMBranchRelRecord(PmtDmRel pdr, HashMap item) {
+
+        Date begin = (Date) item.get("DMBeginDate");
+        pdr.setDMBeginDate(begin);
+
+        Date end = (Date) item.get("DMEndDate");
+        pdr.setDMEndDate(end);
+
+
+        pdr.setBraid((String) item.get("BraId"));
+        pdr.setDMId((String) item.get("DMId"));
+        pdr.setSupId((String) item.get("SupId"));
+        pdr.setProid((String) item.get("ProId"));
+        pdr.setOrigSalePrice(Double2String(item.get("OrigSalePrice").toString()));
+        pdr.setSalePrice(Double2String(item.get("SalePrice").toString()));
+        pdr.setTimeStamp(Long2String(item.get("timestamp").toString()));
+        return pdr;
     }
 
 

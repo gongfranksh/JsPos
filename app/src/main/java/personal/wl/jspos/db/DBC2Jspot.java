@@ -288,6 +288,9 @@ public class DBC2Jspot {
         return list;
     }
 
+
+
+
     public List getProductBranchRelNeedUpdate(Integer timestamp,HashMap device) {
 
 //        device.get("posno") == null
@@ -307,6 +310,30 @@ public class DBC2Jspot {
         }
         return list;
     }
+
+
+    public List getPmtDMBranchRelNeedUpdate(Integer timestamp,HashMap device) {
+
+//        device.get("posno") == null
+
+        String sql = "SELECT   BraId, d.DMId, h.DMBeginDate,h.DMEndDate,\n" +
+                "SupId, ProId, OrigSalePrice,SalePrice, \n" +
+                "CONVERT (int,d.timestamp) as timestamp \n" +
+                "FROM dbo.pmt_dm_rel d LEFT JOIN prompt_peroid_dm h ON h.DMId=d.DMId \n";
+        sql = sql + " WHERE CONVERT (int,d.timestamp) > " + timestamp;
+        sql = sql + " and   BraId = '" +  device.get("braid") +"' ";
+        sql = sql + " ORDER BY CONVERT (int,d.timestamp) ";
+        List list = null;
+        Connection cnn = this.getMyconnection();
+        try {
+            list = QuerySqlGetResult(cnn, sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+
 
 
     public List getBranchNeedUpdate(Integer timestamp) {

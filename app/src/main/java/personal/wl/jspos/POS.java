@@ -50,12 +50,14 @@ import personal.wl.jspos.adapter.SaleOrderChange;
 import personal.wl.jspos.adapter.SaleOrderWatcher;
 import personal.wl.jspos.method.PosTabInfo;
 import personal.wl.jspos.method.PosTranscation;
+import personal.wl.jspos.pos.PmtDmRel;
 import personal.wl.jspos.pos.Product;
 import personal.wl.jspos.pos.ProductBranchRel;
 import personal.wl.jspos.pos.SaleDaily;
 
 import static android.support.constraint.Constraints.TAG;
 import static personal.wl.jspos.method.PosHandleDB.JudgeSaler;
+import static personal.wl.jspos.method.PosHandleDB.QueryPmtDMBranchRelByCode;
 import static personal.wl.jspos.method.PosHandleDB.QueryProductBarCodeByCode;
 import static personal.wl.jspos.method.PosHandleDB.QueryProductBranchRelByCode;
 import static personal.wl.jspos.method.PosPayMent.PAYMENT_ALIPAY;
@@ -96,13 +98,18 @@ public class POS extends Activity {
     private Context context;
     private PosTranscation posTranscation;
 
+    private double tmp_qty = 1.00;
+    private double tmp_price = 0.00;
+    private double tmp_amount = 0.00;
+    private String tmp_isDM = "0";
+
     private PrinterOrderWatcher printerOrderWatcher = new PrinterOrderWatcher() {
         @Override
         public void update(Observable o, Object arg) {
             super.update(o, arg);
             Log.i(TAG, "run(POS.java:102)---printerOrderWatcher> ");
             cleartranstion();
-;
+            ;
 
         }
     };
@@ -225,6 +232,12 @@ public class POS extends Activity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
+
+                tmp_qty = 1.00;
+                tmp_price = 0.00;
+                tmp_amount = 0.00;
+                tmp_isDM="0";
+
                 if (TextUtils.isEmpty(s) || s.length() < 5) {
                     Toast.makeText(POS.this, "请输入正确的编码", Toast.LENGTH_SHORT).show();
                     return false;
@@ -237,21 +250,36 @@ public class POS extends Activity {
                     }
                     prolist = getresult;
 
+
                     List<ProductBranchRel> getproductbranchrel = QueryProductBranchRelByCode(s, posTabInfo.getBranchCode());
                     if (getproductbranchrel == null) {
                         Toast.makeText(POS.this, "该编码的价格不存在！", Toast.LENGTH_LONG).show();
                         return false;
+                    } else {
+                        tmp_price = getproductbranchrel.get(0).getNormalPrice();
+                    }
+
+                    List<PmtDmRel> getproductdm = QueryPmtDMBranchRelByCode(s, posTabInfo.getBranchCode());
+                    if (getproductdm.size() == 0) {
+                        Log.i(TAG, "商品DM检查-->" + s + "没有DM");
+                    } else {
+                        Log.i(TAG, "商品DM检查-->" + s
+                                + "DMID：" + getproductdm.get(0).getDMId()
+                                + "原来价格：" + getproductdm.get(0).getOrigSalePrice().toString()
+                                + "DM促销价格：" + getproductdm.get(0).getSalePrice().toString()
+
+                        );
+                        Toast.makeText(POS.this, "商品DM促销==>" + s, Toast.LENGTH_LONG).show();
+                        tmp_price = getproductdm.get(0).getSalePrice();
+                        tmp_isDM = "1";
                     }
 
 
                     productAdapter = new ProductAdapter(POS.this, prolist);
                     mRecyclerView.setAdapter(productAdapter);
 
-                    double tmp_qty = 1.00;
-                    double tmp_price = 0.00;
-                    double tmp_amount = 0.00;
                     //获取该产品当店的销售价格
-                    tmp_price = getproductbranchrel.get(0).getNormalPrice();
+
 
                     tmp_amount = tmp_qty * tmp_price;
 
@@ -259,6 +287,7 @@ public class POS extends Activity {
                     saleDaily = new SaleDaily();
                     saleDaily.setProId(prolist.get(0).getProid());
                     saleDaily.setBarCode(prolist.get(0).getBarcode());
+                    saleDaily.setIsDM(tmp_isDM);
                     saleDaily.setCurPrice(tmp_price);
                     saleDaily.setNormalPrice(tmp_price);
                     saleDaily.setSaleAmt(tmp_amount);

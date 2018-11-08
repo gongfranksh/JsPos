@@ -32,6 +32,7 @@ public class DaoMaker {
         CreateTableBranchEmployee(schema);
         CreateTablePosMachine(schema);
         CreateTableMobileDevice(schema);
+        CreateTablePromptDmBranchRel(schema);
     }
 
     private static void CreateTableProduct(Schema schema) {
@@ -150,6 +151,21 @@ public class DaoMaker {
         entity.addDateProperty("CreateDate");
         entity.addDateProperty("UpdateDate");
     }
+
+    private static void CreateTablePromptDmBranchRel(Schema schema) {
+        Entity entity = schema.addEntity("PmtDmRel");
+        entity.addIdProperty().autoincrement();
+        entity.addStringProperty("Braid");
+        entity.addStringProperty("DMId");
+        entity.addDateProperty("DMBeginDate");
+        entity.addDateProperty("DMEndDate");
+        entity.addStringProperty("SupId");
+        entity.addStringProperty("Proid");
+        entity.addDoubleProperty("OrigSalePrice");
+        entity.addDoubleProperty("SalePrice");
+        entity.addLongProperty("TimeStamp");
+    }
+
 
     private static void CreateTableBranchEmployee(Schema schema) {
         Entity entity = schema.addEntity("BranchEmployee");

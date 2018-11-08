@@ -14,6 +14,8 @@ import personal.wl.jspos.pos.BranchEmployee;
 import personal.wl.jspos.pos.BranchEmployeeDao;
 import personal.wl.jspos.pos.MobileDevice;
 import personal.wl.jspos.pos.MobileDeviceDao;
+import personal.wl.jspos.pos.PmtDmRel;
+import personal.wl.jspos.pos.PmtDmRelDao;
 import personal.wl.jspos.pos.Product;
 import personal.wl.jspos.pos.ProductBarCode;
 import personal.wl.jspos.pos.ProductBarCodeDao;
@@ -144,6 +146,26 @@ public class PosHandleDB {
         cond.where(ProductDao.Properties.Proid.eq(tmp_proid)).build();
         return cond.build().list();
     }
+
+
+    public static List<PmtDmRel> QueryPmtDMBranchRelByCode(String proid, String storecode) {
+        Date curDate =  new Date(System.currentTimeMillis());
+        String tmp_proid = proid;
+        String tmp_streocode = storecode;
+        if (proid.length() != 13) {
+            tmp_proid = Long.toString(PROID + Long.parseLong(proid));
+        }
+
+        PmtDmRelDao pmtDmRelDao = DBConnect.getInstances().getDaoSession().getPmtDmRelDao();
+        QueryBuilder cond = pmtDmRelDao.queryBuilder();
+        cond.where(PmtDmRelDao.Properties.Proid.eq(tmp_proid),
+                PmtDmRelDao.Properties.Braid.eq(tmp_streocode),
+                PmtDmRelDao.Properties.DMBeginDate.le(curDate),
+                PmtDmRelDao.Properties.DMEndDate.gt(curDate)
+        ).build();
+        return cond.build().list();
+    }
+
 
     public static List<ProductBranchRel> QueryProductBranchRelByCode(String proid, String storecode) {
         String tmp_proid = proid;
