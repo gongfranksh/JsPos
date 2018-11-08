@@ -222,7 +222,6 @@ public class SyncJspotDB extends AsyncTask<String, Integer, Integer>
 //-------------
 
 
-
         //Process Product Update--Begin
         i = i + 1;
         rec = getProductTimeStamp();
@@ -250,7 +249,6 @@ public class SyncJspotDB extends AsyncTask<String, Integer, Integer>
 
         Utils.sleepForSecs(2);
         publishProgress(i);
-
 
 
         //Process Prompt DM
@@ -388,21 +386,29 @@ public class SyncJspotDB extends AsyncTask<String, Integer, Integer>
             PmtDmRel pmtDmRel = new PmtDmRel();
             HashMap item = (HashMap) processtask.get(i);
             String tmp_proid = (String) item.get("ProId");
-            List<PmtDmRel> needupdated = getPmtDMBranchRelByProId(tmp_proid, device);
+//            List<PmtDmRel> needupdated = getPmtDMBranchRelByProId(tmp_proid, device);
+            Log.i(TAG, "ProcessPmtDMBranch2LocalDB Create  PMTDMRL  -->" + item.get("ProId") + "--->" + item.get("ProId"));
+            System.out.print(item.get("ProId"));
+            pmtDmRel = setPmtDMBranchRelRecord(pmtDmRel, item);
+            pmtDmRelDao.insert(pmtDmRel);
 
-            if (needupdated.size() != 0) {
-                for (int j = 0; j < needupdated.size(); j++) {
-                    PmtDmRel findpbr = needupdated.get(j);
-                    findpbr = setPmtDMBranchRelRecord(findpbr, item);
-                    Log.i(TAG, "ProcessPmtDMBranch2LocalDB Update PMTDMRL -->" + item.get("ProId") + "--->" + item.get("ProId"));
-                    pmtDmRelDao.update(findpbr);
-                }
-            } else {
-                Log.i(TAG, "ProcessPmtDMBranch2LocalDB Create  PMTDMRL  -->" + item.get("ProId") + "--->" + item.get("ProId"));
-                System.out.print(item.get("ProId"));
-                pmtDmRel = setPmtDMBranchRelRecord(pmtDmRel, item);
-                pmtDmRelDao.insert(pmtDmRel);
-            }
+
+//
+//            if (needupdated.size() != 0) {
+//                for (int j = 0; j < needupdated.size(); j++) {
+//
+//                    Log.i(TAG, "ProcessPmtDMBranch2LocalDB Update PMTDMRL -->" + item.get("ProId") + "--->" + item.get("ProId"));
+//                    PmtDmRel findpbr = needupdated.get(j);
+//                    findpbr = setPmtDMBranchRelRecord(findpbr, item);
+//                    pmtDmRelDao.update(findpbr);
+////                    pmtDmRelDao.insert(findpbr);
+//                }
+//            } else {
+//                Log.i(TAG, "ProcessPmtDMBranch2LocalDB Create  PMTDMRL  -->" + item.get("ProId") + "--->" + item.get("ProId"));
+//                System.out.print(item.get("ProId"));
+//                pmtDmRel = setPmtDMBranchRelRecord(pmtDmRel, item);
+//                pmtDmRelDao.insert(pmtDmRel);
+//            }
 //            pmtDmRelDao = null;
         }
     }

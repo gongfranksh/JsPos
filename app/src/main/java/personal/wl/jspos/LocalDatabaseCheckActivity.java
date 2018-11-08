@@ -25,7 +25,8 @@ public class LocalDatabaseCheckActivity extends AppCompatActivity {
         String txt_productBarcode = "本地条码ProductBarcode记录数：" + PosHandleDB.getRecordLocalProductBarcode().toString() + "\n";
         String txt_productBranchRel = "本地产品价格ProductBrachRel记录数：" + PosHandleDB.getRecordLocalProductBranchRel().toString() + "\n";
         String txt_saledaily = "本地交易记录数：" + PosHandleDB.getRecordLocalSaleDaily().toString() + "\n";
-        st_display = txt_product + txt_productBarcode + txt_productBranchRel + txt_saledaily;
+        String txt_pmdmbransh = "本地DM促销记录数：" + PosHandleDB.getRecordLocalPmtDMBranch().toString() + "\n";
+        st_display = txt_product + txt_productBarcode + txt_productBranchRel + txt_pmdmbransh+txt_saledaily;
 
 
     }

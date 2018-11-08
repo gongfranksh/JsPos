@@ -49,8 +49,11 @@ public class PosHandleDB {
     public static void CleanLocalSales() {
         String clean_trans_paymode = "delete from sale_pay_mode;";
         String clean_trans_product = "delete from sale_daily;";
+
         ExecSqlVoid(clean_trans_paymode);
         ExecSqlVoid(clean_trans_product);
+//        ExecSqlVoid("DELETE FROM PMT_DM_REL;");
+
     }
 
     public static Boolean CheckDeviceByLocal(HashMap device) {
@@ -417,12 +420,18 @@ public class PosHandleDB {
     }
 
 
-    public static Integer getRecordLocalSaleDaily() {
+       public static Integer getRecordLocalSaleDaily() {
         String sql = null;
         sql = "select count(distinct sale_id) from sale_daily ;";
         return exce_sql(sql);
     }
 
+    public static Integer getRecordLocalPmtDMBranch() {
+        String sql = null;
+        sql = "SELECT count(*)\n" +
+                "  FROM PMT_DM_REL;";
+        return exce_sql(sql);
+    }
 
 
     //Common Tools
