@@ -102,6 +102,7 @@ public class POS extends Activity {
     private double tmp_price = 0.00;
     private double tmp_amount = 0.00;
     private String tmp_isDM = "0";
+    private int presscount = 0;
 
     private PrinterOrderWatcher printerOrderWatcher = new PrinterOrderWatcher() {
         @Override
@@ -109,8 +110,9 @@ public class POS extends Activity {
             super.update(o, arg);
             Log.i(TAG, "run(POS.java:102)---printerOrderWatcher> ");
             cleartranstion();
-            ;
-
+            //开启付款按钮，重置记录按钮次数
+            enablepaymentbutton();
+            presscount = 0;
         }
     };
 
@@ -236,7 +238,7 @@ public class POS extends Activity {
                 tmp_qty = 1.00;
                 tmp_price = 0.00;
                 tmp_amount = 0.00;
-                tmp_isDM="0";
+                tmp_isDM = "0";
 
                 if (TextUtils.isEmpty(s) || s.length() < 5) {
                     Toast.makeText(POS.this, "请输入正确的编码", Toast.LENGTH_SHORT).show();
@@ -355,7 +357,10 @@ public class POS extends Activity {
     }
 
     private void StartSaveTranscation(int paymode) {
-
+        //增加控制重复按打印件
+        presscount += 1;
+        Toast.makeText(context, "付款按钮第" + presscount + "次", Toast.LENGTH_LONG).show();
+        disablepaymentbutton();        //——————结束
         if (saleDailyList.size() > 0) {
             if (JudgeSaler(saleDailyList)) {
                 posTranscation = new PosTranscation(context);
@@ -392,7 +397,7 @@ public class POS extends Activity {
         builder.setTitle("交易成功！");
         //构造器对应的图标
         builder.setIcon(R.mipmap.ic_launcher);
-        builder.setMessage(s);
+        builder.setMessage(s + "\n" + presscount);
         builder.setNegativeButton("提示", null);
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
@@ -667,8 +672,22 @@ public class POS extends Activity {
         searchView.setQuery("", false);
         textView.findFocus();
         searchView.findFocus();
-
-
     }
+
+
+    private void disablepaymentbutton() {
+        ib_submit_cash.setClickable(false);
+        ib_submit_alipay.setClickable(false);
+        ib_submit_weixin.setClickable(false);
+        ib_submit_logoff.setClickable(false);
+    }
+
+    private void enablepaymentbutton() {
+        ib_submit_cash.setClickable(true);
+        ib_submit_alipay.setClickable(true);
+        ib_submit_weixin.setClickable(true);
+        ib_submit_logoff.setClickable(true);
+    }
+
 
 }
