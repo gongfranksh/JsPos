@@ -1,10 +1,11 @@
 package personal.wl.jspos;
 
 import android.app.AlertDialog;
+import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,11 +25,10 @@ import com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-
-import personal.wl.jspos.adapter.SaleOrderAdapter;
 import personal.wl.jspos.adapter.SaleOrderAdapterForDialog;
 import personal.wl.jspos.adapter.SalePayModeAdapter;
 import personal.wl.jspos.method.PosHandleDB;
+import personal.wl.jspos.method.PosPrinter;
 import personal.wl.jspos.pos.SaleDaily;
 import personal.wl.jspos.pos.SalePayMode;
 
@@ -42,6 +42,8 @@ public class PosTransList extends AppCompatActivity {
     private List<SaleDaily> saleDailyList = new ArrayList<>();
     private Context context;
     private SalePayModeAdapter salePayModeAdapter;
+    private BluetoothDevice blueprinter;
+    private PosPrinter posprinter;
 
 
     @Override
@@ -95,12 +97,12 @@ public class PosTransList extends AppCompatActivity {
                         .setHeight(height);
                 swipeLeftMenu.addMenuItem(addItem); // 添加菜单到左侧。
 
-//                SwipeMenuItem closeItem = new SwipeMenuItem(context)
-//                        .setBackground(R.drawable.selector_red)
-//                        .setImage(R.mipmap.ic_action_close)
-//                        .setWidth(width)
-//                        .setHeight(height);
-//                swipeLeftMenu.addMenuItem(closeItem); // 添加菜单到左侧。
+                SwipeMenuItem closeItem = new SwipeMenuItem(context)
+                        .setBackground(R.drawable.selector_purple)
+                        .setImage(R.drawable.ic_local_printshop_black_24dp)
+                        .setWidth(width)
+                        .setHeight(height);
+                swipeLeftMenu.addMenuItem(closeItem); // 添加菜单到左侧。
             }
 
             // 添加右侧的，如果不添加，则右侧不会出现菜单。
@@ -160,7 +162,8 @@ public class PosTransList extends AppCompatActivity {
                         showOrderDetail(salepaymodeList.get(adapterPosition));
                         break;
                     case 1:
-//                        removeorderqty(adapterPosition);
+                        Toast.makeText(context, "重复打印", Toast.LENGTH_LONG).show();
+                        printOrderDetail(salepaymodeList.get(adapterPosition));
                         break;
 
                     default:
@@ -211,6 +214,16 @@ public class PosTransList extends AppCompatActivity {
         builder.setCancelable(true);
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    private void printOrderDetail(SalePayMode salePayMode) {
+        //增加print部分内容
+        List<SaleDaily> saleDailyList = QuerySaleDetailBySaleid(salePayMode.getSaleId());
+        List<SalePayMode> salePayModeList = new ArrayList<>();
+        salePayModeList.add(salePayMode);
+        posprinter = new PosPrinter(context);
+        blueprinter = posprinter.getPosPrinter();
+        posprinter.connect(blueprinter, saleDailyList, salePayModeList);
     }
 
 
