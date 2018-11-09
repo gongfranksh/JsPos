@@ -62,6 +62,7 @@ public class PosInit extends AppCompatActivity {
         tv_display = findViewById(R.id.initdisplay);
         device_diplay = findViewById(R.id.deviceno_display);
         device_diplay.setVisibility(View.INVISIBLE);
+        bt_syncdata= findViewById(R.id.sync_download_data);
 
         bt_checknetwork = findViewById(R.id.checknetwork);
 
@@ -215,7 +216,7 @@ public class PosInit extends AppCompatActivity {
         mHeadPopupclly.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         mHeadPopupclly.setBackgroundDrawable(new BitmapDrawable());
         mHeadPopupclly.setOutsideTouchable(true);
-        mHeadPopupclly.showAsDropDown(bt_cleanLocalSaledata, 0, 0);
+        mHeadPopupclly.showAsDropDown(bt_syncdata, 0, 0);
         textwzdl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

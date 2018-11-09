@@ -7,6 +7,7 @@
         android:layout_height="214dp"
         android:layout_centerVertical="true"
         android:layout_marginLeft="31dp"
+        android:background="@drawable/shape_bgimg"
         android:layout_marginRight="31dp" >
         <TextView
             android:id="@+id/tetle"
@@ -44,6 +45,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="确认"
+                android:background="#f86c6a"
                 android:textColor="#262626"
                 android:textSize="16dp" />
             <TextView
@@ -51,10 +53,10 @@
                 android:layout_width="0dp"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
-                android:background="#f86c6a"
+
                 android:gravity="center"
                 android:text="取消"
-                android:textColor="#ffffff"
+                android:textColor="#262626"
                 android:textSize="16dp" />
         </LinearLayout>
 
