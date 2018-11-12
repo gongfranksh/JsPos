@@ -34,7 +34,7 @@
             android:id="@+id/check_apk"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="检查系统更新" />
+            android:text="备份上传本地数据库" />
 
 
         <Button

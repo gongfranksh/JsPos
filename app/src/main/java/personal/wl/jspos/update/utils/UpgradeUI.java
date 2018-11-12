@@ -20,6 +20,7 @@ import static personal.wl.jspos.update.utils.FtpInfo.UPGRADE_JSON_FILE_ADDRESS;
 import static personal.wl.jspos.update.utils.FtpInfo.UPGRADE_JSON_FILE_NAME;
 import static personal.wl.jspos.update.utils.FtpInfo.UPGRADE_JSON_FILE_NAME_README;
 import static personal.wl.jspos.update.utils.FtpInfo.UPGRADE_README_FILE_ADDRESS;
+import static personal.wl.jspos.update.utils.FtpInfo.UPLOAD_UPDATE;
 
 
 public class UpgradeUI {
@@ -29,40 +30,66 @@ public class UpgradeUI {
     private File getversionfilejson;
     private File getversionfilejsonreadme;
     private File getapkfile;
+    private DownloadTask downloadTask;
+
+    private UploadDbTask uploadDbTask;
 
     public UpgradeUI(Context context) {
         this.context = context;
     }
 
-    public void getversion() {
+    public void getdonwload() {
         new getversionftpjson().start();
     }
 
-    private void ShowDialog(int vision, String newversion, String content
+    public void upload() {
+        new uploaddb2ftp().start();
+//        ShowDialog("上传本地数据库", true);
+    }
+
+
+    private void ShowDialog(String content, final Boolean isDownload
     ) {
         new android.app.AlertDialog.Builder(this.context)
-                .setTitle("版本更新")
+                .setTitle("数据传输")
                 .setMessage(content)
-                .setPositiveButton("更新", new DialogInterface.OnClickListener() {
+                .setPositiveButton("确认", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                         pBar = new CommonProgressDialog(context);
                         pBar.setCanceledOnTouchOutside(false);
-                        pBar.setTitle("正在下载");
+
+                        if (isDownload) {
+                            pBar.setTitle("版本更新正在下载");
+                            pBar.setMessage("正在下载");
+                        } else {
+                            pBar.setTitle("正在上传本地数据库");
+                            pBar.setMessage("正在上传");
+                        }
                         pBar.setCustomTitle(LayoutInflater.from(
                                 context).inflate(
                                 R.layout.title_dialog, null));
-                        pBar.setMessage("正在下载");
                         pBar.setIndeterminate(true);
                         pBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
                         pBar.setCancelable(true);
-                        final DownloadTask downloadTask = new DownloadTask(pBar, context);
-                        downloadTask.execute();
+
+                        if (isDownload) {
+                            downloadTask = new DownloadTask(pBar, context);
+                            downloadTask.execute();
+                        } else {
+                            uploadDbTask = new UploadDbTask(pBar, context);
+                            uploadDbTask.execute();
+                        }
+
                         pBar.setOnCancelListener(new DialogInterface.OnCancelListener() {
                             @Override
                             public void onCancel(DialogInterface dialog) {
-                                downloadTask.cancel(true);
+                                if (isDownload) {
+                                    downloadTask.cancel(true);
+                                } else {
+                                    uploadDbTask.cancel(true);
+                                }
                             }
                         });
                     }
@@ -96,6 +123,19 @@ public class UpgradeUI {
         }
     }
 
+    private class uploaddb2ftp extends Thread {
+        @Override
+        public void run() {
+            try {
+                Message msg = new Message();
+                msg.what = UPLOAD_UPDATE;
+                mHandler.sendMessage(msg);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 
     private android.os.Handler mHandler = new android.os.Handler() {
         @Override
@@ -109,6 +149,9 @@ public class UpgradeUI {
                 case DOWNLOAD_OVER:
 //                    download_installApk();
                     break;
+                case UPLOAD_UPDATE:
+                    upload_localdb_proc();
+                    break;
 
                 default:
                     break;
@@ -116,18 +159,6 @@ public class UpgradeUI {
         }
     };
 
-//    private void download_installApk() {
-//        String ss = BuildConfig.APPLICATION_ID;
-//        getapkfile=new File(context.getFilesDir().getPath() + "/" + APK_FIlE);
-//        Intent install = new Intent(Intent.ACTION_VIEW);
-//        install.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-//        install.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//        Uri contentUri = FileProvider.getUriForFile(this.context, context.getApplicationContext().getPackageName() + ".provider", getapkfile);
-//        install.setDataAndType(contentUri, "application/vnd.android.package-archive");
-//        this.context.startActivity(install);
-//
-//
-//    }
 
     private void download_update_proc() {
         int vision = Tools.getVersion(context);
@@ -144,7 +175,7 @@ public class UpgradeUI {
                 upgradeApk.getVersionname() +
                 "\n" +
                 "---------------------\n"
-                +versionreadme;
+                + versionreadme;
         System.out.println(newversion + "v" + vision + ",,"
                 + cc);
 
@@ -154,14 +185,18 @@ public class UpgradeUI {
                 System.out.println(newversion + "v"
                         + vision);
                 // 版本号不同
-                ShowDialog(vision, newversion, content);
+                ShowDialog(content, true);
 //                download_installApk();
             }
         } else {
             Toast.makeText(this.context, "当前无更新", Toast.LENGTH_LONG).show();
         }
-
-
     }
 
+    private void upload_localdb_proc() {
+        String content = "\n" +
+                "---------------------\n" +
+                "上传本地数据库";
+        ShowDialog(content, false);
+    }
 }

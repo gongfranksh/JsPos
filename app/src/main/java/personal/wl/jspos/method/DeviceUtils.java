@@ -20,6 +20,7 @@ import java.util.Map;
 import personal.wl.jspos.update.utils.FtpInfo;
 
 import static personal.wl.jspos.db.DBC2Jspot.IP;
+import static personal.wl.jspos.update.utils.FtpInfo.FTP_IP;
 
 public class DeviceUtils {
     public static String getUniqueId(Context context) {
@@ -135,6 +136,25 @@ public class DeviceUtils {
     public static Boolean CheckDB2MSSQLConnect() {
         try {
             Process process = Runtime.getRuntime().exec("ping -c 1 -w 1 " + IP);
+            InputStreamReader r = new InputStreamReader(process.getInputStream());
+            LineNumberReader returnData = new LineNumberReader(r);
+            String rt_msg = "";
+            String line = "";
+            while ((line = returnData.readLine()) != null) {
+                System.out.println(line);
+                rt_msg += line;
+            }
+            return CheckResponse(rt_msg);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static Boolean CheckFtpServerConnect() {
+        try {
+            Process process = Runtime.getRuntime().exec("ping -c 1 -w 1 " + FTP_IP);
             InputStreamReader r = new InputStreamReader(process.getInputStream());
             LineNumberReader returnData = new LineNumberReader(r);
             String rt_msg = "";

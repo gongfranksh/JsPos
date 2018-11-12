@@ -46,14 +46,16 @@ public class PosInit extends AppCompatActivity {
     private TextView tetle, textdz;//title,打折
     private TextView textwzdl, textckxq;//我知道了,查看详情
     private Context context;
-    private String ADMINPASSWORD="160023";
+    private String ADMINPASSWORD = "160023";
+    private PosTabInfo posTabInfo;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pos_init);
-        context=PosInit.this;
+        context = PosInit.this;
+        posTabInfo = new PosTabInfo(context);
         bt_cleanLocalSaledata = findViewById(R.id.sync_clean_local);
         bt_getDeviceId = findViewById(R.id.getdeviceid);
         bt_uploadLocalSaledata = findViewById(R.id.sync_upload_sales);
@@ -62,7 +64,7 @@ public class PosInit extends AppCompatActivity {
         tv_display = findViewById(R.id.initdisplay);
         device_diplay = findViewById(R.id.deviceno_display);
         device_diplay.setVisibility(View.INVISIBLE);
-        bt_syncdata= findViewById(R.id.sync_download_data);
+        bt_syncdata = findViewById(R.id.sync_download_data);
 
         bt_checknetwork = findViewById(R.id.checknetwork);
 
@@ -144,10 +146,12 @@ public class PosInit extends AppCompatActivity {
         bt_checkversion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                UpgradeUI ugui = new UpgradeUI(PosInit.this);
-                ugui.getversion();
-
+                if (posTabInfo.isConnectingToInternet() && DeviceUtils.CheckFtpServerConnect()) {
+                    UpgradeUI ugui = new UpgradeUI(PosInit.this);
+                    ugui.upload();
+                } else {
+                    Toast.makeText(context, "无法连接网络，先连接WIFI内网", Toast.LENGTH_LONG).show();
+                }
             }
         });
 
@@ -206,7 +210,7 @@ public class PosInit extends AppCompatActivity {
         mPopupHeadViewy = View.inflate(this, R.layout.adminlogin, null);
         tetle = (TextView) mPopupHeadViewy.findViewById(R.id.tetle);
 //        textdz = (TextView) mPopupHeadViewy.findViewById(R.id.textdz);
-        adminpass =mPopupHeadViewy.findViewById(R.id.adminpasswordinput);
+        adminpass = mPopupHeadViewy.findViewById(R.id.adminpasswordinput);
         textwzdl = (TextView) mPopupHeadViewy.findViewById(R.id.textwzdl);
         textckxq = (TextView) mPopupHeadViewy.findViewById(R.id.textckxq);
 //        mHeadPopupclly = new PopupWindow(mPopupHeadViewy, AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.MATCH_PARENT, true);
@@ -221,12 +225,12 @@ public class PosInit extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if (ADMINPASSWORD.equals(adminpass.getText().toString())){
-                    Toast.makeText(context,"管理员正确",Toast.LENGTH_LONG).show();
+                if (ADMINPASSWORD.equals(adminpass.getText().toString())) {
+                    Toast.makeText(context, "管理员正确", Toast.LENGTH_LONG).show();
                     CleanLocalSales();
-                mHeadPopupclly.dismiss();}
-                else{
-                    Toast.makeText(context,"管理员密码错误",Toast.LENGTH_LONG).show();
+                    mHeadPopupclly.dismiss();
+                } else {
+                    Toast.makeText(context, "管理员密码错误", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -238,6 +242,7 @@ public class PosInit extends AppCompatActivity {
             }
         });
     }
+
     public int getScreenWidth() {
         DisplayMetrics dm = new DisplayMetrics();
         dm = PosInit.this.getResources().getDisplayMetrics();

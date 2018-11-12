@@ -7,6 +7,7 @@ import org.apache.commons.net.ftp.FTPReply;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -46,6 +47,7 @@ public final class FTPToolkit {
                 client.login(username, password);
                 client.enterLocalPassiveMode();
                 client.setFileType(FTP.BINARY_FILE_TYPE);
+//                client.completePendingCommand();
 //                client.setFileTransferMode(FTP.COMPRESSED_TRANSFER_MODE);
             }
 
@@ -135,12 +137,22 @@ public final class FTPToolkit {
         remoteFolderPath = PathToolkit.formatPath4FTP(remoteFolderPath);
         try {
             client.changeWorkingDirectory(remoteFolderPath);
-            if (!localfile.exists())
-                throw new Exception("the upload FTP file"
-                        + localfile.getPath() + "not exist!");
-            if (!localfile.isFile())
-                throw new Exception("the upload FTP file"
-                        + localfile.getPath() + "is a folder!");
+//            if (!localfile.exists())
+//
+//                throw new Exception("the upload FTP file"
+//                        + localfile.getPath() + "not exist!");
+//            if (!localfile.isFile())
+//                throw new Exception("the upload FTP file"
+//                        + localfile.getPath() + "is a folder!");
+
+
+//            FileOutputStream fileOutputStream=new FileOutputStream(remoteFolderPath);
+//            BufferedOutputStream  outstream = new BufferedOutputStream(fileOutputStream);
+            FileInputStream fileInputStream = new FileInputStream(localfile);
+
+            Boolean f = client.storeFile(remoteFolderPath,fileInputStream);
+
+
 
 
         } catch (Exception e) {

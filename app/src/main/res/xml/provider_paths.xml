@@ -3,6 +3,9 @@
     <files-path
         name="files"
         path="/" />
+    <databases-path
+        name="databases"
+        path="/" />
     <external-files-path
         name="ex-files-download" path="Download"/>
     <external-cache-path
