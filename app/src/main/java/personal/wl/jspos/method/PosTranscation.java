@@ -149,7 +149,8 @@ public class PosTranscation {
         QueryBuilder cond = tmp_dao.queryBuilder();
         cond.where(SaleDailyDao.Properties.Braid.eq(para.get("branch")),
                 SaleDailyDao.Properties.SaleDate.le(para.get("datetime")),
-                SaleDailyDao.Properties.PosNo.eq(para.get("posmachine")));
+                SaleDailyDao.Properties.PosNo.eq(para.get("posmachine")),
+                SaleDailyDao.Properties.IsReturn.eq(false));
         cond.orderDesc(SaleDailyDao.Properties.Id);
         cond.limit(1);
         List<SaleDaily> lastercord = cond.build().list();
