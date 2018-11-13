@@ -680,6 +680,8 @@ public class PrintUtil {
 ////            pUtil.printBitmap(bitmap);
             pUtil.printLine(2);
             pUtil.printText("打印时间:"+DeviceUtils.GetCurrentTime());
+            pUtil.printLine(1);
+            pUtil.printText("Android");
             pUtil.printLine(2);
 
         } catch (IOException e) {

@@ -127,7 +127,7 @@ public class DBC2Jspot {
 
     public void LastUploadTranscations(List<SalePayMode> salePayModeList) {
         String sql = "INSERT INTO dbo.mobile_sale_paymode (BraId, SaleDate, SaleId, SalerId," +
-                " PaymodeId, PayMoney, sourceid, deivcetransid)";
+                " PaymodeId, PayMoney, sourceid,orderinnerid, deivcetransid)";
         sql = sql + "Values(";
         String sqlvalue = null;
         Connection cnn = this.getMyconnection();
@@ -140,9 +140,10 @@ public class DBC2Jspot {
                 sqlvalue = sqlvalue + "'" + df.format(salePayModeList.get(i).getSaleDate()) + "',";
                 sqlvalue = sqlvalue + "'" + salePayModeList.get(i).getSaleId() + "',";
                 sqlvalue = sqlvalue + "'" + salePayModeList.get(i).getSalerId() + "',";
-                sqlvalue = sqlvalue + "'" + salePayModeList.get(i).getPayModeId() + "',";
+                sqlvalue = sqlvalue +  "'" + salePayModeList.get(i).getPayModeId() + "',";
                 sqlvalue = sqlvalue + salePayModeList.get(i).getPayMoney() + ",";
                 sqlvalue = sqlvalue + salePayModeList.get(i).getSourceId() + ",";
+                sqlvalue = sqlvalue +  "'" +salePayModeList.get(i).getOrderInnerId() + "',";
                 sqlvalue = sqlvalue + salePayModeList.get(i).getId() + ")";
                 String sql_exec = sql + sqlvalue;
                 proc_exec(cnn, sql_exec);
@@ -166,7 +167,7 @@ public class DBC2Jspot {
                 "cash1, cash7, cash8, " +
 //                "cash1, cash2, cash3, " +
 //                "cash4, cash5, cash6, cash7, cash8, " +
-                " sourceid, deivcetransid )";
+                " sourceid, orderinnerid,deivcetransid )";
         sql = sql + "Values(";
         String sqlvalue = null;
         Connection cnn = this.getMyconnection();
@@ -205,6 +206,7 @@ public class DBC2Jspot {
 
 
                 sqlvalue = sqlvalue + saleDailyList.get(i).getSourceId() + ",";
+                sqlvalue = sqlvalue +  "'" +saleDailyList.get(i).getOrderInnerId() + "',";
                 sqlvalue = sqlvalue + saleDailyList.get(i).getId() + ")";
                 String sql_exec = sql + sqlvalue;
                 Statement stmt = cnn.createStatement();

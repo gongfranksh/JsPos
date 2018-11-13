@@ -296,7 +296,8 @@ public class PosHandleDB {
 
         for (int i = 0; i < salePayModeList.size(); i++) {
             QueryBuilder cond = saleDailyDao.queryBuilder();
-            cond.where(SaleDailyDao.Properties.SaleId.eq(salePayModeList.get(i).getSaleId()));
+//            cond.where(SaleDailyDao.Properties.SaleId.eq(salePayModeList.get(i).getSaleId()));
+            cond.where(SaleDailyDao.Properties.OrderInnerId.eq(salePayModeList.get(i).getOrderInnerId()));
             List<SaleDaily> subset = cond.build().list();
             for (int j = 0; j < subset.size(); j++) {
                 saleDailyList.add(subset.get(j));
