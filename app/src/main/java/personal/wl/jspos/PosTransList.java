@@ -32,7 +32,7 @@ import personal.wl.jspos.method.PosPrinter;
 import personal.wl.jspos.pos.SaleDaily;
 import personal.wl.jspos.pos.SalePayMode;
 
-import static personal.wl.jspos.method.PosHandleDB.QuerySaleDetailBySaleid;
+import static personal.wl.jspos.method.PosHandleDB.QuerySaleDetailByOrderInnerId;
 import static personal.wl.jspos.method.PosHandleDB.UpdateSaleDailyForRetrun;
 import static personal.wl.jspos.method.PosHandleDB.UpdateSalePayMode;
 import static personal.wl.jspos.method.PosHandleDB.getAllSalesPayment;
@@ -199,7 +199,9 @@ public class PosTransList extends AppCompatActivity {
     }
 
     private void showOrderDetail(SalePayMode salePayMode) {
-        List<SaleDaily> saleDailyList = QuerySaleDetailBySaleid(salePayMode.getSaleId());
+//        List<SaleDaily> saleDailyList = QuerySaleDetailBySaleid(salePayMode.getSaleId());
+        List<SaleDaily> saleDailyList = QuerySaleDetailByOrderInnerId(salePayMode.getOrderInnerId());
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setIcon(R.mipmap.ic_launcher);
         builder.setTitle("交易明细");
@@ -216,9 +218,33 @@ public class PosTransList extends AppCompatActivity {
         dialog.show();
     }
 
+    private void showOrderDetail_2(SalePayMode salePayMode) {
+//        List<SaleDaily> saleDailyList = QuerySaleDetailBySaleid(salePayMode.getSaleId());
+        List<SaleDaily> saleDailyList = QuerySaleDetailByOrderInnerId(salePayMode.getOrderInnerId());
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setIcon(R.mipmap.ic_launcher);
+        builder.setTitle("交易明细");
+        View view = LayoutInflater.from(context).inflate(R.layout.showsalesdetail, null);
+        RecyclerView salesorderview = view.findViewById(R.id.showsaleorder);
+        salesorderview.setLayoutManager(new LinearLayoutManager(this));
+        salesorderview.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        SaleOrderAdapterForDialog saleOrderAdapterForDialog = new SaleOrderAdapterForDialog(PosTransList.this, saleDailyList);
+        salesorderview.setAdapter(saleOrderAdapterForDialog);
+        saleOrderAdapterForDialog.notifyDataSetChanged();
+        builder.setView(view);
+        builder.setCancelable(true);
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+
+
+
     private void printOrderDetail(SalePayMode salePayMode) {
         //增加print部分内容
-        List<SaleDaily> saleDailyList = QuerySaleDetailBySaleid(salePayMode.getSaleId());
+//        List<SaleDaily> saleDailyList = QuerySaleDetailBySaleid(salePayMode.getSaleId());
+        List<SaleDaily> saleDailyList = QuerySaleDetailByOrderInnerId(salePayMode.getOrderInnerId());
         List<SalePayMode> salePayModeList = new ArrayList<>();
         salePayModeList.add(salePayMode);
         posprinter = new PosPrinter(context,false);
@@ -240,6 +266,12 @@ public class PosTransList extends AppCompatActivity {
         salePayMode.setIsReturn(true);
         UpdateSalePayMode(tmp_salepaymode);
         UpdateSaleDailyForRetrun(tmp_saledailylist,tmp_salepaymode);
+
+        List<SalePayMode> salepmodeprint = new ArrayList<>();
+        salepmodeprint.add(tmp_salepaymode);
+        posprinter = new PosPrinter(context,false);
+        blueprinter = posprinter.getPosPrinter();
+        posprinter.connect(blueprinter, tmp_saledailylist, salepmodeprint,true);
 
 
     }

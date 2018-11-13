@@ -4,12 +4,10 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.preference.PreferenceManager;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -443,10 +441,9 @@ public class POS extends Activity {
     }
 
     private void showPreference() {
-        SharedPreferences pre = PreferenceManager.getDefaultSharedPreferences(this);
-        branch_selected = pre.getString("branch_selected", "0");
-        pos_machine_selected = pre.getString("pos_machine", "0");
-        String[] branch = getResources().getStringArray(R.array.pref_branch_list_name);
+
+        branch_selected = posTabInfo.getBranchCode() + posTabInfo.getBranchName();
+        pos_machine_selected = posTabInfo.getPosMachine();
     }
 
 
@@ -651,7 +648,7 @@ public class POS extends Activity {
     private void showtitle() {
 //        showPreference();
         TextView branch = findViewById(R.id.branch);
-        branch.setText(branch.getText() + posTabInfo.getBranchCode());
+        branch.setText(branch.getText() + posTabInfo.getBranchCode()+posTabInfo.getBranchName());
         final TextView posmachine = findViewById(R.id.posmachine);
         posmachine.setText(posmachine.getText() + posTabInfo.getPosMachine());
         TextView casherid = findViewById(R.id.casherid);

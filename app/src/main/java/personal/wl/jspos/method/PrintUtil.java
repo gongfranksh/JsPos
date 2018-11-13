@@ -615,10 +615,10 @@ public class PrintUtil {
             PrintUtil pUtil = new PrintUtil(bluetoothSocket.getOutputStream(), "GBK");
             // 店铺名 居中 放大
             pUtil.printAlignment(1);
-            pUtil.printLargeText(posTabInfo.getBranchCode());
+            pUtil.printLargeText(posTabInfo.getBranchName());
             pUtil.printLine();
             if (!is1st){
-                pUtil.printLargeText("--交易补打--");
+                pUtil.printLargeText("--重打印--");
                 pUtil.printLine();
             }
             pUtil.printAlignment(0);
@@ -626,11 +626,11 @@ public class PrintUtil {
             if (saleDailyList.size() != 0) {
                 CharSequence sysTimeStr = DateFormat
                         .format(" yyyy-MM-dd HH:mm:ss", saleDailyList.get(0).getSaleDate());
-                pUtil.printMyTwoColumn("时间:", (String) sysTimeStr);
+                pUtil.printMyTwoColumn("交易时间:", (String) sysTimeStr);
                 pUtil.printLine();
                 pUtil.printMyTwoColumn("订单号:", saleDailyList.get(0).getSaleId() + "");
                 pUtil.printLine();
-                pUtil.printText("营业员");
+                pUtil.printText("营业员:");
                 pUtil.printText(saleDailyList.get(0).getSaleMan());
                 pUtil.printSpace(10);
                 pUtil.printText("第"+ printertimes + "联");
@@ -678,7 +678,9 @@ public class PrintUtil {
             }
 //
 ////            pUtil.printBitmap(bitmap);
-            pUtil.printLine(4);
+            pUtil.printLine(2);
+            pUtil.printText("打印时间:"+DeviceUtils.GetCurrentTime());
+            pUtil.printLine(2);
 
         } catch (IOException e) {
 

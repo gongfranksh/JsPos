@@ -142,6 +142,13 @@ public class PosHandleDB {
         return cond.build().list();
     }
 
+    public static List<SaleDaily> QuerySaleDetailByOrderInnerId(String saleid) {
+        SaleDailyDao saleDailyDao = DBConnect.getInstances().getDaoSession().getSaleDailyDao();
+        QueryBuilder cond = saleDailyDao.queryBuilder();
+        cond.where(SaleDailyDao.Properties.OrderInnerId.eq(saleid)).build();
+        return cond.build().list();
+    }
+
 
     public static List<Product> QueryProductByCode(String proid) {
         String tmp_proid = proid;

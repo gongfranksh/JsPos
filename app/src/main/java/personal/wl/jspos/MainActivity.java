@@ -214,7 +214,7 @@ public class MainActivity extends AppCompatActivity implements IReportBack {
 
     private void showdetail() {
         PosTabInfo posTabInfo = new PosTabInfo(MainActivity.this);
-        String display_msg = "门店编号：" + posTabInfo.getBranchCode() + "\n" +
+        String display_msg = "门店编号：" + posTabInfo.getBranchCode() + "\t" +posTabInfo.getBranchName()+"\n"+
                 "收银机号：" + posTabInfo.getPosMachine() + "\n" +
                 "营业员编号：" + posTabInfo.getSalerId() + "\n" +
                 "版本号：" + posTabInfo.getPackageName() + "\n" +

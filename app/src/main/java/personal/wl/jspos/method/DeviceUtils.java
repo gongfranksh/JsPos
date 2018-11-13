@@ -150,6 +150,15 @@ public class DeviceUtils {
         return sysTimeStr.toString().trim();
     }
 
+    public static String GetCurrentTime() {
+        long sysTime = System.currentTimeMillis();
+        CharSequence sysTimeStr = DateFormat
+                .format(" yyyy-MM-dd HH:mm:ss", sysTime);
+        return sysTimeStr.toString().trim();
+    }
+
+
+
     public static Boolean CheckDB2MSSQLConnect() {
         try {
             Process process = Runtime.getRuntime().exec("ping -c 1 -w 1 " + IP);

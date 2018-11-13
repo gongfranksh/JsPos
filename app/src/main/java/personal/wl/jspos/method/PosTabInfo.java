@@ -11,6 +11,10 @@ import android.preference.PreferenceManager;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+import personal.wl.jspos.R;
 
 import static android.content.Context.CONNECTIVITY_SERVICE;
 import static personal.wl.jspos.method.PosHandleDB.getSalerName;
@@ -21,6 +25,7 @@ public class PosTabInfo {
     private Context context;
     private String BlueToothPrinterName;
     private String BlueToothPrinterAddress;
+    private Map<String, String> branches;
 
     public Boolean getNeedPrint()
 
@@ -29,7 +34,7 @@ public class PosTabInfo {
         return pre.getBoolean("Need_Printer_InVoice", true);
     }
 
-    public int getPrinterTimes(){
+    public int getPrinterTimes() {
         String printertimes = pre.getString("printer_times_selected", "1");
         return Integer.parseInt(printertimes);
     }
@@ -62,6 +67,13 @@ public class PosTabInfo {
     public PosTabInfo(Context context) {
         pre = PreferenceManager.getDefaultSharedPreferences(context);
         this.context = context;
+        branches = new HashMap<String, String>();
+        String[] branchcode = context.getResources().getStringArray(R.array.pref_branch_list_code);
+        String[] branchname = context.getResources().getStringArray(R.array.pref_branch_list_name);
+        for (int i = 0; i < branchcode.length; i++) {
+            branches.put(branchcode[i], branchname[i]);
+        }
+
     }
 
     public String getPosMachine() {
@@ -70,6 +82,20 @@ public class PosTabInfo {
 
     public String getBranchCode() {
         return pre.getString("branch_selected", "0");
+    }
+
+
+    public String getBranchName() {
+        String tmp_branchcode = pre.getString("branch_selected", "0");
+        for (String key : branches.keySet()) {
+            System.out.println("key= " + key + " and value= " + branches.get(key));
+            if (key.equals(tmp_branchcode)) {
+                return branches.get(key);
+            }
+//            return null;
+
+        }
+        return null;
     }
 
     public void setDeviceId(String s) {
