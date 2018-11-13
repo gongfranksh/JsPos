@@ -27,6 +27,24 @@
         <item>01005</item>
     </string-array>
 
+
+    <string name="pref_printer_times">小票打印联数</string>
+    <string-array name="pref_printer_times_name">
+        <item>打印1联</item>
+        <item>打印2联</item>
+        <item>打印3联</item>
+        <item>打印4联</item>
+        <item>打印5联</item>
+    </string-array>
+    <string-array name="pref_printer_times_value">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+
+
     <string name="pref_pos_selection">POS机台号</string>
 
 

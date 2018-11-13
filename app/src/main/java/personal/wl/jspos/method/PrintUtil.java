@@ -607,7 +607,7 @@ public class PrintUtil {
     }
 
 
-    public static void print_weight_56mm(BluetoothSocket bluetoothSocket, Bitmap bitmap, List<SaleDaily> saleDailyList, List<SalePayMode> salePayModeList, PosTabInfo posTabInfo) {
+    public static void print_weight_56mm(BluetoothSocket bluetoothSocket, Bitmap bitmap, List<SaleDaily> saleDailyList, List<SalePayMode> salePayModeList, PosTabInfo posTabInfo,int printertimes,boolean is1st) {
 
         try {
             Double sub_total_order = 0.00;
@@ -617,15 +617,23 @@ public class PrintUtil {
             pUtil.printAlignment(1);
             pUtil.printLargeText(posTabInfo.getBranchCode());
             pUtil.printLine();
+            if (!is1st){
+                pUtil.printLargeText("--交易补打--");
+                pUtil.printLine();
+            }
             pUtil.printAlignment(0);
             pUtil.printLine();
-
             if (saleDailyList.size() != 0) {
                 CharSequence sysTimeStr = DateFormat
                         .format(" yyyy-MM-dd HH:mm:ss", saleDailyList.get(0).getSaleDate());
                 pUtil.printMyTwoColumn("时间:", (String) sysTimeStr);
                 pUtil.printLine();
                 pUtil.printMyTwoColumn("订单号:", saleDailyList.get(0).getSaleId() + "");
+                pUtil.printLine();
+                pUtil.printText("营业员");
+                pUtil.printText(saleDailyList.get(0).getSaleMan());
+                pUtil.printSpace(10);
+                pUtil.printText("第"+ printertimes + "联");
                 pUtil.printLine();
             }
 

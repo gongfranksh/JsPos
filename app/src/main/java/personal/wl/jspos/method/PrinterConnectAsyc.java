@@ -28,14 +28,16 @@ public class PrinterConnectAsyc extends AsyncTask {
     private List<SaleDaily> saleDailyList;
     private List<SalePayMode> salePayModeList;
     private PosTabInfo posTabInfo;
+    boolean  is1st;
 
-    public PrinterConnectAsyc(Context context, BluetoothDevice mmDevice, Boolean NotTest, List<SaleDaily> saleDailyList, List<SalePayMode> salePayModeList) {
+    public PrinterConnectAsyc(Context context, BluetoothDevice mmDevice, Boolean NotTest, List<SaleDaily> saleDailyList, List<SalePayMode> salePayModeList,Boolean is1st) {
         this.context = context;
         this.mmDevice = mmDevice;
         this.saleDailyList = saleDailyList;
         this.nottest = NotTest;
         this.salePayModeList = salePayModeList;
         this.posTabInfo = new PosTabInfo(context);
+        this.is1st =is1st;
         try {
             if (socket == null) {
                 socket = BluetoothUtil.connectDevice(mmDevice);
@@ -97,7 +99,10 @@ public class PrinterConnectAsyc extends AsyncTask {
             List<SaleDaily> mm = this.saleDailyList;
             Log.i(TAG, "run(PrinterConnectAsyc.java:89)---process_print---传递进入打印--收款明细>>" + this.salePayModeList.toString());
             Log.i(TAG, "run(PrinterConnectAsyc.java:90)---process_print---传递进入打印--交易明细>> " + this.saleDailyList.toString());
-            PrintUtil.print_weight_56mm(socket, null, this.saleDailyList, this.salePayModeList,posTabInfo);
+            int ii = posTabInfo.getPrinterTimes();
+            for (int i = 0; i <posTabInfo.getPrinterTimes() ; i++) {
+            PrintUtil.print_weight_56mm(socket, null, this.saleDailyList, this.salePayModeList,posTabInfo,i+1,is1st);
+            }
 
         }
     }

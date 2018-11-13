@@ -133,9 +133,9 @@ public class PosTranscation {
 
 
         //增加print部分内容
-        posprinter = new PosPrinter(context);
+        posprinter = new PosPrinter(context,true);
         blueprinter= posprinter.getPosPrinter();
-        posprinter.connect(blueprinter,saleDailyList,salePayModeList);
+        posprinter.connect(blueprinter,saleDailyList,salePayModeList,true);
 
 
     }

@@ -221,9 +221,9 @@ public class PosTransList extends AppCompatActivity {
         List<SaleDaily> saleDailyList = QuerySaleDetailBySaleid(salePayMode.getSaleId());
         List<SalePayMode> salePayModeList = new ArrayList<>();
         salePayModeList.add(salePayMode);
-        posprinter = new PosPrinter(context);
+        posprinter = new PosPrinter(context,false);
         blueprinter = posprinter.getPosPrinter();
-        posprinter.connect(blueprinter, saleDailyList, salePayModeList);
+        posprinter.connect(blueprinter, saleDailyList, salePayModeList,false);
     }
 
 

@@ -29,6 +29,11 @@ public class PosTabInfo {
         return pre.getBoolean("Need_Printer_InVoice", true);
     }
 
+    public int getPrinterTimes(){
+        String printertimes = pre.getString("printer_times_selected", "1");
+        return Integer.parseInt(printertimes);
+    }
+
     private Boolean isneedprint;
 
     public String getBlueToothPrinterName() {

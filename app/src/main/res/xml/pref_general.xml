@@ -57,6 +57,16 @@
         android:defaultValue="true"
         android:key="Need_Printer_InVoice"
         android:title="@string/IsNeedPrint" />
+
+    <ListPreference
+        android:defaultValue="1"
+        android:entries="@array/pref_printer_times_name"
+        android:entryValues="@array/pref_printer_times_value"
+        android:key="printer_times_selected"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null"
+        android:title="@string/pref_printer_times" />
+
     <Preference android:title="@string/Upgrade_version">
         <intent android:action="personal.wj.jspos.UpgradeActivity" />
     </Preference>

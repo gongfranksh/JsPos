@@ -13,12 +13,14 @@ import personal.wl.jspos.pos.SalePayMode;
 public class PosPrinter {
     private PosTabInfo posTabInfo;
     private Context context;
+    private Boolean isfirsttimes;
     private PrinterConnectThread mThread;//连接的蓝牙线程
 
-    public PosPrinter(Context context) {
+    public PosPrinter(Context context,Boolean isFirstTimes) {
         PosTabInfo posTabInfo = new PosTabInfo(context);
         this.context = context;
         this.posTabInfo = posTabInfo;
+        this.isfirsttimes=isFirstTimes;
     }
 
 
@@ -39,10 +41,10 @@ public class PosPrinter {
         return null;
     }
 
-    public synchronized void connect(BluetoothDevice device, List<SaleDaily> saleDailyList, List<SalePayMode> salePayModeList) {
+    public synchronized void connect(BluetoothDevice device, List<SaleDaily> saleDailyList, List<SalePayMode> salePayModeList,Boolean is1st) {
 
 
-        PrinterConnectAsyc printerConnectAsyc = new PrinterConnectAsyc(context,device,true,saleDailyList,salePayModeList);
+        PrinterConnectAsyc printerConnectAsyc = new PrinterConnectAsyc(context,device,true,saleDailyList,salePayModeList,is1st);
         printerConnectAsyc.execute();
 //        if (mThread != null) {
 //            mThread.interrupt();
