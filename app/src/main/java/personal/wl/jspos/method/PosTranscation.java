@@ -36,6 +36,7 @@ public class PosTranscation {
     private String tmp_posmachine;
     private String tmp_saleid;
     private String tmp_deviceid;
+    private String tmp_transinnerid;
     private Long tmp_sourceid;
     private Date tmp_datetime;
     private Boolean needprint;
@@ -58,10 +59,8 @@ public class PosTranscation {
         generate_saleid_para.put("datetime", this.tmp_datetime);
         generate_saleid_para.put("posno", this.tmp_posmachine);
         generate_saleid_para.put("deviceid", this.tmp_deviceid);
-
-
         this.tmp_saleid = this.getSaleId(generate_saleid_para);
-
+        this.tmp_transinnerid = DeviceUtils.GetTransInnerID();
     }
 
     public String getTranscationId() {

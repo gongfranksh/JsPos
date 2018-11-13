@@ -58,6 +58,7 @@ public class SaleDailyDao extends AbstractDao<SaleDaily, Long> {
         public final static Property Cash8 = new Property(33, Double.class, "Cash8", false, "CASH8");
         public final static Property SourceId = new Property(34, Long.class, "SourceId", false, "SOURCE_ID");
         public final static Property IsReturn = new Property(35, Boolean.class, "IsReturn", false, "IS_RETURN");
+        public final static Property OrderInnerId = new Property(36, String.class, "OrderInnerId", false, "ORDER_INNER_ID");
     }
 
 
@@ -108,7 +109,8 @@ public class SaleDailyDao extends AbstractDao<SaleDaily, Long> {
                 "\"CASH7\" REAL," + // 32: Cash7
                 "\"CASH8\" REAL," + // 33: Cash8
                 "\"SOURCE_ID\" INTEGER," + // 34: SourceId
-                "\"IS_RETURN\" INTEGER);"); // 35: IsReturn
+                "\"IS_RETURN\" INTEGER," + // 35: IsReturn
+                "\"ORDER_INNER_ID\" TEXT);"); // 36: OrderInnerId
     }
 
     /** Drops the underlying database table. */
@@ -300,6 +302,11 @@ public class SaleDailyDao extends AbstractDao<SaleDaily, Long> {
         if (IsReturn != null) {
             stmt.bindLong(36, IsReturn ? 1L: 0L);
         }
+ 
+        String OrderInnerId = entity.getOrderInnerId();
+        if (OrderInnerId != null) {
+            stmt.bindString(37, OrderInnerId);
+        }
     }
 
     @Override
@@ -485,6 +492,11 @@ public class SaleDailyDao extends AbstractDao<SaleDaily, Long> {
         if (IsReturn != null) {
             stmt.bindLong(36, IsReturn ? 1L: 0L);
         }
+ 
+        String OrderInnerId = entity.getOrderInnerId();
+        if (OrderInnerId != null) {
+            stmt.bindString(37, OrderInnerId);
+        }
     }
 
     @Override
@@ -530,7 +542,8 @@ public class SaleDailyDao extends AbstractDao<SaleDaily, Long> {
             cursor.isNull(offset + 32) ? null : cursor.getDouble(offset + 32), // Cash7
             cursor.isNull(offset + 33) ? null : cursor.getDouble(offset + 33), // Cash8
             cursor.isNull(offset + 34) ? null : cursor.getLong(offset + 34), // SourceId
-            cursor.isNull(offset + 35) ? null : cursor.getShort(offset + 35) != 0 // IsReturn
+            cursor.isNull(offset + 35) ? null : cursor.getShort(offset + 35) != 0, // IsReturn
+            cursor.isNull(offset + 36) ? null : cursor.getString(offset + 36) // OrderInnerId
         );
         return entity;
     }
@@ -573,6 +586,7 @@ public class SaleDailyDao extends AbstractDao<SaleDaily, Long> {
         entity.setCash8(cursor.isNull(offset + 33) ? null : cursor.getDouble(offset + 33));
         entity.setSourceId(cursor.isNull(offset + 34) ? null : cursor.getLong(offset + 34));
         entity.setIsReturn(cursor.isNull(offset + 35) ? null : cursor.getShort(offset + 35) != 0);
+        entity.setOrderInnerId(cursor.isNull(offset + 36) ? null : cursor.getString(offset + 36));
      }
     
     @Override

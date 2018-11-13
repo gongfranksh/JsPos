@@ -34,6 +34,7 @@ public class PosInit extends AppCompatActivity {
     private Button bt_checkversion;
     private Button bt_checkversion_http;
     private Button bt_checknetwork;
+    private Button bt_upgrade_localdatabase;
     private TextView tv_display;
     private EditText device_diplay;
     private EditText adminpass;
@@ -64,9 +65,20 @@ public class PosInit extends AppCompatActivity {
         tv_display = findViewById(R.id.initdisplay);
         device_diplay = findViewById(R.id.deviceno_display);
         device_diplay.setVisibility(View.INVISIBLE);
+        bt_upgrade_localdatabase = findViewById(R.id.update_localdatabase);
         bt_syncdata = findViewById(R.id.sync_download_data);
 
         bt_checknetwork = findViewById(R.id.checknetwork);
+
+
+        bt_upgrade_localdatabase.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context,"本地数据库升级",Toast.LENGTH_LONG).show();
+                HttpToolsKits httpToolsKits = new HttpToolsKits(PosInit.this, v);
+                httpToolsKits.downloadUpgradeSqlfilie();
+            }
+        });
 
 
         bt_checknetwork.setOnClickListener(new View.OnClickListener() {

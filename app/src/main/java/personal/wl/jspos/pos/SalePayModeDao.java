@@ -33,6 +33,7 @@ public class SalePayModeDao extends AbstractDao<SalePayMode, Long> {
         public final static Property CardNo = new Property(8, String.class, "CardNo", false, "CARD_NO");
         public final static Property SourceId = new Property(9, Long.class, "SourceId", false, "SOURCE_ID");
         public final static Property IsReturn = new Property(10, Boolean.class, "IsReturn", false, "IS_RETURN");
+        public final static Property OrderInnerId = new Property(11, String.class, "OrderInnerId", false, "ORDER_INNER_ID");
     }
 
 
@@ -58,7 +59,8 @@ public class SalePayModeDao extends AbstractDao<SalePayMode, Long> {
                 "\"CARD_TYPE\" TEXT," + // 7: CardType
                 "\"CARD_NO\" TEXT," + // 8: CardNo
                 "\"SOURCE_ID\" INTEGER," + // 9: SourceId
-                "\"IS_RETURN\" INTEGER);"); // 10: IsReturn
+                "\"IS_RETURN\" INTEGER," + // 10: IsReturn
+                "\"ORDER_INNER_ID\" TEXT);"); // 11: OrderInnerId
     }
 
     /** Drops the underlying database table. */
@@ -125,6 +127,11 @@ public class SalePayModeDao extends AbstractDao<SalePayMode, Long> {
         if (IsReturn != null) {
             stmt.bindLong(11, IsReturn ? 1L: 0L);
         }
+ 
+        String OrderInnerId = entity.getOrderInnerId();
+        if (OrderInnerId != null) {
+            stmt.bindString(12, OrderInnerId);
+        }
     }
 
     @Override
@@ -185,6 +192,11 @@ public class SalePayModeDao extends AbstractDao<SalePayMode, Long> {
         if (IsReturn != null) {
             stmt.bindLong(11, IsReturn ? 1L: 0L);
         }
+ 
+        String OrderInnerId = entity.getOrderInnerId();
+        if (OrderInnerId != null) {
+            stmt.bindString(12, OrderInnerId);
+        }
     }
 
     @Override
@@ -205,7 +217,8 @@ public class SalePayModeDao extends AbstractDao<SalePayMode, Long> {
             cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // CardType
             cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // CardNo
             cursor.isNull(offset + 9) ? null : cursor.getLong(offset + 9), // SourceId
-            cursor.isNull(offset + 10) ? null : cursor.getShort(offset + 10) != 0 // IsReturn
+            cursor.isNull(offset + 10) ? null : cursor.getShort(offset + 10) != 0, // IsReturn
+            cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11) // OrderInnerId
         );
         return entity;
     }
@@ -223,6 +236,7 @@ public class SalePayModeDao extends AbstractDao<SalePayMode, Long> {
         entity.setCardNo(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
         entity.setSourceId(cursor.isNull(offset + 9) ? null : cursor.getLong(offset + 9));
         entity.setIsReturn(cursor.isNull(offset + 10) ? null : cursor.getShort(offset + 10) != 0);
+        entity.setOrderInnerId(cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11));
      }
     
     @Override

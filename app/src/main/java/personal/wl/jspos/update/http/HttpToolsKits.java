@@ -13,7 +13,12 @@ import android.widget.Toast;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.FileCallBack;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 import okhttp3.Call;
 import personal.wl.jspos.R;
@@ -23,10 +28,13 @@ import personal.wl.jspos.update.view.CommonProgressDialog;
 
 import static android.content.Context.DOWNLOAD_SERVICE;
 import static android.os.Environment.DIRECTORY_DOWNLOADS;
+import static personal.wl.jspos.method.PosHandleDB.UpGradeSqlScript;
 import static personal.wl.jspos.update.http.ReleaseWebInfo.APK_FILE_NAME;
 import static personal.wl.jspos.update.http.ReleaseWebInfo.APK_URL;
 import static personal.wl.jspos.update.http.ReleaseWebInfo.README_FILE_NAME;
 import static personal.wl.jspos.update.http.ReleaseWebInfo.README_URL;
+import static personal.wl.jspos.update.http.ReleaseWebInfo.UPGRADE_FILE_NAME;
+import static personal.wl.jspos.update.http.ReleaseWebInfo.UPGRADE_URL;
 import static personal.wl.jspos.update.http.ReleaseWebInfo.VERSION_FILE_NAME;
 import static personal.wl.jspos.update.http.ReleaseWebInfo.VERSION_URL;
 
@@ -90,6 +98,51 @@ public class HttpToolsKits {
 
     }
 
+
+    public void downloadUpgradeSqlfilie() {
+        //下载Readme.txt 发版说明文件
+        OkHttpUtils
+                .get()
+                .url(UPGRADE_URL)
+                .build()//
+                .execute(new FileCallBack(context.getFilesDir().getPath(), UPGRADE_FILE_NAME)//
+                {
+                    @Override
+                    public void onError(Call call, Exception e) {
+                        Toast.makeText(context, "下载" + UPGRADE_FILE_NAME + "失败" + e.toString(), Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onResponse(Call call, File file) {
+                        Toast.makeText(context, "下载" + UPGRADE_FILE_NAME + "成功", Toast.LENGTH_LONG).show();
+                        try {
+                            FileInputStream f = new FileInputStream(file);
+                            InputStreamReader fis = new InputStreamReader(f);
+                            BufferedReader buffreader = new BufferedReader(fis);
+                            String line;
+                            while (( line = buffreader.readLine()) != null) {
+                                String content = line + "\n";
+                                UpGradeSqlScript(content);
+                            }
+                            buffreader.close();
+                            fis.close();
+                            f.close();
+
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+
+                    }
+
+                    @Override
+                    public void inProgress(float v, long l) {
+                    }
+                });
+
+    }
 
     public void checkdownload() {
         int vision = Tools.getVersion(context);

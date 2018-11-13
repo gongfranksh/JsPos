@@ -3,7 +3,6 @@ package personal.wl.jspos.update.utils;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.PowerManager;
-import android.text.format.DateFormat;
 
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
@@ -16,6 +15,7 @@ import java.io.OutputStream;
 import personal.wl.jspos.method.PosTabInfo;
 import personal.wl.jspos.update.view.CommonProgressDialog;
 
+import static personal.wl.jspos.method.DeviceUtils.GetTransInnerID;
 import static personal.wl.jspos.update.utils.FtpInfo.UPLOAD_FILE_ADDRESS;
 
 public class UploadDbTask extends AsyncTask<String, Integer, String> {
@@ -45,11 +45,8 @@ public class UploadDbTask extends AsyncTask<String, Integer, String> {
         this.context = context;
         this.pbar = pbar;
         this.posTabInfo = new PosTabInfo(context);
-        long sysTime = System.currentTimeMillis();
-        CharSequence sysTimeStr = DateFormat
-                .format(" yyyyMMddHHmmss", sysTime);
         REMOTE_DB_FILENAME = UPLOAD_FILE_ADDRESS + posTabInfo.getPosMachine().trim()
-                +sysTimeStr.toString().trim() +"-"+ DB_NAME;
+                +GetTransInnerID() +"-"+ DB_NAME;
     }
 
     @Override

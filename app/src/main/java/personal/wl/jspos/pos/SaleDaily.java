@@ -47,6 +47,7 @@ public class SaleDaily {
     private Double Cash8;
     private Long SourceId;
     private Boolean IsReturn;
+    private String OrderInnerId;
 
     @Generated
     public SaleDaily() {
@@ -57,7 +58,7 @@ public class SaleDaily {
     }
 
     @Generated
-    public SaleDaily(Long id, String Braid, java.util.Date SaleDate, String ProId, String BarCode, String ClassId, String IsDM, String IsPmt, String IsTimePrompt, Double SaleTax, String PosNo, String SalerId, String SaleMan, String SaleType, Double SaleQty, Double SaleAmt, Double SaleDisAmt, Double TransDisAmt, Double NormalPrice, Double CurPrice, Double AvgCostPrice, String SaleId, String InVoiceId, Double Point1, Double Point2, Double ReturnRat, Double Cash1, Double Cash2, Double Cash3, Double Cash4, Double Cash5, Double Cash6, Double Cash7, Double Cash8, Long SourceId, Boolean IsReturn) {
+    public SaleDaily(Long id, String Braid, java.util.Date SaleDate, String ProId, String BarCode, String ClassId, String IsDM, String IsPmt, String IsTimePrompt, Double SaleTax, String PosNo, String SalerId, String SaleMan, String SaleType, Double SaleQty, Double SaleAmt, Double SaleDisAmt, Double TransDisAmt, Double NormalPrice, Double CurPrice, Double AvgCostPrice, String SaleId, String InVoiceId, Double Point1, Double Point2, Double ReturnRat, Double Cash1, Double Cash2, Double Cash3, Double Cash4, Double Cash5, Double Cash6, Double Cash7, Double Cash8, Long SourceId, Boolean IsReturn, String OrderInnerId) {
         this.id = id;
         this.Braid = Braid;
         this.SaleDate = SaleDate;
@@ -94,6 +95,7 @@ public class SaleDaily {
         this.Cash8 = Cash8;
         this.SourceId = SourceId;
         this.IsReturn = IsReturn;
+        this.OrderInnerId = OrderInnerId;
     }
 
     public Long getId() {
@@ -382,6 +384,14 @@ public class SaleDaily {
 
     public void setIsReturn(Boolean IsReturn) {
         this.IsReturn = IsReturn;
+    }
+
+    public String getOrderInnerId() {
+        return OrderInnerId;
+    }
+
+    public void setOrderInnerId(String OrderInnerId) {
+        this.OrderInnerId = OrderInnerId;
     }
 
 }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.ParseException;
 import android.os.Build;
 import android.provider.Settings;
+import android.text.format.DateFormat;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -126,11 +127,20 @@ public class DeviceUtils {
         return null;
     }
 
+
     private static Boolean CheckResponse(String returnMsg) {
         if (returnMsg.indexOf("100% loss") != -1) return false;
         if (returnMsg.indexOf("100% packet loss") != -1) return false;
         if (returnMsg.length() == 0) return false;
         return true;
+    }
+
+
+    public static String GetTransInnerID() {
+        long sysTime = System.currentTimeMillis();
+        CharSequence sysTimeStr = DateFormat
+                .format(" yyyyMMddHHmmss", sysTime);
+        return sysTimeStr.toString().trim();
     }
 
     public static Boolean CheckDB2MSSQLConnect() {
@@ -190,7 +200,7 @@ public class DeviceUtils {
     // strTime要转换的string类型的时间，formatType要转换的格式yyyy-MM-dd HH:mm:ss//yyyy年MM月dd日
     // HH时mm分ss秒，
     // strTime的时间格式必须要与formatType的时间格式相同
-    public static Date stringToDate(String strTime)  {
+    public static Date stringToDate(String strTime) {
         SimpleDateFormat formatter = new SimpleDateFormat(" yyyy-MM-dd HH:mm:ss");
         Date date = null;
         try {

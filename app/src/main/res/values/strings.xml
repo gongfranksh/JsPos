@@ -198,4 +198,5 @@
     <string name="Printer_Display_name">预设打印机</string>
     <string name="Printer_setting_address">预设打印机地址</string>
     <string name="IsNeedPrint">是否需要打印小票</string>
+    <string name="up_localdatabase">升级本地数据库</string>
 </resources>

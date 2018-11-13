@@ -46,6 +46,10 @@ public class PosHandleDB {
         }
     }
 
+    public static void UpGradeSqlScript(String sql){
+        ExecSqlVoid(sql);
+    }
+
     public static void CleanLocalSales() {
         String clean_trans_paymode = "delete from sale_pay_mode;";
         String clean_trans_product = "delete from sale_daily;";
