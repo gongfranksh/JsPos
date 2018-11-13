@@ -17,6 +17,7 @@ import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
+import java.util.UUID;
 
 import personal.wl.jspos.update.utils.FtpInfo;
 
@@ -137,6 +138,12 @@ public class DeviceUtils {
 
 
     public static String GetTransInnerID() {
+        UUID uuid = UUID.randomUUID();
+        return uuid.toString().trim();
+    }
+
+
+    public static String GetTimeStamp() {
         long sysTime = System.currentTimeMillis();
         CharSequence sysTimeStr = DateFormat
                 .format(" yyyyMMddHHmmss", sysTime);

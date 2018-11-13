@@ -91,6 +91,7 @@ public class PosTranscation {
             saleDailyList.get(i).setNormalPrice(tmp_product.get(0).getNormalPrice());
             saleDailyList.get(i).setSaleTax(tmp_product.get(0).getInTax());
             saleDailyList.get(i).setSaleId(this.tmp_saleid);
+            saleDailyList.get(i).setOrderInnerId(this.tmp_transinnerid);
             saleDailyList.get(i).setSourceId(this.tmp_sourceid);
             saleDailyList.get(i).setIsReturn(false);
             switch (pay) {
@@ -113,6 +114,7 @@ public class PosTranscation {
         salePayMode.setBraid(this.tmp_branch);
         salePayMode.setSaleDate(this.tmp_datetime);
         salePayMode.setSaleId(this.tmp_saleid);
+        salePayMode.setOrderInnerId(this.tmp_transinnerid);
         salePayMode.setSourceId(this.tmp_sourceid);
         salePayMode.setIsReturn(false);
         salePayMode.setSalerId(posTabInfo.getSalerId());

@@ -27,6 +27,7 @@ import personal.wl.jspos.pos.SaleDailyDao;
 import personal.wl.jspos.pos.SalePayMode;
 import personal.wl.jspos.pos.SalePayModeDao;
 
+import static personal.wl.jspos.method.DeviceUtils.GetTransInnerID;
 import static personal.wl.jspos.method.PosPayMent.PAYMENT_ALIPAY_CODE;
 import static personal.wl.jspos.method.PosPayMent.PAYMENT_CASH_CODE;
 import static personal.wl.jspos.method.PosPayMent.PAYMENT_WEIXIN_CODE;
@@ -313,6 +314,7 @@ public class PosHandleDB {
         rt_salepaymode.setIsReturn(true);
         rt_salepaymode.setSalerId(salePayMode.getSalerId());
         rt_salepaymode.setSourceId(salePayMode.getSourceId());
+        rt_salepaymode.setOrderInnerId(GetTransInnerID());
         return rt_salepaymode;
     }
 
@@ -334,10 +336,11 @@ public class PosHandleDB {
         }
     }
 
-    public static void UpdateSaleDailyForRetrun(List<SaleDaily> saleDailyList) {
+    public static void UpdateSaleDailyForRetrun(List<SaleDaily> saleDailyList,SalePayMode salePaymode) {
         SaleDailyDao saleDailyDao = DBConnect.getInstances().getDaoSession().getSaleDailyDao();
         for (int i = 0; i < saleDailyList.size(); i++) {
             saleDailyList.get(i).setIsReturn(true);
+            saleDailyList.get(i).setOrderInnerId(salePaymode.getOrderInnerId());
             saleDailyDao.update(saleDailyList.get(i));
         }
     }
@@ -363,7 +366,7 @@ public class PosHandleDB {
             Double tmp_CurPrice = saleDailyList.get(i).getCurPrice() * (-1);
             Double tmp_NormalPrice = saleDailyList.get(i).getNormalPrice() * (-1);
             String tmp_saleid = "R" + paymode_saleid;
-
+            tmp_saledaily.setOrderInnerId(salePayMode.getOrderInnerId());
             tmp_saledaily.setBraid(saleDailyList.get(i).getBraid());
             tmp_saledaily.setSaleDate(new Date());
             tmp_saledaily.setProId(saleDailyList.get(i).getProId());

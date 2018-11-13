@@ -238,8 +238,8 @@ public class PosTransList extends AppCompatActivity {
 
         //修改原来的记录--退货状态为已经退货了
         salePayMode.setIsReturn(true);
-        UpdateSalePayMode(salePayMode);
-        UpdateSaleDailyForRetrun(tmp_saledailylist);
+        UpdateSalePayMode(tmp_salepaymode);
+        UpdateSaleDailyForRetrun(tmp_saledailylist,tmp_salepaymode);
 
 
     }
