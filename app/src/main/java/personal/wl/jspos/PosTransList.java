@@ -4,15 +4,20 @@ import android.app.AlertDialog;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.yanzhenjie.recyclerview.swipe.SwipeMenu;
@@ -44,12 +49,16 @@ public class PosTransList extends AppCompatActivity {
     private SalePayModeAdapter salePayModeAdapter;
     private BluetoothDevice blueprinter;
     private PosPrinter posprinter;
+    private View postanslayout;
+    private View ordertaillayout;
+    private TextView tx_confirm;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pos_trans_list);
+        postanslayout = findViewById(R.id.postranslayout);
 
         final SwipeMenuRecyclerView salespaymodeview = findViewById(R.id.postranslist);
         salepaymodeList = getAllSalesPayment();
@@ -71,7 +80,9 @@ public class PosTransList extends AppCompatActivity {
 
             @Override
             public void onItemLongClick(int position) {
-                showOrderDetail(salepaymodeList.get(position));
+//                showOrderDetail(salepaymodeList.get(position));
+
+                showOrderDetail_2(salepaymodeList.get(position));
             }
         });
     }
@@ -90,12 +101,19 @@ public class PosTransList extends AppCompatActivity {
 
             // 添加左侧的，如果不添加，则左侧不会出现菜单。
             {
-                SwipeMenuItem addItem = new SwipeMenuItem(context)
+//                SwipeMenuItem addItem = new SwipeMenuItem(context)
+//                        .setBackground(R.drawable.selector_green)
+//                        .setImage(R.mipmap.ic_action_add)
+//                        .setWidth(width)
+//                        .setHeight(height);
+//                swipeLeftMenu.addMenuItem(addItem); // 添加菜单到左侧。
+
+                SwipeMenuItem ItemDetail = new SwipeMenuItem(context)
                         .setBackground(R.drawable.selector_green)
-                        .setImage(R.mipmap.ic_action_add)
+                        .setImage(R.drawable.ic_view_list_black_24dp)
                         .setWidth(width)
                         .setHeight(height);
-                swipeLeftMenu.addMenuItem(addItem); // 添加菜单到左侧。
+                swipeLeftMenu.addMenuItem(ItemDetail); // 添加菜单到左侧。
 
                 SwipeMenuItem closeItem = new SwipeMenuItem(context)
                         .setBackground(R.drawable.selector_purple)
@@ -103,6 +121,9 @@ public class PosTransList extends AppCompatActivity {
                         .setWidth(width)
                         .setHeight(height);
                 swipeLeftMenu.addMenuItem(closeItem); // 添加菜单到左侧。
+
+
+
             }
 
             // 添加右侧的，如果不添加，则右侧不会出现菜单。
@@ -159,12 +180,18 @@ public class PosTransList extends AppCompatActivity {
 
                 switch (menuPosition) {
                     case 0:
-                        showOrderDetail(salepaymodeList.get(adapterPosition));
+//                        showOrderDetail(salepaymodeList.get(adapterPosition));
+                        showOrderDetail_2(salepaymodeList.get(adapterPosition));
                         break;
                     case 1:
                         Toast.makeText(context, "重复打印", Toast.LENGTH_LONG).show();
                         printOrderDetail(salepaymodeList.get(adapterPosition));
                         break;
+//                    case 2:
+//                        Toast.makeText(context, "显示明显", Toast.LENGTH_LONG).show();
+//                        showOrderDetail_2(salepaymodeList.get(adapterPosition));
+//                        break;
+
 
                     default:
                         break;
@@ -219,27 +246,92 @@ public class PosTransList extends AppCompatActivity {
     }
 
     private void showOrderDetail_2(SalePayMode salePayMode) {
-//        List<SaleDaily> saleDailyList = QuerySaleDetailBySaleid(salePayMode.getSaleId());
         List<SaleDaily> saleDailyList = QuerySaleDetailByOrderInnerId(salePayMode.getOrderInnerId());
+        View mPopupHeadViewy = View.inflate(this, R.layout.orderdeatillayout, null);
+//        PopupWindow mHeadPopupclly = new PopupWindow(mPopupHeadViewy, (int) (getScreenWidth() * 1), getScreenHeight(), true);
+        final PopupWindow mHeadPopupclly = new PopupWindow(mPopupHeadViewy, ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        ordertaillayout = mPopupHeadViewy.findViewById(R.id.ordertaillayout);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setIcon(R.mipmap.ic_launcher);
-        builder.setTitle("交易明细");
-        View view = LayoutInflater.from(context).inflate(R.layout.showsalesdetail, null);
-        RecyclerView salesorderview = view.findViewById(R.id.showsaleorder);
+//        mPopupHeadViewy.setFocusable(true);
+//        mPopupHeadViewy.setFocusableInTouchMode(true);
+//        mPopupHeadViewy.setOnKeyListener(new View.OnKeyListener() {
+//            @Override
+//            public boolean onKey(View v, int keyCode, KeyEvent event) {
+//                Toast.makeText(context,"key touch",Toast.LENGTH_LONG).show();
+//                if (keyCode == KeyEvent.KEYCODE_BACK){
+//                    if(mHeadPopupclly != null) {
+//                        mHeadPopupclly.dismiss();
+//                    }
+//                }
+//                return false;
+//
+//
+//
+//
+//            }
+//        });
+//
+
+
+        RecyclerView salesorderview = mPopupHeadViewy.findViewById(R.id.poporderdetaili);
         salesorderview.setLayoutManager(new LinearLayoutManager(this));
         salesorderview.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         SaleOrderAdapterForDialog saleOrderAdapterForDialog = new SaleOrderAdapterForDialog(PosTransList.this, saleDailyList);
         salesorderview.setAdapter(saleOrderAdapterForDialog);
         saleOrderAdapterForDialog.notifyDataSetChanged();
-        builder.setView(view);
-        builder.setCancelable(true);
-        AlertDialog dialog = builder.create();
-        dialog.show();
+
+        mHeadPopupclly.setInputMethodMode(PopupWindow.INPUT_METHOD_NEEDED);
+        mHeadPopupclly.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        mHeadPopupclly.setBackgroundDrawable(new BitmapDrawable());
+        mHeadPopupclly.setOutsideTouchable(true);
+        mHeadPopupclly.showAsDropDown(postanslayout, 100, 100);
+        backgroundAlpha(0.5f);
+
+
+
+
+//        saleOrderAdapterForDialog.setOnItemClickListener(new SaleOrderAdapterForDialog.onItemClickListener() {
+//            @Override
+//            public void onItemClick(int position) {
+//                backgroundAlpha(1f);
+//                mHeadPopupclly.dismiss();
+//            }
+//
+//            @Override
+//            public void onItemLongClick(int position) {
+//
+//            }
+//        });
+//
+
+        ordertaillayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                backgroundAlpha(1f);
+                mHeadPopupclly.dismiss();
+            }
+        });
+//        backgroundAlpha(1f);
     }
 
+    public void backgroundAlpha(float bgAlpha) {
+        WindowManager.LayoutParams lp = getWindow().getAttributes();
+        lp.alpha = bgAlpha; //0.0-1.0
+        getWindow().setAttributes(lp);
+    }
 
+    public int getScreenWidth() {
+        DisplayMetrics dm = new DisplayMetrics();
+        dm = context.getResources().getDisplayMetrics();
+        return dm.widthPixels;
+    }
 
+    public int getScreenHeight() {
+        DisplayMetrics dm = new DisplayMetrics();
+        dm = context.getResources().getDisplayMetrics();
+        return dm.heightPixels;
+    }
 
     private void printOrderDetail(SalePayMode salePayMode) {
         //增加print部分内容
@@ -247,9 +339,9 @@ public class PosTransList extends AppCompatActivity {
         List<SaleDaily> saleDailyList = QuerySaleDetailByOrderInnerId(salePayMode.getOrderInnerId());
         List<SalePayMode> salePayModeList = new ArrayList<>();
         salePayModeList.add(salePayMode);
-        posprinter = new PosPrinter(context,false);
+        posprinter = new PosPrinter(context, false);
         blueprinter = posprinter.getPosPrinter();
-        posprinter.connect(blueprinter, saleDailyList, salePayModeList,false);
+        posprinter.connect(blueprinter, saleDailyList, salePayModeList, false);
     }
 
 
@@ -265,14 +357,12 @@ public class PosTransList extends AppCompatActivity {
         //修改原来的记录--退货状态为已经退货了
         salePayMode.setIsReturn(true);
         UpdateSalePayMode(tmp_salepaymode);
-        UpdateSaleDailyForRetrun(tmp_saledailylist,tmp_salepaymode);
+        UpdateSaleDailyForRetrun(tmp_saledailylist, tmp_salepaymode);
 
         List<SalePayMode> salepmodeprint = new ArrayList<>();
         salepmodeprint.add(tmp_salepaymode);
-        posprinter = new PosPrinter(context,false);
+        posprinter = new PosPrinter(context, false);
         blueprinter = posprinter.getPosPrinter();
-        posprinter.connect(blueprinter, tmp_saledailylist, salepmodeprint,true);
-
-
+        posprinter.connect(blueprinter, tmp_saledailylist, salepmodeprint, true);
     }
 }

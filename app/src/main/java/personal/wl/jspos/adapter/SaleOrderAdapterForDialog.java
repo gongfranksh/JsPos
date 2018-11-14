@@ -7,14 +7,11 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -31,6 +28,7 @@ import static personal.wl.jspos.method.PosHandleDB.getSaleid;
 public class SaleOrderAdapterForDialog extends RecyclerView.Adapter<SaleOrderAdapterForDialog.SaleOrderViewHolderForDialog> {
     private Context context;
     private List<SaleDaily> saleDailyList;
+
 
     public interface onItemClickListener {
         void onItemClick(int position);

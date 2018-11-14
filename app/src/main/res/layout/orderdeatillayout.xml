@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/ordertaillayout"
+        android:layout_width="fill_parent"
+        android:layout_height="214dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="31dp"
+        android:layout_marginRight="31dp"
+        android:background="@drawable/shape_bgimg">
+
+
+        <LinearLayout
+            android:id="@+id/lineardb"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_alignParentTop="true">
+
+            <TextView
+                android:id="@+id/popcode"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:background="#f86c6a"
+                android:gravity="center"
+                android:text="编码"
+                android:textColor="#262626"
+                android:textSize="16dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/popproductname"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:background="#f86c6a"
+                android:gravity="center"
+                android:text="简称"
+                android:textColor="#262626"
+                android:textSize="16dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/popproductprice"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:background="#f86c6a"
+                android:gravity="center"
+                android:text="零售价"
+                android:textColor="#262626"
+                android:textSize="16dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/popproductsalerid"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:background="#f86c6a"
+                android:gravity="center"
+                android:text="营业员"
+                android:textColor="#262626"
+                android:textSize="16dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/popproductsaleman"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:background="#f86c6a"
+                android:gravity="center"
+                android:text="营业员姓名"
+                android:textColor="#262626"
+                android:textSize="16dp"
+                android:textStyle="bold" />
+            <TextView
+                android:id="@+id/popqty"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:background="#f86c6a"
+                android:gravity="center"
+                android:text="数量"
+                android:textColor="#262626"
+                android:textSize="16dp"
+                android:textStyle="bold" />
+            <TextView
+                android:id="@+id/poplinetotal"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:background="#f86c6a"
+                android:gravity="center"
+                android:text="小计"
+                android:textColor="#262626"
+                android:textSize="16dp"
+                android:textStyle="bold" />
+
+            <!--<TextView-->
+            <!--android:id="@+id/orderdetailconfirm"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="fill_parent"-->
+            <!--android:layout_weight="1"-->
+            <!--android:background="#f86c6a"-->
+            <!--android:text="确认"-->
+            <!--android:textColor="#262626"-->
+            <!--android:textSize="16dp" />-->
+        </LinearLayout>
+
+
+        <com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView
+            android:id="@+id/poporderdetaili"
+            android:layout_below="@+id/lineardb"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            android:background="#ffff"></com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView>
+    </RelativeLayout>
+</RelativeLayout>
