@@ -83,6 +83,8 @@ public class POS extends Activity {
     private String branch_selected = null;
     private String pos_machine_selected = null;
 
+    private TextView msg_title;
+
     private TextView totalamt;
 
     private TextView saletransdate;
@@ -363,9 +365,14 @@ public class POS extends Activity {
             if (JudgeSaler(saleDailyList)) {
                 posTranscation = new PosTranscation(context);
                 posTranscation.SaleTranstion(saleDailyList, paymode);
-//                cleartranstion();
-//                saleid.setText("上次交易流水:" + posTranscation.getTranscationId());
-//                showOkDiallog(posTranscation.getTranscationId());
+
+                if (!posTabInfo.getNeedPrint()) {
+                    cleartranstion();
+                    //开启付款按钮，重置记录按钮次数
+                    enablepaymentbutton();
+                    presscount = 0;
+                }
+
 
             } else {
                 showErrorDiallog("营业员代码错误！");
@@ -378,11 +385,18 @@ public class POS extends Activity {
     }
 
     private void showErrorDiallog(String s) {
+//        msg_title= new TextView(context);
+//        msg_title.setText("交易异常！");
+//        msg_title.setPadding(10, 10, 10, 10);
+//        msg_title.setGravity(Gravity.CENTER);
+//        msg_title.setTextSize(23);
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         //设置构造器标题
-        builder.setTitle("交易异常！");
+        builder.setTitle("交易异常");
+
         //构造器对应的图标
-        builder.setIcon(R.mipmap.ic_launcher);
+        builder.setIcon(R.drawable.ic_cancel_black_24dp);
         builder.setMessage(s);
         builder.setNegativeButton("提示", null);
         AlertDialog alertDialog = builder.create();
@@ -392,9 +406,9 @@ public class POS extends Activity {
     private void showOkDiallog(String s) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         //设置构造器标题
-        builder.setTitle("交易成功！");
+        builder.setTitle("交易成功");
         //构造器对应的图标
-        builder.setIcon(R.mipmap.ic_launcher);
+        builder.setIcon(R.drawable.ic_check_black_24dp);
         builder.setMessage(s + "\n" + presscount);
         builder.setNegativeButton("提示", null);
         AlertDialog alertDialog = builder.create();
@@ -648,7 +662,7 @@ public class POS extends Activity {
     private void showtitle() {
 //        showPreference();
         TextView branch = findViewById(R.id.branch);
-        branch.setText(branch.getText() + posTabInfo.getBranchCode()+posTabInfo.getBranchName());
+        branch.setText(branch.getText() + posTabInfo.getBranchCode() + posTabInfo.getBranchName());
         final TextView posmachine = findViewById(R.id.posmachine);
         posmachine.setText(posmachine.getText() + posTabInfo.getPosMachine());
         TextView casherid = findViewById(R.id.casherid);

@@ -34,6 +34,7 @@ import personal.wl.jspos.adapter.SaleOrderAdapterForDialog;
 import personal.wl.jspos.adapter.SalePayModeAdapter;
 import personal.wl.jspos.method.PosHandleDB;
 import personal.wl.jspos.method.PosPrinter;
+import personal.wl.jspos.method.PosTabInfo;
 import personal.wl.jspos.pos.SaleDaily;
 import personal.wl.jspos.pos.SalePayMode;
 
@@ -52,6 +53,7 @@ public class PosTransList extends AppCompatActivity {
     private View postanslayout;
     private View ordertaillayout;
     private TextView tx_confirm;
+    private PosTabInfo posTabInfo;
 
 
     @Override
@@ -59,7 +61,8 @@ public class PosTransList extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pos_trans_list);
         postanslayout = findViewById(R.id.postranslayout);
-
+        this.context = PosTransList.this;
+        posTabInfo = new PosTabInfo(context);
         final SwipeMenuRecyclerView salespaymodeview = findViewById(R.id.postranslist);
         salepaymodeList = getAllSalesPayment();
         salespaymodeview.setLayoutManager(new LinearLayoutManager(this));
@@ -121,7 +124,6 @@ public class PosTransList extends AppCompatActivity {
                         .setWidth(width)
                         .setHeight(height);
                 swipeLeftMenu.addMenuItem(closeItem); // 添加菜单到左侧。
-
 
 
             }
@@ -289,8 +291,6 @@ public class PosTransList extends AppCompatActivity {
         backgroundAlpha(0.5f);
 
 
-
-
 //        saleOrderAdapterForDialog.setOnItemClickListener(new SaleOrderAdapterForDialog.onItemClickListener() {
 //            @Override
 //            public void onItemClick(int position) {
@@ -361,8 +361,11 @@ public class PosTransList extends AppCompatActivity {
 
         List<SalePayMode> salepmodeprint = new ArrayList<>();
         salepmodeprint.add(tmp_salepaymode);
-        posprinter = new PosPrinter(context, false);
-        blueprinter = posprinter.getPosPrinter();
-        posprinter.connect(blueprinter, tmp_saledailylist, salepmodeprint, true);
+
+        if (posTabInfo.getNeedPrint()) {
+            posprinter = new PosPrinter(context, false);
+            blueprinter = posprinter.getPosPrinter();
+            posprinter.connect(blueprinter, tmp_saledailylist, salepmodeprint, true);
+        }
     }
 }

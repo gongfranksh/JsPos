@@ -39,8 +39,6 @@ public class PosTabInfo {
         return Integer.parseInt(printertimes);
     }
 
-    private Boolean isneedprint;
-
     public String getBlueToothPrinterName() {
         return pre.getString("BlueTooth_Printer_Name", "0");
     }
