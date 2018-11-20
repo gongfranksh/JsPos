@@ -20,7 +20,9 @@ import static personal.wl.jspos.method.DeviceUtils.ToolsGetSaleAmt;
 
 public class QRCodeUtil {
 
+
     public static String QR_PREX = "http://tfp.buynow.com.cn:8090/invoice/qr?saleid=saleid&braid=braid&saledate=saledate";
+
     public static Bitmap createQRCodeBitmap(String content, int width, int height,
                                             String character_set, String error_correction_level,
                                             String margin, int color_black, int color_white) {
@@ -72,25 +74,25 @@ public class QRCodeUtil {
         }
     }
 
-    public static String getQRcodeContent(List<SalePayMode> salePayModeList,List<SaleDaily> saleSaleDailyList) {
+    public static String getQRcodeContent(List<SalePayMode> salePayModeList, List<SaleDaily> saleSaleDailyList) {
 
         String tmp_qrcontent = null;
-        String tmp_needcrpt =null;
-        String tmp_aftercrpt=null;
-        tmp_needcrpt="saleid="+saleSaleDailyList.get(0).getSaleId()+
-                "saleamt="+ToolsGetSaleAmt(salePayModeList)+
-                "posno="+saleSaleDailyList.get(0).getPosNo()+
-                "braid="+saleSaleDailyList.get(0).getBraid()+
-                "saledate="+GetSaleDateYYMMDD(salePayModeList.get(0).getSaleDate()) ;
+        String tmp_needcrpt = null;
+        String tmp_aftercrpt = null;
+        tmp_needcrpt = "saleid=" + saleSaleDailyList.get(0).getSaleId() +
+                "saleamt=" + ToolsGetSaleAmt(salePayModeList) +
+                "posno=" + saleSaleDailyList.get(0).getPosNo() +
+                "braid=" + saleSaleDailyList.get(0).getBraid() +
+                "saledate=" + GetSaleDateYYMMDD(salePayModeList.get(0).getSaleDate());
 
 //        tmp_needcrpt="saleid=2071810300011&saleamt=699.00&posno=207&braid=01002&saledate=2018-10-30";
 
         try {
-            tmp_aftercrpt=DESCoder.Encrypt(tmp_needcrpt);
+            tmp_aftercrpt = DESCoder.Encrypt(tmp_needcrpt);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        tmp_qrcontent =QR_PREX+tmp_aftercrpt;
+        tmp_qrcontent = QR_PREX + tmp_aftercrpt;
         return tmp_qrcontent;
     }
 
