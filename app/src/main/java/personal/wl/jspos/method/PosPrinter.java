@@ -14,6 +14,7 @@ public class PosPrinter {
     private PosTabInfo posTabInfo;
     private Context context;
     private Boolean isfirsttimes;
+
     private PrinterConnectThread mThread;//连接的蓝牙线程
 
     public PosPrinter(Context context,Boolean isFirstTimes) {
@@ -22,6 +23,7 @@ public class PosPrinter {
         this.posTabInfo = posTabInfo;
         this.isfirsttimes=isFirstTimes;
     }
+
 
 
     public BluetoothDevice getPosPrinter() {
@@ -45,6 +47,19 @@ public class PosPrinter {
 
 
         PrinterConnectAsyc printerConnectAsyc = new PrinterConnectAsyc(context,device,true,saleDailyList,salePayModeList,is1st);
+        printerConnectAsyc.execute();
+//        if (mThread != null) {
+//            mThread.interrupt();
+//            mThread = null;
+//        }
+//        mThread = new PrinterConnectThread(device.getAddress(), device, context, true, saleDailyList, salePayModeList);
+//        mThread.start();
+    }
+
+    public synchronized void connect(BluetoothDevice device, List<SaleDaily> saleDailyList, List<SalePayMode> salePayModeList,Boolean is1st,Boolean isReturn) {
+
+
+        PrinterConnectAsyc printerConnectAsyc = new PrinterConnectAsyc(context,device,true,saleDailyList,salePayModeList,is1st,isReturn);
         printerConnectAsyc.execute();
 //        if (mThread != null) {
 //            mThread.interrupt();

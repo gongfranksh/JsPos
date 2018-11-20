@@ -16,9 +16,11 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import personal.wl.jspos.pos.SalePayMode;
 import personal.wl.jspos.update.utils.FtpInfo;
 
 import static personal.wl.jspos.db.DBC2Jspot.IP;
@@ -157,6 +159,21 @@ public class DeviceUtils {
         return sysTimeStr.toString().trim();
     }
 
+    public static String GetSaleDateYYMMDD(Date tmp_date) {
+        CharSequence sysTimeStr = DateFormat
+                .format(" yyyy-MM-dd", tmp_date);
+        return sysTimeStr.toString().trim();
+    }
+
+
+    public static double ToolsGetSaleAmt(List<SalePayMode> salePayModeList) {
+        double tmp_saleamt = 0.00;
+        for (int i = 0; i < salePayModeList.size(); i++) {
+
+            tmp_saleamt += salePayModeList.get(i).getPayMoney();
+        }
+        return tmp_saleamt;
+    }
 
 
     public static Boolean CheckDB2MSSQLConnect() {

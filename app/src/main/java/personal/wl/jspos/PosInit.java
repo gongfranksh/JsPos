@@ -16,6 +16,7 @@ import android.widget.Toast;
 import java.util.Date;
 import java.util.HashMap;
 
+import personal.wl.jspos.method.DESCoder;
 import personal.wl.jspos.method.DeviceUtils;
 import personal.wl.jspos.method.PosTabInfo;
 import personal.wl.jspos.sync.SyncJsSaleData;
@@ -35,6 +36,7 @@ public class PosInit extends AppCompatActivity {
     private Button bt_checkversion_http;
     private Button bt_checknetwork;
     private Button bt_upgrade_localdatabase;
+    private Button bt_checkdes64;
     private TextView tv_display;
     private EditText device_diplay;
     private EditText adminpass;
@@ -67,6 +69,7 @@ public class PosInit extends AppCompatActivity {
         device_diplay.setVisibility(View.INVISIBLE);
         bt_upgrade_localdatabase = findViewById(R.id.update_localdatabase);
         bt_syncdata = findViewById(R.id.sync_download_data);
+        bt_checkdes64 = findViewById(R.id.checkdes64);
 
         bt_checknetwork = findViewById(R.id.checknetwork);
 
@@ -201,6 +204,27 @@ public class PosInit extends AppCompatActivity {
 //
 //                }
 //
+            }
+        });
+
+        bt_checkdes64.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String str = "saleid=2071810300011&saleamt=699.00&posno=207&braid=01002&saledate=2018-10-30";
+                String str_desc = null;
+                String encodestr="7etcT5mYsblgKPg6WDgGU4Pqg4jVhQFcMb82579M8MgXKl0mCNz4Rbx+8YsK+f+L\n" +
+                        "qsRvfroxP+OWMfHoTuUN4Pm8mjGaUUSur7bHvN+4xgmBaB2+rV1luQ==";
+                String decodestr=null;
+                try {
+                    str_desc = DESCoder.Encrypt(str);
+                    decodestr=DESCoder.Decrypt(encodestr);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }                tv_display.setText(
+                        "加密测试-->原文："+str+"\n"+"密文："+str_desc+"\n\n\n\n"+
+                        "解密测试-->密文："+encodestr+"\n"+"原文："+decodestr+"\n");
+                System.out.printf("encrpt code :%s",str_desc);
             }
         });
 

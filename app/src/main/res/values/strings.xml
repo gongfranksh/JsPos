@@ -215,6 +215,8 @@
     <string name="testing_printer">打印测试</string>
     <string name="Printer_Display_name">预设打印机</string>
     <string name="Printer_setting_address">预设打印机地址</string>
-    <string name="IsNeedPrint">是否需要打印小票</string>
     <string name="up_localdatabase">升级本地数据库</string>
+    <string name="IsNeedPrint">打印小票</string>
+    <string name="IsNeedQRCode">打印电子发票二维码</string>
+    <string name="checkdes64">加密检查</string>
 </resources>

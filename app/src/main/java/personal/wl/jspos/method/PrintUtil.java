@@ -29,6 +29,9 @@ public class PrintUtil {
 
     public final static int WIDTH_PIXEL = 384;
     public final static int IMAGE_SIZE = 320;
+//    public final static int WIDTH_PIXEL = 200;
+//    public final static int IMAGE_SIZE = 320;
+
 
     /**
      * 初始化Pos实例
@@ -334,7 +337,6 @@ public class PrintUtil {
         //PAYMENT_CASH_CODE
 
 
-
         tmp = getGbk(tmp_payname);
         for (int i = 0; i < payname.length; i++) {
             if (i < tmp.length) {
@@ -607,7 +609,7 @@ public class PrintUtil {
     }
 
 
-    public static void print_weight_56mm(BluetoothSocket bluetoothSocket, Bitmap bitmap, List<SaleDaily> saleDailyList, List<SalePayMode> salePayModeList, PosTabInfo posTabInfo,int printertimes,boolean is1st) {
+    public static void print_weight_56mm(BluetoothSocket bluetoothSocket, Bitmap bitmap, List<SaleDaily> saleDailyList, List<SalePayMode> salePayModeList, PosTabInfo posTabInfo, int printertimes, boolean is1st) {
 
         try {
             Double sub_total_order = 0.00;
@@ -617,7 +619,7 @@ public class PrintUtil {
             pUtil.printAlignment(1);
             pUtil.printLargeText(posTabInfo.getBranchName());
             pUtil.printLine();
-            if (!is1st){
+            if (!is1st) {
                 pUtil.printLargeText("--重打印--");
                 pUtil.printLine();
             }
@@ -633,7 +635,7 @@ public class PrintUtil {
                 pUtil.printText("营业员:");
                 pUtil.printText(saleDailyList.get(0).getSaleMan());
                 pUtil.printSpace(10);
-                pUtil.printText("第"+ printertimes + "联");
+                pUtil.printText("第" + printertimes + "联");
                 pUtil.printLine();
             }
 
@@ -676,10 +678,14 @@ public class PrintUtil {
                 pUtil.printLine();
 
             }
-//
-////            pUtil.printBitmap(bitmap);
+
+            pUtil.printLine(1);
+            if (bitmap != null) {
+                pUtil.printBitmap(bitmap);
+                pUtil.printText("注：隔日扫码，可以开具电子发票！" );
+            }
             pUtil.printLine(2);
-            pUtil.printText("打印时间:"+DeviceUtils.GetCurrentTime());
+            pUtil.printText("打印时间:" + DeviceUtils.GetCurrentTime());
             pUtil.printLine(1);
             pUtil.printText("Android");
             pUtil.printLine(2);

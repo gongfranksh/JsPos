@@ -34,6 +34,13 @@ public class PosTabInfo {
         return pre.getBoolean("Need_Printer_InVoice", true);
     }
 
+    public Boolean getNeedQRcode()
+
+    {
+        pre.getBoolean("Need_Printer_InVoice_QRCode", false);
+        return pre.getBoolean("Need_Printer_InVoice_QRCode", false);
+    }
+
     public int getPrinterTimes() {
         String printertimes = pre.getString("printer_times_selected", "1");
         return Integer.parseInt(printertimes);

@@ -58,6 +58,11 @@
         android:key="Need_Printer_InVoice"
         android:title="@string/IsNeedPrint" />
 
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="Need_Printer_InVoice_QRCode"
+        android:title="@string/IsNeedQRCode" />
+
     <ListPreference
         android:defaultValue="1"
         android:entries="@array/pref_printer_times_name"

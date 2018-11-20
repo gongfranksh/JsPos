@@ -365,7 +365,7 @@ public class PosTransList extends AppCompatActivity {
         if (posTabInfo.getNeedPrint()) {
             posprinter = new PosPrinter(context, false);
             blueprinter = posprinter.getPosPrinter();
-            posprinter.connect(blueprinter, tmp_saledailylist, salepmodeprint, true);
+            posprinter.connect(blueprinter, tmp_saledailylist, salepmodeprint, true,true);
         }
     }
 }

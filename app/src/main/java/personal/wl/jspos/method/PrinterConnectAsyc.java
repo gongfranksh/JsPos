@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -16,6 +17,8 @@ import personal.wl.jspos.pos.SaleDaily;
 import personal.wl.jspos.pos.SalePayMode;
 
 import static android.support.constraint.Constraints.TAG;
+import static personal.wl.jspos.method.QRCodeUtil.createQRCodeBitmap;
+import static personal.wl.jspos.method.QRCodeUtil.getQRcodeContent;
 
 public class PrinterConnectAsyc extends AsyncTask {
     private String address;
@@ -25,19 +28,39 @@ public class PrinterConnectAsyc extends AsyncTask {
     private BluetoothDevice mmDevice;
     private BluetoothSocket socket;
     private Boolean nottest;
+    private Boolean isReturn=false;
     private List<SaleDaily> saleDailyList;
     private List<SalePayMode> salePayModeList;
     private PosTabInfo posTabInfo;
-    boolean  is1st;
+    private Bitmap bitmapQRcode=null;
+    boolean is1st;
 
-    public PrinterConnectAsyc(Context context, BluetoothDevice mmDevice, Boolean NotTest, List<SaleDaily> saleDailyList, List<SalePayMode> salePayModeList,Boolean is1st) {
+    public PrinterConnectAsyc(Context context, BluetoothDevice mmDevice, Boolean NotTest, List<SaleDaily> saleDailyList, List<SalePayMode> salePayModeList, Boolean is1st) {
         this.context = context;
         this.mmDevice = mmDevice;
         this.saleDailyList = saleDailyList;
         this.nottest = NotTest;
         this.salePayModeList = salePayModeList;
         this.posTabInfo = new PosTabInfo(context);
-        this.is1st =is1st;
+        this.is1st = is1st;
+        try {
+            if (socket == null) {
+                socket = BluetoothUtil.connectDevice(mmDevice);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public PrinterConnectAsyc(Context context, BluetoothDevice mmDevice, Boolean NotTest, List<SaleDaily> saleDailyList, List<SalePayMode> salePayModeList, Boolean is1st,Boolean isReturn) {
+        this.context = context;
+        this.mmDevice = mmDevice;
+        this.saleDailyList = saleDailyList;
+        this.nottest = NotTest;
+        this.salePayModeList = salePayModeList;
+        this.posTabInfo = new PosTabInfo(context);
+        this.is1st = is1st;
+        this.isReturn=isReturn;
         try {
             if (socket == null) {
                 socket = BluetoothUtil.connectDevice(mmDevice);
@@ -100,8 +123,14 @@ public class PrinterConnectAsyc extends AsyncTask {
             Log.i(TAG, "run(PrinterConnectAsyc.java:89)---process_print---传递进入打印--收款明细>>" + this.salePayModeList.toString());
             Log.i(TAG, "run(PrinterConnectAsyc.java:90)---process_print---传递进入打印--交易明细>> " + this.saleDailyList.toString());
             int ii = posTabInfo.getPrinterTimes();
-            for (int i = 0; i <posTabInfo.getPrinterTimes() ; i++) {
-            PrintUtil.print_weight_56mm(socket, null, this.saleDailyList, this.salePayModeList,posTabInfo,i+1,is1st);
+            for (int i = 0; i < posTabInfo.getPrinterTimes(); i++) {
+                if (i == 0 & posTabInfo.getNeedQRcode() &(!isReturn)) {
+                    String printqrstr = getQRcodeContent(this.salePayModeList, this.saleDailyList);
+                    bitmapQRcode= createQRCodeBitmap(printqrstr, 200, 200,"UTF-8","H", "1", Color.BLACK, Color.WHITE);
+                    PrintUtil.print_weight_56mm(socket, bitmapQRcode, this.saleDailyList, this.salePayModeList, posTabInfo, i + 1, is1st);
+                } else {
+                    PrintUtil.print_weight_56mm(socket, null, this.saleDailyList, this.salePayModeList, posTabInfo, i + 1, is1st);
+                }
             }
 
         }

@@ -68,6 +68,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/checknetwork" />
+
+
+        <Button
+            android:id="@+id/checkdes64"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/checkdes64" />
+
     </LinearLayout>
 
     <LinearLayout
