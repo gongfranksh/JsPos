@@ -43,30 +43,16 @@ public class PosPrinter {
         return null;
     }
 
+    //正常销售打印
     public synchronized void connect(BluetoothDevice device, List<SaleDaily> saleDailyList, List<SalePayMode> salePayModeList,Boolean is1st) {
-
-
         PrinterConnectAsyc printerConnectAsyc = new PrinterConnectAsyc(context,device,true,saleDailyList,salePayModeList,is1st);
         printerConnectAsyc.execute();
-//        if (mThread != null) {
-//            mThread.interrupt();
-//            mThread = null;
-//        }
-//        mThread = new PrinterConnectThread(device.getAddress(), device, context, true, saleDailyList, salePayModeList);
-//        mThread.start();
     }
 
+    //退货销售打印
     public synchronized void connect(BluetoothDevice device, List<SaleDaily> saleDailyList, List<SalePayMode> salePayModeList,Boolean is1st,Boolean isReturn) {
-
-
         PrinterConnectAsyc printerConnectAsyc = new PrinterConnectAsyc(context,device,true,saleDailyList,salePayModeList,is1st,isReturn);
         printerConnectAsyc.execute();
-//        if (mThread != null) {
-//            mThread.interrupt();
-//            mThread = null;
-//        }
-//        mThread = new PrinterConnectThread(device.getAddress(), device, context, true, saleDailyList, salePayModeList);
-//        mThread.start();
     }
 
 
