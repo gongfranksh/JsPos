@@ -648,7 +648,7 @@ public class POS extends Activity {
                 case msgKey:
                     long sysTime = System.currentTimeMillis();
                     CharSequence sysTimeStr = DateFormat
-                            .format(" yyyy-MM-dd hh:mm:ss", sysTime);
+                            .format(" yyyy-MM-dd HH:mm:ss", sysTime);
                     saletransdate.setText("日期：" + sysTimeStr);
 //                    total_amount();
                     break;
