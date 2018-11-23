@@ -21,7 +21,7 @@ import static personal.wl.jspos.method.DeviceUtils.ToolsGetSaleAmt;
 public class QRCodeUtil {
 
 
-    public static String QR_PREX = "http://tfp.buynow.com.cn:8090/invoice/qr?saleid=saleid&braid=braid&saledate=saledate";
+    public static String QR_PREX = "http://fapiao.buynow.com.cn:8090/invoice/qr?saleid=saleid&braid=braid&saledate=saledate";
 
     public static Bitmap createQRCodeBitmap(String content, int width, int height,
                                             String character_set, String error_correction_level,
