@@ -19,11 +19,5 @@
         <intent android:action="personal.wj.jspos.posinit" />
     </Preference>
 
-    <Preference android:title="@string/local_data">
-        <intent android:action="personal.wj.jspos.LocalDatabaseCheckActivity" />
-    </Preference>
 
-    <Preference android:title="@string/local_printer">
-        <intent android:action="personal.wj.jspos.BlueToothDeviceActivity" />
-    </Preference>
 </PreferenceScreen>

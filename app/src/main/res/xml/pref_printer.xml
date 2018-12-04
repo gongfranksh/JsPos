@@ -1,0 +1,47 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <Preference android:title="@string/local_printer">
+        <intent android:action="personal.wj.jspos.BlueToothDeviceActivity" />
+    </Preference>
+
+
+    <EditTextPreference
+        android:capitalize="words"
+        android:defaultValue="000"
+        android:inputType="textCapWords"
+        android:key="BlueTooth_Printer_Name"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/Printer_Display_name" />
+
+    <EditTextPreference
+        android:capitalize="words"
+        android:defaultValue="000"
+        android:inputType="textCapWords"
+        android:key="BlueTooth_Printer_Address"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/Printer_setting_address" />
+
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="Need_Printer_InVoice"
+        android:title="@string/IsNeedPrint" />
+
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="Need_Printer_InVoice_QRCode"
+        android:title="@string/IsNeedQRCode" />
+
+    <ListPreference
+        android:defaultValue="1"
+        android:entries="@array/pref_printer_times_name"
+        android:entryValues="@array/pref_printer_times_value"
+        android:key="printer_times_selected"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null"
+        android:title="@string/pref_printer_times" />
+
+
+</PreferenceScreen>

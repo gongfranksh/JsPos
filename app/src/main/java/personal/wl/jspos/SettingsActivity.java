@@ -131,8 +131,8 @@ public class SettingsActivity extends PreferenceActivity {
         pos_machine.setSummary(pre.getString("pos_machine", "0"));
 */
         setupActionBar();
-        
-        
+
+
     }
 
     /**
@@ -170,6 +170,8 @@ public class SettingsActivity extends PreferenceActivity {
     protected boolean isValidFragment(String fragmentName) {
         return PreferenceFragment.class.getName().equals(fragmentName)
                 || GeneralPreferenceFragment.class.getName().equals(fragmentName)
+                || PrinterPreferenceFragment.class.getName().equals(fragmentName)
+                || ReportDataPreferenceFragment.class.getName().equals(fragmentName)
                 || DataSyncPreferenceFragment.class.getName().equals(fragmentName)
                 || NotificationPreferenceFragment.class.getName().equals(fragmentName);
     }
@@ -195,10 +197,9 @@ public class SettingsActivity extends PreferenceActivity {
             bindPreferenceSummaryToValue(findPreference("example_list"));
 */
             bindPreferenceSummaryToValue(findPreference("branch_selected"));
+            bindPreferenceSummaryToValue(findPreference("branch_name"));
             bindPreferenceSummaryToValue(findPreference("pos_machine"));
             bindPreferenceSummaryToValue(findPreference("pos_device_id"));
-            bindPreferenceSummaryToValue(findPreference("BlueTooth_Printer_Name"));
-            bindPreferenceSummaryToValue(findPreference("BlueTooth_Printer_Address"));
         }
 
         @Override
@@ -211,6 +212,64 @@ public class SettingsActivity extends PreferenceActivity {
             return super.onOptionsItemSelected(item);
         }
     }
+
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    public static class PrinterPreferenceFragment extends PreferenceFragment {
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.pref_printer);
+            setHasOptionsMenu(true);
+
+            // Bind the summaries of EditText/List/Dialog/Ringtone preferences
+            // to their values. When their values change, their summaries are
+            // updated to reflect the new value, per the Android Design
+            // guidelines.
+
+
+        }
+
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item) {
+            int id = item.getItemId();
+            if (id == android.R.id.home) {
+                startActivity(new Intent(getActivity(), SettingsActivity.class));
+                return true;
+            }
+            return super.onOptionsItemSelected(item);
+        }
+
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    public static class ReportDataPreferenceFragment extends PreferenceFragment {
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.pref_report_data);
+            setHasOptionsMenu(true);
+
+            // Bind the summaries of EditText/List/Dialog/Ringtone preferences
+            // to their values. When their values change, their summaries are
+            // updated to reflect the new value, per the Android Design
+            // guidelines.
+
+
+        }
+
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item) {
+            int id = item.getItemId();
+            if (id == android.R.id.home) {
+                startActivity(new Intent(getActivity(), SettingsActivity.class));
+                return true;
+            }
+            return super.onOptionsItemSelected(item);
+        }
+
+    }
+
 
     /**
      * This fragment shows notification preferences only. It is used when the
@@ -230,6 +289,11 @@ public class SettingsActivity extends PreferenceActivity {
             // guidelines.
             bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone"));
         }
+
+        /**
+         * This fragment shows notification preferences only. It is used when the
+         * activity is showing a two-pane settings UI.
+         */
 
         @Override
         public boolean onOptionsItemSelected(MenuItem item) {

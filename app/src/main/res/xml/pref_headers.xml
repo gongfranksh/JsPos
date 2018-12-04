@@ -6,10 +6,19 @@
         android:fragment="personal.wl.jspos.SettingsActivity$GeneralPreferenceFragment"
         android:icon="@drawable/ic_info_black_24dp"
         android:title="@string/general_setting" />
+    <header
+        android:fragment="personal.wl.jspos.SettingsActivity$PrinterPreferenceFragment"
+        android:icon="@drawable/ic_print_black_24dp"
+        android:title="@string/printer_setting" />
 
     <header
         android:fragment="personal.wl.jspos.SettingsActivity$DataSyncPreferenceFragment"
-        android:icon="@drawable/ic_sync_black_24dp"
+        android:icon="@drawable/ic_build_black_24dp"
         android:title="@string/Sync_data" />
+    <header
+        android:fragment="personal.wl.jspos.SettingsActivity$ReportDataPreferenceFragment"
+        android:icon="@drawable/ic_desktop_mac_black_24dp"
+        android:title="@string/report_data_info" />
+
 
 </preference-headers>

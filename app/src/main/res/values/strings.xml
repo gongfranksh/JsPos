@@ -15,7 +15,8 @@
         based on your message history
     </string>
 
-    <string name="pref_branch_selection">门店</string>
+    <string name="pref_branch_selection">门店编号</string>
+    <string name="branch_name">门店名称</string>
     <string-array name="pref_branch_list_name">
         <item>乐之广州店</item>
         <item>乐之上海店</item>
@@ -219,4 +220,6 @@
     <string name="IsNeedPrint">打印小票</string>
     <string name="IsNeedQRCode">打印电子发票二维码</string>
     <string name="checkdes64">加密检查</string>
+    <string name="printer_setting">打印设定</string>
+    <string name="report_data_info">数据查看</string>
 </resources>

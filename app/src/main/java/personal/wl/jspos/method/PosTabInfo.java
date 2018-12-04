@@ -86,22 +86,26 @@ public class PosTabInfo {
     }
 
     public String getBranchCode() {
-        return pre.getString("branch_selected", "0");
+        return pre.getString("branch_selected", "00000");
     }
-
 
     public String getBranchName() {
-        String tmp_branchcode = pre.getString("branch_selected", "0");
-        for (String key : branches.keySet()) {
-            System.out.println("key= " + key + " and value= " + branches.get(key));
-            if (key.equals(tmp_branchcode)) {
-                return branches.get(key);
-            }
-//            return null;
-
-        }
-        return null;
+        return pre.getString("branch_name", "000000");
     }
+
+
+//    public String getBranchName() {
+//        String tmp_branchcode = pre.getString("branch_selected", "0");
+//        for (String key : branches.keySet()) {
+//            System.out.println("key= " + key + " and value= " + branches.get(key));
+//            if (key.equals(tmp_branchcode)) {
+//                return branches.get(key);
+//            }
+////            return null;
+//
+//        }
+//        return null;
+//    }
 
     public void setDeviceId(String s) {
         SharedPreferences.Editor editor = pre.edit();
