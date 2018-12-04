@@ -3,7 +3,6 @@ package personal.wl.jspos;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -46,6 +45,7 @@ import personal.wl.jspos.adapter.ProductAdapter;
 import personal.wl.jspos.adapter.SaleOrderAdapter;
 import personal.wl.jspos.adapter.SaleOrderChange;
 import personal.wl.jspos.adapter.SaleOrderWatcher;
+import personal.wl.jspos.method.PosLogin;
 import personal.wl.jspos.method.PosTabInfo;
 import personal.wl.jspos.method.PosTranscation;
 import personal.wl.jspos.pos.PmtDmRel;
@@ -84,7 +84,7 @@ public class POS extends Activity {
     private String pos_machine_selected = null;
 
     private TextView msg_title;
-
+    private TextView casherid;
     private TextView totalamt;
 
     private TextView saletransdate;
@@ -103,6 +103,7 @@ public class POS extends Activity {
     private double tmp_amount = 0.00;
     private String tmp_isDM = "0";
     private int presscount = 0;
+    private PosLogin posLogin;
 
     private PrinterOrderWatcher printerOrderWatcher = new PrinterOrderWatcher() {
         @Override
@@ -132,6 +133,7 @@ public class POS extends Activity {
         this.context = POS.this;
         SaleOrderChange.getInstance().addObserver(saleOrderWatcher);
         PrintOrderStatusChange.getInstance().addObserver(printerOrderWatcher);
+        casherid = findViewById(R.id.casherid);
 
         posTabInfo = new PosTabInfo(POS.this);
         saletransdate = findViewById(R.id.saletransdate);
@@ -222,11 +224,17 @@ public class POS extends Activity {
             }
         });
 
+        posLogin = new PosLogin(POS.this, ib_submit_logoff);
 
         ib_submit_logoff.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                posTabInfo.setSalerid(NOBODY_LOGIN);
+//                posTabInfo.setSalerid(NOBODY_LOGIN);
+                login();
+//                PosLogin posLogin = new PosLogin(POS.this, ib_submit_logoff);
+//                posLogin.ShowAccountLogin();
+
+
             }
         });
 
@@ -239,6 +247,11 @@ public class POS extends Activity {
                 tmp_price = 0.00;
                 tmp_amount = 0.00;
                 tmp_isDM = "0";
+                //扫码商品前先判断是否登陆
+                if (posTabInfo.getSalerId().equals(NOBODY_LOGIN)) {
+                    login();
+                }
+
 
                 if (TextUtils.isEmpty(s) || s.length() < 5) {
                     Toast.makeText(POS.this, "请输入正确的编码", Toast.LENGTH_SHORT).show();
@@ -319,11 +332,15 @@ public class POS extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
+        Toast.makeText(this, "onResume", Toast.LENGTH_LONG).show();
         if (posTabInfo.getSalerId().equals(NOBODY_LOGIN)) {
-            showErrorDiallog("请先登陆");
-            Intent intent = new Intent();
-            intent.setClass(POS.this, LoginActivity.class);
-            startActivity(intent);
+//            login();
+//            showErrorDiallog("请先登陆");
+//            Intent intent = new Intent();
+//            intent.setClass(POS.this, LoginActivity.class);
+//            startActivity(intent);
+
+
         }
 
     }
@@ -650,6 +667,8 @@ public class POS extends Activity {
                     CharSequence sysTimeStr = DateFormat
                             .format(" yyyy-MM-dd HH:mm:ss", sysTime);
                     saletransdate.setText("日期：" + sysTimeStr);
+                    casherid.setText("操作员:" + posTabInfo.getSalerId());
+
 //                    total_amount();
                     break;
                 default:
@@ -665,7 +684,7 @@ public class POS extends Activity {
         branch.setText(branch.getText() + posTabInfo.getBranchCode() + posTabInfo.getBranchName());
         final TextView posmachine = findViewById(R.id.posmachine);
         posmachine.setText(posmachine.getText() + posTabInfo.getPosMachine());
-        TextView casherid = findViewById(R.id.casherid);
+
         casherid.setText(casherid.getText() + posTabInfo.getSalerId());
 
     }
@@ -700,5 +719,7 @@ public class POS extends Activity {
         ib_submit_logoff.setClickable(true);
     }
 
-
+    private void login() {
+        posLogin.ShowAccountLogin();
+    }
 }

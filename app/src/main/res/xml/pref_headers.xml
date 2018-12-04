@@ -19,6 +19,11 @@
         android:fragment="personal.wl.jspos.SettingsActivity$ReportDataPreferenceFragment"
         android:icon="@drawable/ic_desktop_mac_black_24dp"
         android:title="@string/report_data_info" />
+    <header
+        android:fragment="personal.wl.jspos.SettingsActivity$PesonPreferenceFragment"
+        android:icon="@drawable/ic_person_outline_black_24dp"
+        android:title="@string/pre_personal_info" />
+
 
 
 </preference-headers>

@@ -3,23 +3,18 @@ package personal.wl.jspos;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
-
 import android.app.Activity;
 import android.app.LoaderManager.LoaderCallbacks;
-
 import android.content.CursorLoader;
 import android.content.Loader;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
-
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -31,25 +26,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import org.greenrobot.greendao.query.QueryBuilder;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import personal.wl.jspos.db.DBConnect;
 import personal.wl.jspos.db.IGetOperator;
 import personal.wl.jspos.method.PosTabInfo;
 import personal.wl.jspos.pos.BranchEmployee;
-import personal.wl.jspos.pos.BranchEmployeeDao;
-import personal.wl.jspos.pos.DaoSession;
-import personal.wl.jspos.sync.SyncJspotDB;
 
 import static android.Manifest.permission.READ_CONTACTS;
 import static personal.wl.jspos.db.Utils.isLoginAccount;
 import static personal.wl.jspos.method.PosHandleDB.CheckAccountPassword;
-import static personal.wl.jspos.method.PosHandleDB.getSalerName;
 import static personal.wl.jspos.method.PosTabInfo.NOBODY_LOGIN;
 
 /**

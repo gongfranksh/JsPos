@@ -96,11 +96,11 @@ public class MainActivity extends AppCompatActivity implements IReportBack {
                     showdetail();
 
                     return true;
-                case R.id.navigation_login:
-                    LoadLogin();
-                    showdetail();
-
-                    return true;
+//                case R.id.navigation_login:
+//                    LoadLogin();
+//                    showdetail();
+//
+//                    return true;
             }
             return false;
         }

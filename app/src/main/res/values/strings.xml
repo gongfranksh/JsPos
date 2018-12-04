@@ -222,4 +222,6 @@
     <string name="checkdes64">加密检查</string>
     <string name="printer_setting">打印设定</string>
     <string name="report_data_info">数据查看</string>
+    <string name="pre_personal_info">个人中心</string>
+    <string name="personal_login">登陆</string>
 </resources>
