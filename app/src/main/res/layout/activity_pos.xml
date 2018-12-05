@@ -6,8 +6,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#1111"
-    tools:context=".pos2">
-
+    tools:context=".POS">
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline-product"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.35" />
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline-order"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.89" />
     <LinearLayout
         android:id="@+id/line1"
         android:layout_width="match_parent"
@@ -48,8 +59,6 @@
             android:textSize="17sp"
             android:textStyle="bold" />
     </LinearLayout>
-
-
     <LinearLayout
         android:id="@+id/line2"
         android:layout_width="match_parent"
@@ -80,7 +89,6 @@
             android:textSize="17sp"
             android:textStyle="bold" />
     </LinearLayout>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -97,7 +105,6 @@
             android:inputType="number"
             android:textStyle="bold"></android.support.v7.widget.SearchView>
     </LinearLayout>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -112,23 +119,6 @@
             android:layout_height="match_parent"
             android:background="#7EC0EE"></android.support.v7.widget.RecyclerView>
     </LinearLayout>
-
-
-
-    <android.support.constraint.Guideline
-        android:id="@+id/guideline-product"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.35" />
-
-    <android.support.constraint.Guideline
-        android:id="@+id/guideline-order"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.89" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -174,7 +164,6 @@
             android:text="营业员"
             android:textSize="20dp"
             android:textStyle="bold" />
-
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -184,7 +173,6 @@
             android:text="姓名"
             android:textSize="20dp"
             android:textStyle="bold" />
-
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -206,7 +194,6 @@
             android:textSize="20dp"
             android:textStyle="bold" />
     </LinearLayout>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -222,7 +209,6 @@
             android:layout_height="match_parent"
             android:background="#cccc"></com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView>
     </LinearLayout>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -286,5 +272,4 @@
             android:textAlignment="gravity"
             android:textSize="50dp" />
     </LinearLayout>
-
 </android.support.constraint.ConstraintLayout>
