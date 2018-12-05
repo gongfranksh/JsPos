@@ -48,6 +48,10 @@
             android:name=".ScrollingActivity"
             android:label="@string/title_activity_scrolling" />
 
+
+        <activity android:name=".pos2"
+            android:label="pos2"/>
+
         <activity
             android:name=".LocalDatabaseCheckActivity"
             android:label="本地数据库记录"

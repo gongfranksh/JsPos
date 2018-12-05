@@ -208,6 +208,7 @@ public class MainActivity extends AppCompatActivity implements IReportBack {
     private void LoadPos() {
         Intent intent = new Intent();
         intent.setClass(MainActivity.this, POS.class);
+//        intent.setClass(MainActivity.this, pos2.class);
         startActivity(intent);
     }
 
