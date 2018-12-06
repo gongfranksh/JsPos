@@ -14,6 +14,7 @@ import java.io.File;
 import personal.wl.jspos.R;
 import personal.wl.jspos.update.view.CommonProgressDialog;
 
+import static personal.wl.jspos.update.utils.FtpInfo.DOWNLOAD_DB_TEMPLATE;
 import static personal.wl.jspos.update.utils.FtpInfo.DOWNLOAD_OVER;
 import static personal.wl.jspos.update.utils.FtpInfo.DOWNLOAD_UPDATE;
 import static personal.wl.jspos.update.utils.FtpInfo.UPGRADE_JSON_FILE_ADDRESS;
@@ -33,6 +34,7 @@ public class UpgradeUI {
     private DownloadTask downloadTask;
 
     private UploadDbTask uploadDbTask;
+    private DownloadDbTask downloadDbTask;
 
     public UpgradeUI(Context context) {
         this.context = context;
@@ -47,8 +49,12 @@ public class UpgradeUI {
 //        ShowDialog("上传本地数据库", true);
     }
 
+    public void dn_db_template() {
+        new download_db_templdate().start();
+    }
 
-    private void ShowDialog(String content, final Boolean isDownload
+
+    private void ShowDialog(String content, final Boolean isDownload, final Boolean isDB
     ) {
         new android.app.AlertDialog.Builder(this.context)
                 .setTitle("数据传输")
@@ -61,12 +67,14 @@ public class UpgradeUI {
                         pBar.setCanceledOnTouchOutside(false);
 
                         if (isDownload) {
-                            pBar.setTitle("版本更新正在下载");
+                            pBar.setTitle("正在下载");
                             pBar.setMessage("正在下载");
                         } else {
                             pBar.setTitle("正在上传本地数据库");
                             pBar.setMessage("正在上传");
                         }
+
+
                         pBar.setCustomTitle(LayoutInflater.from(
                                 context).inflate(
                                 R.layout.title_dialog, null));
@@ -75,21 +83,37 @@ public class UpgradeUI {
                         pBar.setCancelable(true);
 
                         if (isDownload) {
-                            downloadTask = new DownloadTask(pBar, context);
-                            downloadTask.execute();
+                            if (!isDB) {
+                                downloadTask = new DownloadTask(pBar, context);
+                                downloadTask.execute();
+                            } else {
+                                downloadDbTask = new DownloadDbTask(pBar, context);
+                                downloadDbTask.execute();
+                            }
+
                         } else {
                             uploadDbTask = new UploadDbTask(pBar, context);
                             uploadDbTask.execute();
                         }
 
+
                         pBar.setOnCancelListener(new DialogInterface.OnCancelListener() {
                             @Override
                             public void onCancel(DialogInterface dialog) {
+
                                 if (isDownload) {
-                                    downloadTask.cancel(true);
+                                    if (!isDB) {
+                                        downloadTask.cancel(true);
+                                    } else {
+                                        downloadDbTask.cancel(true);
+                                    }
+
+
                                 } else {
                                     uploadDbTask.cancel(true);
                                 }
+
+
                             }
                         });
                     }
@@ -116,6 +140,23 @@ public class UpgradeUI {
                 FTPToolkit.download(mFtpClient, UPGRADE_README_FILE_ADDRESS, getversionfilejsonreadme.getPath());
                 Message msg = new Message();
                 msg.what = DOWNLOAD_UPDATE;
+                mHandler.sendMessage(msg);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private class download_db_templdate extends Thread {
+        @Override
+        public void run() {
+            try {
+//                mFtpClient = FTPToolkit
+//                        .makeFtpConnection(FtpInfo.IP, FtpInfo.PORT,
+//                                FtpInfo.LOGIN_ACCOUNT, FtpInfo.LOGIN_PASSWORD);
+//                getversionfilejson = new File(context.getFilesDir().getPath() + "/" + UPGRADE_JSON_FILE_NAME);
+                Message msg = new Message();
+                msg.what = DOWNLOAD_DB_TEMPLATE;
                 mHandler.sendMessage(msg);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -152,6 +193,9 @@ public class UpgradeUI {
                 case UPLOAD_UPDATE:
                     upload_localdb_proc();
                     break;
+                case DOWNLOAD_DB_TEMPLATE:
+                    download_db_template_proc();
+                    break;
 
                 default:
                     break;
@@ -185,7 +229,7 @@ public class UpgradeUI {
                 System.out.println(newversion + "v"
                         + vision);
                 // 版本号不同
-                ShowDialog(content, true);
+                ShowDialog(content, true,false);
 //                download_installApk();
             }
         } else {
@@ -197,6 +241,14 @@ public class UpgradeUI {
         String content = "\n" +
                 "---------------------\n" +
                 "上传本地数据库";
-        ShowDialog(content, false);
+        ShowDialog(content, false,true);
     }
+
+    private void download_db_template_proc() {
+        String content = "\n" +
+                "---------------------\n" +
+                "下载初始数据库";
+        ShowDialog(content,  true,true);
+    }
+
 }

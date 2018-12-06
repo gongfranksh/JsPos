@@ -37,6 +37,7 @@ public class PosInit extends AppCompatActivity {
     private Button bt_checknetwork;
     private Button bt_upgrade_localdatabase;
     private Button bt_checkdes64;
+    private Button bt_db_download;
     private TextView tv_display;
     private EditText device_diplay;
     private EditText adminpass;
@@ -60,6 +61,7 @@ public class PosInit extends AppCompatActivity {
         context = PosInit.this;
         posTabInfo = new PosTabInfo(context);
         bt_cleanLocalSaledata = findViewById(R.id.sync_clean_local);
+        bt_db_download = findViewById(R.id.downdbtemplate);
         bt_getDeviceId = findViewById(R.id.getdeviceid);
         bt_uploadLocalSaledata = findViewById(R.id.sync_upload_sales);
         bt_checkversion = findViewById(R.id.check_apk);
@@ -72,6 +74,7 @@ public class PosInit extends AppCompatActivity {
         bt_checkdes64 = findViewById(R.id.checkdes64);
 
         bt_checknetwork = findViewById(R.id.checknetwork);
+
 
 
         bt_upgrade_localdatabase.setOnClickListener(new View.OnClickListener() {
@@ -95,30 +98,6 @@ public class PosInit extends AppCompatActivity {
                     tv_display.setText(IP + "服务器连接失败");
                 }
 
-//                try {
-//                    Process process = Runtime.getRuntime().exec("ping -c 1 -w 1 " + IP);
-//                    InputStreamReader r = new InputStreamReader(process.getInputStream());
-//                    LineNumberReader returnData = new LineNumberReader(r);
-//                    String returnMsg = "";
-//                    String line = "";
-//                    while ((line = returnData.readLine()) != null) {
-//                        System.out.println(line);
-//                        returnMsg += line;
-//                    }
-//
-//                    tv_display.setVisibility(View.VISIBLE);
-//                    if (DeviceUtils.CheckDBConnect(returnMsg)) {
-//                        tv_display.setText(IP + "服务器连接成功！！！！！");
-//                        //                        System.out.println("与 " +address +" 连接不畅通.");
-//                    } else {
-//                        tv_display.setText(IP + "服务器连接失败");
-////                        System.out.println("与 " +address +" 连接畅通.");
-//                    }
-//
-//                } catch (IOException e) {
-//                    Toast.makeText(PosInit.this, e.toString(), Toast.LENGTH_LONG).show();
-//                    e.printStackTrace();
-//                }
             }
         });
 
@@ -158,6 +137,18 @@ public class PosInit extends AppCompatActivity {
             }
         });
 
+        bt_db_download.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (posTabInfo.isConnectingToInternet() && DeviceUtils.CheckFtpServerConnect()) {
+                    popupDownloadDb();
+                } else {
+                    Toast.makeText(context, "无法连接网络，先连接WIFI内网", Toast.LENGTH_LONG).show();
+                }
+
+            }
+        });
+
         bt_checkversion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -177,33 +168,6 @@ public class PosInit extends AppCompatActivity {
                 HttpToolsKits httpToolsKits = new HttpToolsKits(PosInit.this, v);
                 httpToolsKits.downloadVersionFile();
 
-//                try {
-////                    String uriString = "file:///storage/emulated/0/Android/data/personal.wl.jspos/files/Download/app-release-1.apk";
-////                    String uriString = PosInit.this.getFilesDir().getPath() + "/" + APK_FIlE;
-////                    File targetApkFile = new File(uriString);
-////                    Uri contentUri = FileProvider.getUriForFile(PosInit.this, PosInit.this.getApplicationContext().getPackageName() + ".provider", targetApkFile);
-//
-//                    String uriString = "/storage/emulated/0/Android/data/personal.wl.jspos/files/Download/app-release-1.apk";
-//                    File targetApkFile = new File(uriString);
-//                    Uri contentUri = FileProvider.getUriForFile(PosInit.this, PosInit.this.getApplicationContext().getPackageName() + ".provider", targetApkFile);
-//
-//
-//                    Intent installIntent = new Intent(Intent.ACTION_VIEW);
-//                    installIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-//                    installIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                    installIntent.setDataAndType(contentUri, "application/vnd.android.package-archive");
-//
-//
-//
-//                    startActivity(installIntent);
-//
-//
-//                } catch (Exception e) {
-//                    Toast.makeText(PosInit.this,e.toString(),Toast.LENGTH_LONG).show();
-//                    e.printStackTrace();
-//
-//                }
-//
             }
         });
 
@@ -278,6 +242,49 @@ public class PosInit extends AppCompatActivity {
             }
         });
     }
+
+    private void popupDownloadDb() {
+        mPopupHeadViewy = View.inflate(this, R.layout.adminlogin, null);
+        tetle = (TextView) mPopupHeadViewy.findViewById(R.id.tetle);
+        TextView msg = (TextView) mPopupHeadViewy.findViewById(R.id.msg_display);
+        msg.setText( "此操作会清除本地交易记录！");
+
+//        textdz = (TextView) mPopupHeadViewy.findViewById(R.id.textdz);
+        adminpass = mPopupHeadViewy.findViewById(R.id.adminpasswordinput);
+        textwzdl = (TextView) mPopupHeadViewy.findViewById(R.id.textwzdl);
+        textckxq = (TextView) mPopupHeadViewy.findViewById(R.id.textckxq);
+//        mHeadPopupclly = new PopupWindow(mPopupHeadViewy, AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.MATCH_PARENT, true);
+        mHeadPopupclly = new PopupWindow(mPopupHeadViewy, (int) (getScreenWidth() * 0.5), -2, true);
+        // 在PopupWindow里面就加上下面代码，让键盘弹出时，不会挡住pop窗口。
+        mHeadPopupclly.setInputMethodMode(PopupWindow.INPUT_METHOD_NEEDED);
+        mHeadPopupclly.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        mHeadPopupclly.setBackgroundDrawable(new BitmapDrawable());
+        mHeadPopupclly.setOutsideTouchable(true);
+        mHeadPopupclly.showAsDropDown(bt_syncdata, 0, 0);
+        textwzdl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (ADMINPASSWORD.equals(adminpass.getText().toString())) {
+                    Toast.makeText(context, "管理员正确", Toast.LENGTH_LONG).show();
+                    UpgradeUI ugui = new UpgradeUI(PosInit.this);
+                    ugui.dn_db_template();
+                    mHeadPopupclly.dismiss();
+                } else {
+                    Toast.makeText(context, "管理员密码错误", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+        textckxq.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mHeadPopupclly.dismiss();
+                Toast.makeText(PosInit.this, "取消", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+
 
     public int getScreenWidth() {
         DisplayMetrics dm = new DisplayMetrics();

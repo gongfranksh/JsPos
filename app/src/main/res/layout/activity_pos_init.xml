@@ -75,7 +75,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/checkdes64" />
-
+        <Button
+            android:id="@+id/downdbtemplate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="@string/will_delete_all_sales"
+            android:text="@string/db_down_template" />
     </LinearLayout>
 
     <LinearLayout
