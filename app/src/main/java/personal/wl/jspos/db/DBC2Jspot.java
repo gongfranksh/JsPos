@@ -109,7 +109,9 @@ public class DBC2Jspot {
                 " AND md.deviceid='" + device.get("deviceid") + "'" +
                 " AND posno='" + device.get("posno") + "'";
         List list = null;
-        Connection cnn = this.getMyconnection();
+
+        Log.i(TAG, "getLastUploadTranscations: ==>"+sql);
+      Connection cnn = this.getMyconnection();
         try {
             list = QuerySqlGetResult(cnn, sql);
         } catch (SQLException e) {

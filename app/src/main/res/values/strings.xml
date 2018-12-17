@@ -226,4 +226,5 @@
     <string name="personal_login">登陆</string>
     <string name="db_down_template">下载数据库到本地</string>
     <string name="will_delete_all_sales">此操作会清除本地交易</string>
+    <string name="setting_connect">连接配置</string>
 </resources>

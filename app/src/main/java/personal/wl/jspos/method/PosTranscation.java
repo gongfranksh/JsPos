@@ -2,6 +2,7 @@ package personal.wl.jspos.method;
 
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
+import android.util.Log;
 
 import org.greenrobot.greendao.query.QueryBuilder;
 
@@ -43,6 +44,7 @@ public class PosTranscation {
     private HashMap generate_saleid_para = new HashMap<String, String>();
     private BluetoothDevice blueprinter;
     private PosPrinter posprinter;
+    private String TAG="PosTranscation";
 
 
     public PosTranscation(Context context) {
@@ -71,9 +73,11 @@ public class PosTranscation {
 
         List<MobileDevice> sourcelist = QueryMobileDevice(generate_saleid_para);
         List<SalePayMode> salePayModeList = new ArrayList<>();
+        Log.i(TAG, "SaleTranstion:==> "+salePayModeList.size());
         if (sourcelist.size() != 0) {
             tmp_sourceid = sourcelist.get(0).getSourceId();
         }
+        Log.i(TAG, "SaleTranstion:==>tmp_sourceid "+tmp_sourceid);
 
         SaleDailyDao saleDailyDao = DBConnect.getInstances().getDaoSession().getSaleDailyDao();
         double totalamt = 0;

@@ -1,6 +1,7 @@
 package personal.wl.jspos.method;
 
 import android.database.Cursor;
+import android.util.Log;
 
 import org.greenrobot.greendao.query.QueryBuilder;
 
@@ -38,6 +39,7 @@ public class PosHandleDB {
     protected static long PROID = 2000000000000L;
     public static final String MOBILE_DEVICE_CAN_RUN = "1";
     public static final String MOBILE_DEVICE_CANNOT_RUN = "0";
+    private static final  String TAG="PosHandleDB";
 
     private static void ExecSqlVoid(String sql) {
         try {
@@ -85,6 +87,10 @@ public class PosHandleDB {
                 MobileDeviceDao.Properties.Status.eq(MOBILE_DEVICE_CAN_RUN),
                 MobileDeviceDao.Properties.Posno.eq(tmp_posno));
         List<MobileDevice> res = cond.build().list();
+        Log.i(TAG, "QueryMobileDevice:res===>"+res.size()+res);
+        Log.i(TAG, "QueryMobileDevice:tmp_device===> "+tmp_device);
+        Log.i(TAG, "QueryMobileDevice:MOBILE_DEVICE_CAN_RUN===> "+MOBILE_DEVICE_CAN_RUN);
+        Log.i(TAG, "QueryMobileDevice:tmp_posno===> "+tmp_posno);
         if (res.size() == 1) {
             return res;
         } else {

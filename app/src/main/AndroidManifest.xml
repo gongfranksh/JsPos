@@ -34,24 +34,21 @@
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings"
             android:screenOrientation="landscape" />
-
         <activity
             android:name=".LoginActivity"
             android:label="@string/title_activity_login">
             <intent-filter>
                 <action android:name="personal.wj.jspos.LoginActivity" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".ScrollingActivity"
             android:label="@string/title_activity_scrolling" />
-
-
-        <activity android:name=".pos2"
-            android:label="pos2"/>
-
+        <activity
+            android:name=".pos2"
+            android:label="pos2" />
         <activity
             android:name=".LocalDatabaseCheckActivity"
             android:label="本地数据库记录"
@@ -84,11 +81,16 @@
             android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="personal.wj.jspos.posinit" />
-
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
+        <activity android:name=".ConnectSettingActivity"
+            android:screenOrientation="landscape">
+            <intent-filter>
+                <action android:name="personal.wj.jspos.ConnectSettingActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="${applicationId}.provider"
@@ -98,11 +100,13 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
+
         <receiver android:name=".update.http.DownLoadBroadcastReceiver">
             <intent-filter android:priority="20">
                 <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
             </intent-filter>
         </receiver>
+
         <activity
             android:name=".BlueToothDeviceActivity"
             android:label="@string/title_BlueToothSetting"
@@ -113,6 +117,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>

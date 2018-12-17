@@ -81,10 +81,10 @@ public class QRCodeUtil {
         String tmp_needcrpt = null;
         String tmp_aftercrpt = null;
         tmp_needcrpt = "saleid=" + saleSaleDailyList.get(0).getSaleId() +
-                "saleamt=" + ToolsGetSaleAmt(salePayModeList) +
-                "posno=" + saleSaleDailyList.get(0).getPosNo() +
-                "braid=" + saleSaleDailyList.get(0).getBraid() +
-                "saledate=" + GetSaleDateYYMMDD(salePayModeList.get(0).getSaleDate());
+                "&saleamt=" + ToolsGetSaleAmt(salePayModeList) +
+                "&posno=" + saleSaleDailyList.get(0).getPosNo() +
+                "&braid=" + saleSaleDailyList.get(0).getBraid() +
+                "&saledate=" + GetSaleDateYYMMDD(salePayModeList.get(0).getSaleDate());
 
 //        tmp_needcrpt="saleid=2071810300011&saleamt=699.00&posno=207&braid=01002&saledate=2018-10-30";
 

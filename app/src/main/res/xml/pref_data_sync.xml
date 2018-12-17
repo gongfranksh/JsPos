@@ -19,5 +19,9 @@
         <intent android:action="personal.wj.jspos.posinit" />
     </Preference>
 
+    <Preference android:title="@string/setting_connect">
+        <intent android:action="personal.wj.jspos.ConnectSettingActivity" />
+    </Preference>
+
 
 </PreferenceScreen>

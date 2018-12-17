@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.util.HashMap;
 import java.util.List;
@@ -68,6 +69,8 @@ public class SyncJsSaleData extends AsyncTask<HashMap, Integer, Integer>
         long maxnumber = js.getLastUploadTranscations(device);
         device.put("max", maxnumber);
         List<SalePayMode> needupdatesalepaymode = getSalesPaymentForUpload(device);
+        Log.i(TAG, "doInBackground: device==> "+device);
+        Log.i(TAG, "doInBackground: needupdatesalepaymode==> "+needupdatesalepaymode.size());
         List<SaleDaily> needuploadsalesdailylist = getSalesDailyUpload(needupdatesalepaymode);
 
 
