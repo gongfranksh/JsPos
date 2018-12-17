@@ -227,4 +227,21 @@
     <string name="db_down_template">下载数据库到本地</string>
     <string name="will_delete_all_sales">此操作会清除本地交易</string>
     <string name="setting_connect">连接配置</string>
+    <string-array name="Setting_Channel">
+        <item>数据库服务器设定</item>
+        <item>升级服务器设定</item>
+        <item>ftp服务器设定</item>
+    </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="Setting_ToolBars">参数设置</string>
+    <string name="labe_db_ip">数据库地址：</string>
+    <string name="setting_db_name">数据库名称:</string>
+    <string name="lable_setting_db_connect_user">连接账号:</string>
+    <string name="setting_db_connect_pwd">连接密码:</string>
+    <string name="setting_ftp_ip">FTP服务器地址:</string>
+    <string name="label_setting_ftp_user">FTP账号:</string>
+    <string name="label_setting_ftp_pwd">FTP密码:</string>
+    <string name="label_settting_http_ip">升级服务器地址:</string>
 </resources>

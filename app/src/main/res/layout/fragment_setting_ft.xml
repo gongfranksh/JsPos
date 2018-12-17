@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- TODO: Update blank fragment layout -->
+    <!--android:background="@drawable/shape_bgimg"-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+
+                android:background="@drawable/button_decoration"
+                android:text="@string/setting_ftp_ip"
+                android:textColor="@color/white"
+                android:textSize="25sp" />
+
+            <EditText
+                android:id="@+id/setting_ftp_ip"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:inputType=""
+                android:text=""
+                android:textColor="#ea302e" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+
+                android:background="@drawable/button_decoration"
+                android:text="@string/label_setting_ftp_user"
+                android:textColor="@color/white"
+                android:textSize="25sp" />
+
+            <EditText
+                android:id="@+id/setting_ftp_connect_user"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:text=""
+                android:textColor="#ea302e" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/button_decoration"
+                android:text="@string/label_setting_ftp_pwd"
+                android:textColor="@color/white"
+                android:textSize="25sp" />
+
+            <EditText
+                android:id="@+id/setting_ftp_connect_pwd"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:inputType="textPassword"
+                android:text=""
+                android:textColor="#ea302e" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/bt_ftpNeedSave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/button_decoration"
+                android:text="确认"
+                android:textColor="@color/white"
+                android:textSize="25sp" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/button_decoration"
+                android:text="取消"
+                android:textColor="@color/white"
+                android:textSize="25sp">
+
+            </Button>
+
+        </LinearLayout>
+
+    </LinearLayout>
+</FrameLayout>
