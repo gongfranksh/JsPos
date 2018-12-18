@@ -1,6 +1,7 @@
 package personal.wl.jspos;
 
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,7 +12,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import org.apache.commons.net.ftp.FTPClient;
+
 import personal.wl.jspos.method.SystemFtpInfo;
+import personal.wl.jspos.update.utils.FTPToolkit;
+
+import static personal.wl.jspos.method.SystemSettingConstant.TEST_OK_STATUS;
 
 
 /**
@@ -20,6 +26,7 @@ import personal.wl.jspos.method.SystemFtpInfo;
 public class SettingFTP extends Fragment {
 
     private SystemFtpInfo systemFtpInfo;
+    private FTPClient mFtpClient;
 
     private EditText et_ftp_ip;
     private EditText et_ftp_account;
@@ -70,14 +77,14 @@ public class SettingFTP extends Fragment {
             @Override
             public void onClick(View v) {
                 saveConfig();
-                Toast.makeText(getActivity(),"保存完毕!",Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "保存完毕!", Toast.LENGTH_LONG).show();
             }
         });
 
         bt_test.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                new TestConnectFTP().execute();
             }
         });
 
@@ -102,5 +109,41 @@ public class SettingFTP extends Fragment {
         systemFtpInfo.setFtp_ipassword(et_ftp_pwd.getText().toString());
         systemFtpInfo.setFtp_joson_file(et_ftp_josonfile.getText().toString());
         systemFtpInfo.setFtp_readme_file(et_ftp_readme.getText().toString());
+    }
+
+    private String testFTPConnect() {
+        try {
+            mFtpClient = FTPToolkit
+                    .makeFtpConnection(systemFtpInfo.getFtp_ip_address(), 21,
+                            systemFtpInfo.getFtp_iaccount(), systemFtpInfo.getFtp_ipassword());
+            return TEST_OK_STATUS;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return  e.toString();
+        }
+
+    }
+
+
+    public class TestConnectFTP extends AsyncTask<String, Integer, String> {
+        public TestConnectFTP() {
+            super();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            String flag = testFTPConnect();
+            return flag;
+        }
+
+
+        @Override
+        protected void onPostExecute(String o) {
+            if (o.equals(TEST_OK_STATUS)) {
+                Toast.makeText(getActivity(), "---测试成功！", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(getActivity(), o, Toast.LENGTH_LONG).show();
+            }
+        }
     }
 }

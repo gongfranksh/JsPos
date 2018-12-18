@@ -3,7 +3,7 @@ package personal.wl.jspos.method;
 public class SystemSettingConstant {
     public final static String SETTING_APP_APK_FIlE = "app-release.apk";
     public final static String SETTING_LOCAL_DB_NAME = "jsPos.db";
-
+    public static final String TEST_OK_STATUS= "TESTOK";
     public static final String SETTING_DB_CONF_NAME="DBSetting";
     public static final String SETTING_DB_IP_ADDRESS="SETTING_DB_IP_ADDRESS";
     public static final String SETTING_DB_NAME="SETTING_DB_NAME";
