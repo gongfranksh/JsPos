@@ -21,9 +21,6 @@ import java.util.Map;
 import java.util.UUID;
 
 import personal.wl.jspos.pos.SalePayMode;
-import personal.wl.jspos.update.utils.FtpInfo;
-
-import static personal.wl.jspos.update.utils.FtpInfo.FTP_IP;
 
 public class DeviceUtils {
     public static String getUniqueId(Context context) {
@@ -77,7 +74,9 @@ public class DeviceUtils {
 
     public static Map<String, Object> getVersion_JSON(Context context) {
         try {
-            InputStream jsonversion = new FileInputStream(context.getFilesDir().getPath() + "/" + FtpInfo.UPGRADE_JSON_FILE_NAME);
+
+            SystemFtpInfo systemFtpInfo = new SystemFtpInfo(context);
+            InputStream jsonversion = new FileInputStream(context.getFilesDir().getPath() + "/" + systemFtpInfo.getFtp_joson_file());
             InputStreamReader isr = new InputStreamReader(jsonversion, "UTF-8");
             BufferedReader br = new BufferedReader(isr);
             String line;
@@ -92,15 +91,6 @@ public class DeviceUtils {
             CommonJSONParser commonJSONParser = new CommonJSONParser();
             Map<String, Object> checkversion = commonJSONParser.parse(jsonreplace(builder.toString()));
             return checkversion;
-//
-//            JSONObject testjson = new JSONObject();
-//            testjson.getJSONObject(builder.toString());
-////            JSONObject testjson = new JSONObject(builder.toString());//builder读取了JSON中的数据。
-//            //直接传入JSONObject来构造一个实例
-//            JSONArray array = testjson.getJSONArray("role");         //从JSONObject中取出数组对象
-//            for (int i = 0; i < array.length(); i++) {
-//                JSONObject role = array.getJSONObject(i);    //取出数组中的对象
-//            }//
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -110,7 +100,8 @@ public class DeviceUtils {
 
     public static String getVersion_Readme(Context context) {
         try {
-            InputStream versionreadme = new FileInputStream(context.getFilesDir().getPath() + "/" + FtpInfo.UPGRADE_JSON_FILE_NAME_README);
+            SystemFtpInfo systemFtpInfo = new SystemFtpInfo(context);
+            InputStream versionreadme = new FileInputStream(context.getFilesDir().getPath() + "/" + systemFtpInfo.getFtp_readme_file());
             InputStreamReader isr = new InputStreamReader(versionreadme, "UTF-8");
             BufferedReader br = new BufferedReader(isr);
             String line;
@@ -194,9 +185,9 @@ public class DeviceUtils {
         return false;
     }
 
-    public static Boolean CheckFtpServerConnect() {
+    public static Boolean CheckFtpServerConnect(String ftpip) {
         try {
-            Process process = Runtime.getRuntime().exec("ping -c 1 -w 1 " + FTP_IP);
+            Process process = Runtime.getRuntime().exec("ping -c 1 -w 1 " + ftpip);
             InputStreamReader r = new InputStreamReader(process.getInputStream());
             LineNumberReader returnData = new LineNumberReader(r);
             String rt_msg = "";

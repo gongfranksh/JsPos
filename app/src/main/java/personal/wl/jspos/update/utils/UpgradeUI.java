@@ -12,16 +12,13 @@ import org.apache.commons.net.ftp.FTPClient;
 import java.io.File;
 
 import personal.wl.jspos.R;
+import personal.wl.jspos.method.SystemFtpInfo;
 import personal.wl.jspos.update.view.CommonProgressDialog;
 
-import static personal.wl.jspos.update.utils.FtpInfo.DOWNLOAD_DB_TEMPLATE;
-import static personal.wl.jspos.update.utils.FtpInfo.DOWNLOAD_OVER;
-import static personal.wl.jspos.update.utils.FtpInfo.DOWNLOAD_UPDATE;
-import static personal.wl.jspos.update.utils.FtpInfo.UPGRADE_JSON_FILE_ADDRESS;
-import static personal.wl.jspos.update.utils.FtpInfo.UPGRADE_JSON_FILE_NAME;
-import static personal.wl.jspos.update.utils.FtpInfo.UPGRADE_JSON_FILE_NAME_README;
-import static personal.wl.jspos.update.utils.FtpInfo.UPGRADE_README_FILE_ADDRESS;
-import static personal.wl.jspos.update.utils.FtpInfo.UPLOAD_UPDATE;
+import static personal.wl.jspos.method.SystemSettingConstant.FTP_DOWNLOAD_DB_TEMPLATE;
+import static personal.wl.jspos.method.SystemSettingConstant.FTP_DOWNLOAD_OVER;
+import static personal.wl.jspos.method.SystemSettingConstant.FTP_DOWNLOAD_UPDATE;
+import static personal.wl.jspos.method.SystemSettingConstant.FTP_UPLOAD_UPDATE;
 
 
 public class UpgradeUI {
@@ -35,9 +32,12 @@ public class UpgradeUI {
 
     private UploadDbTask uploadDbTask;
     private DownloadDbTask downloadDbTask;
+    private SystemFtpInfo systemFtpInfo;
 
     public UpgradeUI(Context context) {
         this.context = context;
+        systemFtpInfo= new SystemFtpInfo(context);
+
     }
 
     public void getdonwload() {
@@ -132,14 +132,15 @@ public class UpgradeUI {
         public void run() {
             try {
                 mFtpClient = FTPToolkit
-                        .makeFtpConnection(FtpInfo.IP, FtpInfo.PORT,
-                                FtpInfo.LOGIN_ACCOUNT, FtpInfo.LOGIN_PASSWORD);
-                getversionfilejson = new File(context.getFilesDir().getPath() + "/" + UPGRADE_JSON_FILE_NAME);
-                getversionfilejsonreadme = new File(context.getFilesDir().getPath() + "/" + UPGRADE_JSON_FILE_NAME_README);
-                FTPToolkit.download(mFtpClient, UPGRADE_JSON_FILE_ADDRESS, getversionfilejson.getPath());
-                FTPToolkit.download(mFtpClient, UPGRADE_README_FILE_ADDRESS, getversionfilejsonreadme.getPath());
+                        .makeFtpConnection(systemFtpInfo.getFtp_ip_address(), 21,
+                                systemFtpInfo.getFtp_iaccount(), systemFtpInfo.getFtp_ipassword());
+
+                getversionfilejson = new File(context.getFilesDir().getPath() + "/" + systemFtpInfo.getFtp_joson_file());
+                getversionfilejsonreadme = new File(context.getFilesDir().getPath() + "/" + systemFtpInfo.getFtp_readme_file());
+                FTPToolkit.download(mFtpClient, systemFtpInfo.getFtp_path()+'/'+systemFtpInfo.getFtp_joson_file(), systemFtpInfo.getFtp_joson_file());
+                FTPToolkit.download(mFtpClient, systemFtpInfo.getFtp_path()+'/'+systemFtpInfo.getFtp_readme_file(),systemFtpInfo.getFtp_readme_file());
                 Message msg = new Message();
-                msg.what = DOWNLOAD_UPDATE;
+                msg.what = FTP_DOWNLOAD_UPDATE;
                 mHandler.sendMessage(msg);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -156,7 +157,7 @@ public class UpgradeUI {
 //                                FtpInfo.LOGIN_ACCOUNT, FtpInfo.LOGIN_PASSWORD);
 //                getversionfilejson = new File(context.getFilesDir().getPath() + "/" + UPGRADE_JSON_FILE_NAME);
                 Message msg = new Message();
-                msg.what = DOWNLOAD_DB_TEMPLATE;
+                msg.what = FTP_DOWNLOAD_DB_TEMPLATE;
                 mHandler.sendMessage(msg);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -169,7 +170,7 @@ public class UpgradeUI {
         public void run() {
             try {
                 Message msg = new Message();
-                msg.what = UPLOAD_UPDATE;
+                msg.what = FTP_UPLOAD_UPDATE;
                 mHandler.sendMessage(msg);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -183,17 +184,17 @@ public class UpgradeUI {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
-                case DOWNLOAD_UPDATE:
+                case FTP_DOWNLOAD_UPDATE:
                     download_update_proc();
                     break;
 
-                case DOWNLOAD_OVER:
+                case FTP_DOWNLOAD_OVER:
 //                    download_installApk();
                     break;
-                case UPLOAD_UPDATE:
+                case FTP_UPLOAD_UPDATE:
                     upload_localdb_proc();
                     break;
-                case DOWNLOAD_DB_TEMPLATE:
+                case FTP_DOWNLOAD_DB_TEMPLATE:
                     download_db_template_proc();
                     break;
 

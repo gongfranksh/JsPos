@@ -15,9 +15,10 @@ import java.io.OutputStream;
 import java.util.HashMap;
 
 import personal.wl.jspos.method.PosTabInfo;
+import personal.wl.jspos.method.SystemFtpInfo;
 import personal.wl.jspos.update.view.CommonProgressDialog;
 
-import static personal.wl.jspos.update.utils.FtpInfo.UPLOAD_FILE_ADDRESS;
+import static personal.wl.jspos.method.SystemSettingConstant.SETTING_LOCAL_DB_NAME;
 
 public class DownloadDbTask extends AsyncTask<String, Integer, String> {
     private Context context;
@@ -28,6 +29,7 @@ public class DownloadDbTask extends AsyncTask<String, Integer, String> {
     private FTPClient mFtpClient;
     private PosTabInfo posTabInfo;
     private HashMap device = new HashMap<String, String>();
+    private SystemFtpInfo systemFtpInfo;
 
     @Override
     protected void onPostExecute(String s) {
@@ -47,7 +49,8 @@ public class DownloadDbTask extends AsyncTask<String, Integer, String> {
         this.context = context;
         this.pbar = pbar;
         this.posTabInfo = new PosTabInfo(context);
-        REMOTE_DB_FILENAME = UPLOAD_FILE_ADDRESS + posTabInfo.getBranchCode().trim()+ DB_NAME;
+        systemFtpInfo = new SystemFtpInfo(context);
+        REMOTE_DB_FILENAME = systemFtpInfo.getFtp_path() + posTabInfo.getBranchCode().trim()+ SETTING_LOCAL_DB_NAME;
     }
 
     @Override
@@ -74,12 +77,12 @@ public class DownloadDbTask extends AsyncTask<String, Integer, String> {
 
 
 
-
             mFtpClient = FTPToolkit
-                    .makeFtpConnection(FtpInfo.IP, FtpInfo.PORT,
-                            FtpInfo.LOGIN_ACCOUNT, FtpInfo.LOGIN_PASSWORD);
+                    .makeFtpConnection(systemFtpInfo.getFtp_ip_address(), 21,
+                            systemFtpInfo.getFtp_iaccount(), systemFtpInfo.getFtp_ipassword());
 
-            File locadbfile = new File(context.getDatabasePath(DB_NAME).getPath());
+
+            File locadbfile = new File(context.getDatabasePath(SETTING_LOCAL_DB_NAME).getPath());
 
 //            if (locadbfile.exists())
 //                throw new Exception("local database file is exist!==>" + locadbfile.getPath());
@@ -88,9 +91,9 @@ public class DownloadDbTask extends AsyncTask<String, Integer, String> {
             long fileLength = fis.available();
 //            long fileLength = FTPToolkit.getFileLength(mFtpClient,locadbfile.getPath());
 
-            Boolean changeDirResult = mFtpClient.changeWorkingDirectory(UPLOAD_FILE_ADDRESS);
+            Boolean changeDirResult = mFtpClient.changeWorkingDirectory(systemFtpInfo.getFtp_path());
             if (!changeDirResult) throw new Exception("remote path do not exist");
-            FTPFile[] getremotefiles = mFtpClient.listFiles(UPLOAD_FILE_ADDRESS);
+            FTPFile[] getremotefiles = mFtpClient.listFiles(systemFtpInfo.getFtp_path());
             mFtpClient.enterLocalPassiveMode();
 
             OutputStream out = new FileOutputStream(locadbfile);

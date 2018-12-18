@@ -20,6 +20,7 @@ import personal.wl.jspos.method.DESCoder;
 import personal.wl.jspos.method.DeviceUtils;
 import personal.wl.jspos.method.PosTabInfo;
 import personal.wl.jspos.method.SystemDBInfo;
+import personal.wl.jspos.method.SystemFtpInfo;
 import personal.wl.jspos.sync.SyncJsSaleData;
 import personal.wl.jspos.update.http.HttpToolsKits;
 import personal.wl.jspos.update.utils.UpgradeUI;
@@ -53,6 +54,7 @@ public class PosInit extends AppCompatActivity {
     private String ADMINPASSWORD = "160023";
     private PosTabInfo posTabInfo;
     private SystemDBInfo systemDBInfo;
+    private SystemFtpInfo systemFtpInfo;
 
     private String IP;
 
@@ -78,6 +80,7 @@ public class PosInit extends AppCompatActivity {
         bt_checknetwork = findViewById(R.id.checknetwork);
 
         systemDBInfo = new SystemDBInfo(context);
+        systemFtpInfo = new SystemFtpInfo(context);
         IP=systemDBInfo.get_Db_IP_Address();
 
 
@@ -145,7 +148,7 @@ public class PosInit extends AppCompatActivity {
         bt_db_download.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (posTabInfo.isConnectingToInternet() && DeviceUtils.CheckFtpServerConnect()) {
+                if (posTabInfo.isConnectingToInternet() && DeviceUtils.CheckFtpServerConnect(systemFtpInfo.getFtp_ip_address())) {
                     popupDownloadDb();
                 } else {
                     Toast.makeText(context, "无法连接网络，先连接WIFI内网", Toast.LENGTH_LONG).show();
@@ -157,7 +160,7 @@ public class PosInit extends AppCompatActivity {
         bt_checkversion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (posTabInfo.isConnectingToInternet() && DeviceUtils.CheckFtpServerConnect()) {
+                if (posTabInfo.isConnectingToInternet() && DeviceUtils.CheckFtpServerConnect(systemFtpInfo.getFtp_ip_address())) {
                     UpgradeUI ugui = new UpgradeUI(PosInit.this);
                     ugui.upload();
                 } else {
