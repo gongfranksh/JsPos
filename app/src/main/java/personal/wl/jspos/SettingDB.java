@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import personal.wl.jspos.method.SystemDBInfo;
 
@@ -24,7 +25,7 @@ public class SettingDB extends Fragment {
     private TextView tv_db_account;
     private TextView tv_db_password;
     private Button bt_confirm;
-    private Button bt_cancel;
+    private Button bt_test;
 
 
     public SettingDB() {
@@ -64,10 +65,21 @@ public class SettingDB extends Fragment {
         tv_db_account = view.findViewById(R.id.setting_db_connect_user);
         tv_db_password = view.findViewById(R.id.setting_db_connect_pwd);
         bt_confirm = view.findViewById(R.id.bt_dbNeedSave);
+        bt_test = view.findViewById(R.id.setting_db_conect_test);
+
         bt_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 saveConfig();
+                Toast.makeText(getActivity(),"保存完毕！",Toast.LENGTH_LONG).show();
+            }
+        });
+
+        bt_test.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getActivity(),"测试连接。。。。",Toast.LENGTH_LONG).show();
+
             }
         });
     }
@@ -78,8 +90,5 @@ public class SettingDB extends Fragment {
         systemDBInfo.set_Db_Ip_Address(tv_db_ip_address.getText().toString());
         systemDBInfo.set_Db_Name(tv_db_name.getText().toString());
         systemDBInfo.set_Db_Password(tv_db_password.getText().toString());
-
-
-
     }
 }
