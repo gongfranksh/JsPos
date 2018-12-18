@@ -17,6 +17,8 @@ import java.sql.SQLException;
 
 import personal.wl.jspos.method.SystemDBInfo;
 
+import static personal.wl.jspos.method.SystemSettingConstant.TEST_OK_STATUS;
+
 public class SettingDB extends Fragment {
     private SystemDBInfo systemDBInfo;
     private TextView tv_db_ip_address;
@@ -28,7 +30,6 @@ public class SettingDB extends Fragment {
     private String CONNSTR;
     private String DRIVER;
 
-    private static final String OK_STATUS = "TESTOK";
 
 
     public SettingDB() {
@@ -106,7 +107,7 @@ public class SettingDB extends Fragment {
             long start = System.currentTimeMillis();
             Connection con = DriverManager.getConnection(CONNSTR, systemDBInfo.get_Db_Account(), systemDBInfo.get_Db_Password());
             long end = System.currentTimeMillis() - start;
-            return OK_STATUS;
+            return TEST_OK_STATUS;
         } catch (ClassNotFoundException e1) {
             // TODO ClassNotFoundException
             e1.printStackTrace();
@@ -133,7 +134,7 @@ public class SettingDB extends Fragment {
 
         @Override
         protected void onPostExecute(String o) {
-            if (o.equals(OK_STATUS)){
+            if (o.equals(TEST_OK_STATUS)){
                 Toast.makeText(getActivity(),"---测试成功！",Toast.LENGTH_LONG).show();
             }
             else {

@@ -22,6 +22,8 @@ import java.io.InputStreamReader;
 
 import okhttp3.Call;
 import personal.wl.jspos.R;
+import personal.wl.jspos.method.SystemFtpInfo;
+import personal.wl.jspos.method.SystemHttpInfo;
 import personal.wl.jspos.update.utils.Tools;
 import personal.wl.jspos.update.utils.UpgradeApk;
 import personal.wl.jspos.update.view.CommonProgressDialog;
@@ -29,24 +31,31 @@ import personal.wl.jspos.update.view.CommonProgressDialog;
 import static android.content.Context.DOWNLOAD_SERVICE;
 import static android.os.Environment.DIRECTORY_DOWNLOADS;
 import static personal.wl.jspos.method.PosHandleDB.UpGradeSqlScript;
-import static personal.wl.jspos.update.http.ReleaseWebInfo.APK_FILE_NAME;
-import static personal.wl.jspos.update.http.ReleaseWebInfo.APK_URL;
-import static personal.wl.jspos.update.http.ReleaseWebInfo.README_FILE_NAME;
-import static personal.wl.jspos.update.http.ReleaseWebInfo.README_URL;
-import static personal.wl.jspos.update.http.ReleaseWebInfo.UPGRADE_FILE_NAME;
-import static personal.wl.jspos.update.http.ReleaseWebInfo.UPGRADE_URL;
-import static personal.wl.jspos.update.http.ReleaseWebInfo.VERSION_FILE_NAME;
-import static personal.wl.jspos.update.http.ReleaseWebInfo.VERSION_URL;
+import static personal.wl.jspos.method.SystemSettingConstant.SETTING_APP_APK_FIlE;
+import static personal.wl.jspos.method.SystemSettingConstant.SETTING_UPGRADE_SQL_FILE;
+
 
 public class HttpToolsKits {
 
     private Context context;
     private View v;
     private CommonProgressDialog pBar;
+    private SystemHttpInfo systemHttpInfo;
+    private SystemFtpInfo systemFtpInfo;
+    private String VERSION_URL;
+    private String UPGRADE_URL;
+    private String README_URL;
+    private String APK_URL;
+
+
 
     public HttpToolsKits(Context context, View v) {
         this.context = context;
         this.v = v;
+        systemFtpInfo= new SystemFtpInfo(context);
+        systemHttpInfo = new SystemHttpInfo(context);
+        VERSION_URL=systemHttpInfo.getURL() + systemFtpInfo.getFtp_joson_file();
+        APK_URL=systemHttpInfo.getURL() + SETTING_APP_APK_FIlE;
     }
 
     public void downloadVersionFile() {
@@ -55,11 +64,11 @@ public class HttpToolsKits {
                 .get()
                 .url(VERSION_URL)
                 .build()//
-                .execute(new FileCallBack(context.getFilesDir().getPath(), VERSION_FILE_NAME)//
+                .execute(new FileCallBack(context.getFilesDir().getPath(), systemFtpInfo.getFtp_joson_file())//
                 {
                     @Override
                     public void onError(Call call, Exception e) {
-                        Toast.makeText(context, "下载" + VERSION_FILE_NAME + "失败" + e.toString(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, "下载" + systemFtpInfo.getFtp_joson_file() + "失败" + e.toString(), Toast.LENGTH_LONG).show();
                     }
 
                     @Override
@@ -78,11 +87,11 @@ public class HttpToolsKits {
                 .get()
                 .url(README_URL)
                 .build()//
-                .execute(new FileCallBack(context.getFilesDir().getPath(), README_FILE_NAME)//
+                .execute(new FileCallBack(context.getFilesDir().getPath(), systemFtpInfo.getFtp_readme_file())//
                 {
                     @Override
                     public void onError(Call call, Exception e) {
-                        Toast.makeText(context, "下载" + README_FILE_NAME + "失败" + e.toString(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, "下载" + systemFtpInfo.getFtp_readme_file() + "失败" + e.toString(), Toast.LENGTH_LONG).show();
                     }
 
                     @Override
@@ -105,16 +114,16 @@ public class HttpToolsKits {
                 .get()
                 .url(UPGRADE_URL)
                 .build()//
-                .execute(new FileCallBack(context.getFilesDir().getPath(), UPGRADE_FILE_NAME)//
+                .execute(new FileCallBack(context.getFilesDir().getPath(), SETTING_UPGRADE_SQL_FILE)//
                 {
                     @Override
                     public void onError(Call call, Exception e) {
-                        Toast.makeText(context, "下载" + UPGRADE_FILE_NAME + "失败" + e.toString(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, "下载" + SETTING_UPGRADE_SQL_FILE + "失败" + e.toString(), Toast.LENGTH_LONG).show();
                     }
 
                     @Override
                     public void onResponse(Call call, File file) {
-                        Toast.makeText(context, "下载" + UPGRADE_FILE_NAME + "成功", Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, "下载" + SETTING_UPGRADE_SQL_FILE + "成功", Toast.LENGTH_LONG).show();
                         try {
                             FileInputStream f = new FileInputStream(file);
                             InputStreamReader fis = new InputStreamReader(f);
@@ -177,7 +186,7 @@ public class HttpToolsKits {
         }
     }
 
-    public static void downloadapk(Context context) {
+    public void downloadapk(Context context) {
         DownloadManager manager = (DownloadManager) context.getSystemService(DOWNLOAD_SERVICE);
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(APK_URL));
         request.setDescription("下载中");
@@ -186,7 +195,7 @@ public class HttpToolsKits {
         request.setVisibleInDownloadsUi(true);
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
 //        request.setDestinationInExternalPublicDir(DIRECTORY_DOWNLOADS,APK_FILE_NAME);
-        request.setDestinationInExternalFilesDir(context, DIRECTORY_DOWNLOADS, APK_FILE_NAME);
+        request.setDestinationInExternalFilesDir(context, DIRECTORY_DOWNLOADS, SETTING_APP_APK_FIlE);
 
 
         long downloadid = manager.enqueue(request);

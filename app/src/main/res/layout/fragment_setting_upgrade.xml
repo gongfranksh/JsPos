@@ -29,7 +29,7 @@
                 android:textSize="25sp" />
 
             <EditText
-                android:id="@+id/setting_db_ip"
+                android:id="@+id/setting_http_web"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
@@ -62,8 +62,9 @@
                 android:layout_gravity="center"
                 android:layout_margin="10dp"
                 android:layout_weight="1"
+                android:id="@+id/bt_http_test"
                 android:background="@drawable/button_decoration"
-                android:text="取消"
+                android:text="测试"
                 android:textColor="@color/white"
                 android:textSize="25sp">
 
