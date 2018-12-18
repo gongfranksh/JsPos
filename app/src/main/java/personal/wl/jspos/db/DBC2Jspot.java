@@ -22,15 +22,6 @@ import static personal.wl.jspos.db.Tools.convertList;
 
 
 public class DBC2Jspot {
-    //    public static final String IP = "192.168.72.21";
-//    private static final String DBName = "headquarters";
-//    private static final String USER = "syzy";
-//    private static final String PWD = "7fad69fa0c";
-//
-//    private static final String DRIVER = "net.sourceforge.jtds.jdbc.Driver";
-//    private static final String CONNSTR = "jdbc:jtds:sqlserver://" + IP + ":1433/"
-//            + DBName + ";useunicode=true;characterEncoding=UTF-8";
-//
     private static String TAG = "DBC2Jspot";
     private static long run;
     private static Connection myconnection;
