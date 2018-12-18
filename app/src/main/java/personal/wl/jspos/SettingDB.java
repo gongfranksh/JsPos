@@ -1,6 +1,7 @@
 package personal.wl.jspos;
 
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,6 +11,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 import personal.wl.jspos.method.SystemDBInfo;
 
@@ -26,6 +31,11 @@ public class SettingDB extends Fragment {
     private TextView tv_db_password;
     private Button bt_confirm;
     private Button bt_test;
+    private String DRIVER;
+    private String CONNSTR;
+
+    private static final int msgKey = 880011;
+    private static final String OK_STATUS = "TESTOK";
 
 
     public SettingDB() {
@@ -71,15 +81,14 @@ public class SettingDB extends Fragment {
             @Override
             public void onClick(View v) {
                 saveConfig();
-                Toast.makeText(getActivity(),"保存完毕！",Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "保存完毕！", Toast.LENGTH_LONG).show();
             }
         });
 
         bt_test.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(),"测试连接。。。。",Toast.LENGTH_LONG).show();
-
+               new  TestConnectMssql().execute();
             }
         });
     }
@@ -90,5 +99,54 @@ public class SettingDB extends Fragment {
         systemDBInfo.set_Db_Ip_Address(tv_db_ip_address.getText().toString());
         systemDBInfo.set_Db_Name(tv_db_name.getText().toString());
         systemDBInfo.set_Db_Password(tv_db_password.getText().toString());
+    }
+
+
+    private String testConnection() {
+        String flag="";
+        try {
+            DRIVER = "net.sourceforge.jtds.jdbc.Driver";
+            CONNSTR = "jdbc:jtds:sqlserver://" + systemDBInfo.get_Db_IP_Address() + ":1433/"
+                    + systemDBInfo.get_Db_Name() + ";useunicode=true;characterEncoding=UTF-8";
+
+            // TODO Connect To MsSql Server
+            Class.forName("net.sourceforge.jtds.jdbc.Driver");
+            long start = System.currentTimeMillis();
+            Connection con = DriverManager.getConnection(CONNSTR, systemDBInfo.get_Db_Account(), systemDBInfo.get_Db_Password());
+            long end = System.currentTimeMillis() - start;
+            return OK_STATUS;
+        } catch (ClassNotFoundException e1) {
+            // TODO ClassNotFoundException
+            e1.printStackTrace();
+            return e1.toString();
+        } catch (SQLException e) {
+            // TODO SQLExceptionError
+            e.printStackTrace();
+            return e.toString();
+        }
+    }
+
+
+    public class TestConnectMssql extends AsyncTask<String, Integer, String> {
+        public TestConnectMssql() {
+            super();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            String flag = testConnection();
+            return flag;
+        }
+
+
+        @Override
+        protected void onPostExecute(String o) {
+            if (o.equals(OK_STATUS)){
+                Toast.makeText(getActivity(),"---测试成功！",Toast.LENGTH_LONG).show();
+            }
+            else {
+                Toast.makeText(getActivity(),o,Toast.LENGTH_LONG).show();
+            }
+        }
     }
 }
