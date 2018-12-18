@@ -1,6 +1,5 @@
 package personal.wl.jspos;
 
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -19,11 +18,6 @@ import java.sql.SQLException;
 import personal.wl.jspos.method.SystemDBInfo;
 
 public class SettingDB extends Fragment {
-    private SharedPreferences sPreferences;
-    private String db_ip_address;
-    private String db_name;
-    private String db_account;
-    private String db_password;
     private SystemDBInfo systemDBInfo;
     private TextView tv_db_ip_address;
     private TextView tv_db_name;
@@ -31,10 +25,9 @@ public class SettingDB extends Fragment {
     private TextView tv_db_password;
     private Button bt_confirm;
     private Button bt_test;
-    private String DRIVER;
     private String CONNSTR;
+    private String DRIVER;
 
-    private static final int msgKey = 880011;
     private static final String OK_STATUS = "TESTOK";
 
 
@@ -103,7 +96,6 @@ public class SettingDB extends Fragment {
 
 
     private String testConnection() {
-        String flag="";
         try {
             DRIVER = "net.sourceforge.jtds.jdbc.Driver";
             CONNSTR = "jdbc:jtds:sqlserver://" + systemDBInfo.get_Db_IP_Address() + ":1433/"
