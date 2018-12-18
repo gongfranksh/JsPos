@@ -170,7 +170,7 @@ public class SyncJspotDB extends AsyncTask<String, Integer, Integer>
 
         i = i + 1;
         //Open MsSql Server
-        DBC2Jspot js = new DBC2Jspot();
+        DBC2Jspot js = new DBC2Jspot(context);
         //Open Local SqlLite DB
         DaoSession daoSession = DBConnect.getInstances().getDaoSession();
         this.setDaosession(daoSession);

@@ -48,7 +48,7 @@ public class SyncJsSaleData extends AsyncTask<HashMap, Integer, Integer>
         int i = 0;
 
         i = i + 1;
-        DBC2Jspot js = new DBC2Jspot();
+        DBC2Jspot js = new DBC2Jspot(context);
         //Check Device id
         if (js.CheckDeviceByServer(device)) {
             List devicelist = js.getCheckDeviceThisFromServer(device);

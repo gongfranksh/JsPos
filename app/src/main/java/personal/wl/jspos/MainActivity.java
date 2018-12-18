@@ -28,6 +28,7 @@ import personal.wl.jspos.method.NetWorkStateRecevier;
 import personal.wl.jspos.method.NetworkChange;
 import personal.wl.jspos.method.NetworkWatcher;
 import personal.wl.jspos.method.PosTabInfo;
+import personal.wl.jspos.method.SystemDBInfo;
 import personal.wl.jspos.sync.SyncJsSaleData;
 import personal.wl.jspos.sync.SyncJspotDB;
 import personal.wl.jspos.update.utils.Tools;
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements IReportBack {
     private ImageButton uploadtranscation;
     private ImageButton networkdisplay;
     private NetWorkStateRecevier netWorkStateRecevier;
+    private SystemDBInfo systemDBInfo;
 
 
     //    private  PosTabInfo posTabInfo = new PosTabInfo(MainActivity.this);
@@ -50,8 +52,8 @@ public class MainActivity extends AppCompatActivity implements IReportBack {
             super.update(o, arg);
             //观察者接受到被观察者的通知，来更新自己的数据操作。
             APPNetwork network = (APPNetwork) arg;
-
-            if (network.isConnected()&&DeviceUtils.CheckDB2MSSQLConnect()) {
+            systemDBInfo = new SystemDBInfo(MainActivity.this);
+            if (network.isConnected()&&DeviceUtils.CheckDB2MSSQLConnect(systemDBInfo.get_Db_IP_Address())) {
                 networkdisplay.setImageDrawable(getResources().getDrawable(R.drawable.ic_wifi_tethering_black_24dp));
 
             } else {
@@ -170,7 +172,7 @@ public class MainActivity extends AppCompatActivity implements IReportBack {
         HashMap devicelist = new HashMap<String, String>();
         PosTabInfo posTabInfo = new PosTabInfo(MainActivity.this);
 
-        if (posTabInfo.isConnectingToInternet() && DeviceUtils.CheckDB2MSSQLConnect()) {
+        if (posTabInfo.isConnectingToInternet() && DeviceUtils.CheckDB2MSSQLConnect(systemDBInfo.get_Db_IP_Address())) {
             devicelist.put("deviceid", posTabInfo.getDeviceid());
             devicelist.put("posno", posTabInfo.getPosMachine());
             devicelist.put("braid", posTabInfo.getBranchCode());
@@ -312,7 +314,7 @@ public class MainActivity extends AppCompatActivity implements IReportBack {
         devicelist.put("deviceid", posTabInfo.getDeviceid());
         devicelist.put("posno", posTabInfo.getPosMachine());
 
-        if (posTabInfo.isConnectingToInternet()&&DeviceUtils.CheckDB2MSSQLConnect()) {
+        if (posTabInfo.isConnectingToInternet()&&DeviceUtils.CheckDB2MSSQLConnect(systemDBInfo.get_Db_IP_Address())) {
             SyncJsSaleData task = new SyncJsSaleData(MainActivity.this, devicelist);
             task.execute();
         } else {

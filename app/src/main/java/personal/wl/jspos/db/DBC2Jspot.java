@@ -1,6 +1,7 @@
 package personal.wl.jspos.db;
 
 
+import android.content.Context;
 import android.util.Log;
 
 import java.sql.Connection;
@@ -13,6 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 
+import personal.wl.jspos.method.SystemDBInfo;
 import personal.wl.jspos.pos.SaleDaily;
 import personal.wl.jspos.pos.SalePayMode;
 
@@ -20,22 +22,44 @@ import static personal.wl.jspos.db.Tools.convertList;
 
 
 public class DBC2Jspot {
-    public static final String IP = "192.168.72.21";
-    private static final String DBName = "headquarters";
-    //    private static final String USER = "syread";
-//    private static final String PWD = "buynow";
-    private static final String USER = "syzy";
-    private static final String PWD = "7fad69fa0c";
-
-    private static final String DRIVER = "net.sourceforge.jtds.jdbc.Driver";
-    private static final String CONNSTR = "jdbc:jtds:sqlserver://" + IP + ":1433/"
-            + DBName + ";useunicode=true;characterEncoding=UTF-8";
+    //    public static final String IP = "192.168.72.21";
+//    private static final String DBName = "headquarters";
+//    private static final String USER = "syzy";
+//    private static final String PWD = "7fad69fa0c";
+//
+//    private static final String DRIVER = "net.sourceforge.jtds.jdbc.Driver";
+//    private static final String CONNSTR = "jdbc:jtds:sqlserver://" + IP + ":1433/"
+//            + DBName + ";useunicode=true;characterEncoding=UTF-8";
+//
     private static String TAG = "DBC2Jspot";
     private static long run;
     private static Connection myconnection;
+    private SystemDBInfo systemDBInfo;
+    private Context context;
 
-    public DBC2Jspot() {
+    private String IP;
+    private String DBName;
+    private String USER;
+    private String PWD;
+
+    private String DRIVER;
+    private String CONNSTR;
+
+
+    public DBC2Jspot(Context context) {
+
+        systemDBInfo = new SystemDBInfo(context);
+        IP=systemDBInfo.get_Db_IP_Address();
+        DBName=systemDBInfo.get_Db_Name();
+        USER=systemDBInfo.get_Db_Account();
+        PWD=systemDBInfo.get_Db_Password();
+
+        DRIVER = "net.sourceforge.jtds.jdbc.Driver";
+        CONNSTR = "jdbc:jtds:sqlserver://" + IP + ":1433/"
+                + DBName + ";useunicode=true;characterEncoding=UTF-8";
         this.setMyconnection(getConnection());
+        this.context = context;
+
     }
 
 
@@ -110,8 +134,8 @@ public class DBC2Jspot {
                 " AND posno='" + device.get("posno") + "'";
         List list = null;
 
-        Log.i(TAG, "getLastUploadTranscations: ==>"+sql);
-      Connection cnn = this.getMyconnection();
+        Log.i(TAG, "getLastUploadTranscations: ==>" + sql);
+        Connection cnn = this.getMyconnection();
         try {
             list = QuerySqlGetResult(cnn, sql);
         } catch (SQLException e) {
@@ -142,10 +166,10 @@ public class DBC2Jspot {
                 sqlvalue = sqlvalue + "'" + df.format(salePayModeList.get(i).getSaleDate()) + "',";
                 sqlvalue = sqlvalue + "'" + salePayModeList.get(i).getSaleId() + "',";
                 sqlvalue = sqlvalue + "'" + salePayModeList.get(i).getSalerId() + "',";
-                sqlvalue = sqlvalue +  "'" + salePayModeList.get(i).getPayModeId() + "',";
+                sqlvalue = sqlvalue + "'" + salePayModeList.get(i).getPayModeId() + "',";
                 sqlvalue = sqlvalue + salePayModeList.get(i).getPayMoney() + ",";
                 sqlvalue = sqlvalue + salePayModeList.get(i).getSourceId() + ",";
-                sqlvalue = sqlvalue +  "'" +salePayModeList.get(i).getOrderInnerId() + "',";
+                sqlvalue = sqlvalue + "'" + salePayModeList.get(i).getOrderInnerId() + "',";
                 sqlvalue = sqlvalue + salePayModeList.get(i).getId() + ")";
                 String sql_exec = sql + sqlvalue;
                 proc_exec(cnn, sql_exec);
@@ -208,7 +232,7 @@ public class DBC2Jspot {
 
 
                 sqlvalue = sqlvalue + saleDailyList.get(i).getSourceId() + ",";
-                sqlvalue = sqlvalue +  "'" +saleDailyList.get(i).getOrderInnerId() + "',";
+                sqlvalue = sqlvalue + "'" + saleDailyList.get(i).getOrderInnerId() + "',";
                 sqlvalue = sqlvalue + saleDailyList.get(i).getId() + ")";
                 String sql_exec = sql + sqlvalue;
                 Statement stmt = cnn.createStatement();
@@ -293,9 +317,7 @@ public class DBC2Jspot {
     }
 
 
-
-
-    public List getProductBranchRelNeedUpdate(Integer timestamp,HashMap device) {
+    public List getProductBranchRelNeedUpdate(Integer timestamp, HashMap device) {
 
 //        device.get("posno") == null
 
@@ -303,7 +325,7 @@ public class DBC2Jspot {
                 "CONVERT (int,timestamp) as timestamp \n" +
                 "FROM product_branch_rel \n";
         sql = sql + "WHERE CONVERT (int,timestamp) > " + timestamp;
-        sql = sql + "and   BraId = '" +  device.get("braid") +"' ";
+        sql = sql + "and   BraId = '" + device.get("braid") + "' ";
         sql = sql + "ORDER BY CONVERT (int,timestamp) ";
         List list = null;
         Connection cnn = this.getMyconnection();
@@ -316,7 +338,7 @@ public class DBC2Jspot {
     }
 
 
-    public List getPmtDMBranchRelNeedUpdate(Integer timestamp,HashMap device) {
+    public List getPmtDMBranchRelNeedUpdate(Integer timestamp, HashMap device) {
 
 //        device.get("posno") == null
 
@@ -325,7 +347,7 @@ public class DBC2Jspot {
                 "CONVERT (int,d.timestamp) as timestamp \n" +
                 "FROM dbo.pmt_dm_rel d LEFT JOIN prompt_peroid_dm h ON h.DMId=d.DMId \n";
         sql = sql + " WHERE CONVERT (int,d.timestamp) > " + timestamp;
-        sql = sql + " and   BraId = '" +  device.get("braid") +"' ";
+        sql = sql + " and   BraId = '" + device.get("braid") + "' ";
         sql = sql + " ORDER BY CONVERT (int,d.timestamp) ";
         List list = null;
         Connection cnn = this.getMyconnection();
@@ -336,8 +358,6 @@ public class DBC2Jspot {
         }
         return list;
     }
-
-
 
 
     public List getBranchNeedUpdate(Integer timestamp) {

@@ -19,12 +19,12 @@ import java.util.HashMap;
 import personal.wl.jspos.method.DESCoder;
 import personal.wl.jspos.method.DeviceUtils;
 import personal.wl.jspos.method.PosTabInfo;
+import personal.wl.jspos.method.SystemDBInfo;
 import personal.wl.jspos.sync.SyncJsSaleData;
 import personal.wl.jspos.update.http.HttpToolsKits;
 import personal.wl.jspos.update.utils.UpgradeUI;
 import personal.wl.jspos.update.view.CommonProgressDialog;
 
-import static personal.wl.jspos.db.DBC2Jspot.IP;
 import static personal.wl.jspos.method.PosHandleDB.CleanLocalSales;
 
 public class PosInit extends AppCompatActivity {
@@ -52,7 +52,9 @@ public class PosInit extends AppCompatActivity {
     private Context context;
     private String ADMINPASSWORD = "160023";
     private PosTabInfo posTabInfo;
+    private SystemDBInfo systemDBInfo;
 
+    private String IP;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +77,9 @@ public class PosInit extends AppCompatActivity {
 
         bt_checknetwork = findViewById(R.id.checknetwork);
 
+        systemDBInfo = new SystemDBInfo(context);
+        IP=systemDBInfo.get_Db_IP_Address();
+
 
 
         bt_upgrade_localdatabase.setOnClickListener(new View.OnClickListener() {
@@ -91,7 +96,7 @@ public class PosInit extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 tv_display.setVisibility(View.VISIBLE);
-                if (DeviceUtils.CheckDB2MSSQLConnect()) {
+                if (DeviceUtils.CheckDB2MSSQLConnect(systemDBInfo.get_Db_IP_Address())) {
                     tv_display.setText(IP + "服务器连接成功！！！！！");
 
                 } else {

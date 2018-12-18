@@ -23,7 +23,6 @@ import java.util.UUID;
 import personal.wl.jspos.pos.SalePayMode;
 import personal.wl.jspos.update.utils.FtpInfo;
 
-import static personal.wl.jspos.db.DBC2Jspot.IP;
 import static personal.wl.jspos.update.utils.FtpInfo.FTP_IP;
 
 public class DeviceUtils {
@@ -176,7 +175,7 @@ public class DeviceUtils {
     }
 
 
-    public static Boolean CheckDB2MSSQLConnect() {
+    public static Boolean CheckDB2MSSQLConnect(String IP) {
         try {
             Process process = Runtime.getRuntime().exec("ping -c 1 -w 1 " + IP);
             InputStreamReader r = new InputStreamReader(process.getInputStream());
