@@ -1,10 +1,10 @@
-package personal.wl.jspos.method;
+package personal.wl.jspos.Config.Beans;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import static personal.wl.jspos.method.SystemSettingConstant.SETTING_HTTP_CONF_NAME;
-import static personal.wl.jspos.method.SystemSettingConstant.SETTING_HTTP_URL;
+import static personal.wl.jspos.Config.Beans.SystemSettingConstant.SETTING_HTTP_CONF_NAME;
+import static personal.wl.jspos.Config.Beans.SystemSettingConstant.SETTING_HTTP_URL;
 
 public class SystemHttpInfo {
     private SharedPreferences sPre;

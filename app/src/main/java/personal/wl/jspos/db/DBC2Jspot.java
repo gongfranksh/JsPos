@@ -14,7 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 
-import personal.wl.jspos.method.SystemDBInfo;
+import personal.wl.jspos.Config.Beans.SystemDBInfo;
 import personal.wl.jspos.pos.SaleDaily;
 import personal.wl.jspos.pos.SalePayMode;
 

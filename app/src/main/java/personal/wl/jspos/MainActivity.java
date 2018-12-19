@@ -28,7 +28,7 @@ import personal.wl.jspos.method.NetWorkStateRecevier;
 import personal.wl.jspos.method.NetworkChange;
 import personal.wl.jspos.method.NetworkWatcher;
 import personal.wl.jspos.method.PosTabInfo;
-import personal.wl.jspos.method.SystemDBInfo;
+import personal.wl.jspos.Config.Beans.SystemDBInfo;
 import personal.wl.jspos.sync.SyncJsSaleData;
 import personal.wl.jspos.sync.SyncJspotDB;
 import personal.wl.jspos.update.utils.Tools;

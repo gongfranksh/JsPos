@@ -1,13 +1,13 @@
-package personal.wl.jspos.method;
+package personal.wl.jspos.Config.Beans;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import static personal.wl.jspos.method.SystemSettingConstant.SETTING_DB_ACCOUNT;
-import static personal.wl.jspos.method.SystemSettingConstant.SETTING_DB_CONF_NAME;
-import static personal.wl.jspos.method.SystemSettingConstant.SETTING_DB_IP_ADDRESS;
-import static personal.wl.jspos.method.SystemSettingConstant.SETTING_DB_NAME;
-import static personal.wl.jspos.method.SystemSettingConstant.SETTING_DB_PASSWORD;
+import static personal.wl.jspos.Config.Beans.SystemSettingConstant.SETTING_DB_ACCOUNT;
+import static personal.wl.jspos.Config.Beans.SystemSettingConstant.SETTING_DB_CONF_NAME;
+import static personal.wl.jspos.Config.Beans.SystemSettingConstant.SETTING_DB_IP_ADDRESS;
+import static personal.wl.jspos.Config.Beans.SystemSettingConstant.SETTING_DB_NAME;
+import static personal.wl.jspos.Config.Beans.SystemSettingConstant.SETTING_DB_PASSWORD;
 
 public class SystemDBInfo {
     private SharedPreferences sPre;

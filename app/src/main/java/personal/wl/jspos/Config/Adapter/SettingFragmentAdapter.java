@@ -1,13 +1,13 @@
-package personal.wl.jspos.adapter;
+package personal.wl.jspos.Config.Adapter;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import personal.wl.jspos.SettingDB;
-import personal.wl.jspos.SettingFTP;
-import personal.wl.jspos.SettingUpgrade;
+import personal.wl.jspos.Config.Fragments.SettingDB;
+import personal.wl.jspos.Config.Fragments.SettingFTP;
+import personal.wl.jspos.Config.Fragments.SettingUpgrade;
 
 public class SettingFragmentAdapter extends FragmentStatePagerAdapter {
     private int mNumOfTabs;

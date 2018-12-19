@@ -1,15 +1,15 @@
-package personal.wl.jspos.method;
+package personal.wl.jspos.Config.Beans;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import static personal.wl.jspos.method.SystemSettingConstant.SETTING_FTP_CONF_NAME;
-import static personal.wl.jspos.method.SystemSettingConstant.SETTING_FTP_IP_ADDRESS;
-import static personal.wl.jspos.method.SystemSettingConstant.SETTING_FTP_LOGIN_ACCOUNT;
-import static personal.wl.jspos.method.SystemSettingConstant.SETTING_FTP_LOGIN_PASSWORD;
-import static personal.wl.jspos.method.SystemSettingConstant.SETTING_FTP_UPGRADE_JSON_FILE_NAME;
-import static personal.wl.jspos.method.SystemSettingConstant.SETTING_FTP_UPGRADE_JSON_FILE_NAME_README;
-import static personal.wl.jspos.method.SystemSettingConstant.SETTING_FTP_UPLOAD_FILE_ADDRESS;
+import static personal.wl.jspos.Config.Beans.SystemSettingConstant.SETTING_FTP_CONF_NAME;
+import static personal.wl.jspos.Config.Beans.SystemSettingConstant.SETTING_FTP_IP_ADDRESS;
+import static personal.wl.jspos.Config.Beans.SystemSettingConstant.SETTING_FTP_LOGIN_ACCOUNT;
+import static personal.wl.jspos.Config.Beans.SystemSettingConstant.SETTING_FTP_LOGIN_PASSWORD;
+import static personal.wl.jspos.Config.Beans.SystemSettingConstant.SETTING_FTP_UPGRADE_JSON_FILE_NAME;
+import static personal.wl.jspos.Config.Beans.SystemSettingConstant.SETTING_FTP_UPGRADE_JSON_FILE_NAME_README;
+import static personal.wl.jspos.Config.Beans.SystemSettingConstant.SETTING_FTP_UPLOAD_FILE_ADDRESS;
 
 public class SystemFtpInfo {
     private SharedPreferences sPre;

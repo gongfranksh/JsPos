@@ -15,10 +15,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import personal.wl.jspos.BuildConfig;
-import personal.wl.jspos.method.SystemFtpInfo;
+import personal.wl.jspos.Config.Beans.SystemFtpInfo;
 import personal.wl.jspos.update.view.CommonProgressDialog;
 
-import static personal.wl.jspos.method.SystemSettingConstant.SETTING_APP_APK_FIlE;
+import static personal.wl.jspos.Config.Beans.SystemSettingConstant.SETTING_APP_APK_FIlE;
 
 public class DownloadTask extends AsyncTask<String, Integer, String> {
 

@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import personal.wl.jspos.Config.Beans.SystemFtpInfo;
 import personal.wl.jspos.pos.SalePayMode;
 
 public class DeviceUtils {

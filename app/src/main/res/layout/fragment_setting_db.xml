@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SettingDB">
+    tools:context=".Config.Fragments.SettingDB">
 
     <!-- TODO: Update blank fragment layout -->
     <!--android:background="@drawable/shape_bgimg"-->

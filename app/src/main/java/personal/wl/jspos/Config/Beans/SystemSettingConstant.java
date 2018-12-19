@@ -1,4 +1,4 @@
-package personal.wl.jspos.method;
+package personal.wl.jspos.Config.Beans;
 
 public class SystemSettingConstant {
 

@@ -13,11 +13,11 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import personal.wl.jspos.method.PosTabInfo;
-import personal.wl.jspos.method.SystemFtpInfo;
+import personal.wl.jspos.Config.Beans.SystemFtpInfo;
 import personal.wl.jspos.update.view.CommonProgressDialog;
 
 import static personal.wl.jspos.method.DeviceUtils.GetTimeStamp;
-import static personal.wl.jspos.method.SystemSettingConstant.SETTING_LOCAL_DB_NAME;
+import static personal.wl.jspos.Config.Beans.SystemSettingConstant.SETTING_LOCAL_DB_NAME;
 
 public class UploadDbTask extends AsyncTask<String, Integer, String> {
     private Context context;

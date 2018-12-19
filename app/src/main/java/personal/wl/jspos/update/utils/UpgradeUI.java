@@ -12,13 +12,13 @@ import org.apache.commons.net.ftp.FTPClient;
 import java.io.File;
 
 import personal.wl.jspos.R;
-import personal.wl.jspos.method.SystemFtpInfo;
+import personal.wl.jspos.Config.Beans.SystemFtpInfo;
 import personal.wl.jspos.update.view.CommonProgressDialog;
 
-import static personal.wl.jspos.method.SystemSettingConstant.FTP_DOWNLOAD_DB_TEMPLATE;
-import static personal.wl.jspos.method.SystemSettingConstant.FTP_DOWNLOAD_OVER;
-import static personal.wl.jspos.method.SystemSettingConstant.FTP_DOWNLOAD_UPDATE;
-import static personal.wl.jspos.method.SystemSettingConstant.FTP_UPLOAD_UPDATE;
+import static personal.wl.jspos.Config.Beans.SystemSettingConstant.FTP_DOWNLOAD_DB_TEMPLATE;
+import static personal.wl.jspos.Config.Beans.SystemSettingConstant.FTP_DOWNLOAD_OVER;
+import static personal.wl.jspos.Config.Beans.SystemSettingConstant.FTP_DOWNLOAD_UPDATE;
+import static personal.wl.jspos.Config.Beans.SystemSettingConstant.FTP_UPLOAD_UPDATE;
 
 
 public class UpgradeUI {

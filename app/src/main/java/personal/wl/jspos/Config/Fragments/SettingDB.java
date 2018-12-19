@@ -1,4 +1,4 @@
-package personal.wl.jspos;
+package personal.wl.jspos.Config.Fragments;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -15,9 +15,10 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-import personal.wl.jspos.method.SystemDBInfo;
+import personal.wl.jspos.Config.Beans.SystemDBInfo;
+import personal.wl.jspos.R;
 
-import static personal.wl.jspos.method.SystemSettingConstant.TEST_OK_STATUS;
+import static personal.wl.jspos.Config.Beans.SystemSettingConstant.TEST_OK_STATUS;
 
 public class SettingDB extends Fragment {
     private SystemDBInfo systemDBInfo;

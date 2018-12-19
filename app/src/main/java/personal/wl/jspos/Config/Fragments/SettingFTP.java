@@ -1,4 +1,4 @@
-package personal.wl.jspos;
+package personal.wl.jspos.Config.Fragments;
 
 
 import android.os.AsyncTask;
@@ -14,10 +14,11 @@ import android.widget.Toast;
 
 import org.apache.commons.net.ftp.FTPClient;
 
-import personal.wl.jspos.method.SystemFtpInfo;
+import personal.wl.jspos.Config.Beans.SystemFtpInfo;
+import personal.wl.jspos.R;
 import personal.wl.jspos.update.utils.FTPToolkit;
 
-import static personal.wl.jspos.method.SystemSettingConstant.TEST_OK_STATUS;
+import static personal.wl.jspos.Config.Beans.SystemSettingConstant.TEST_OK_STATUS;
 
 
 /**

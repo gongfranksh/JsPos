@@ -9,7 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import java.util.List;
 
-import personal.wl.jspos.adapter.SettingFragmentAdapter;
+import personal.wl.jspos.Config.Adapter.SettingFragmentAdapter;
 
 public class ConnectSettingActivity extends AppCompatActivity {
     private TabLayout tabLayout;

@@ -22,8 +22,8 @@ import java.io.InputStreamReader;
 
 import okhttp3.Call;
 import personal.wl.jspos.R;
-import personal.wl.jspos.method.SystemFtpInfo;
-import personal.wl.jspos.method.SystemHttpInfo;
+import personal.wl.jspos.Config.Beans.SystemFtpInfo;
+import personal.wl.jspos.Config.Beans.SystemHttpInfo;
 import personal.wl.jspos.update.utils.Tools;
 import personal.wl.jspos.update.utils.UpgradeApk;
 import personal.wl.jspos.update.view.CommonProgressDialog;
@@ -31,8 +31,8 @@ import personal.wl.jspos.update.view.CommonProgressDialog;
 import static android.content.Context.DOWNLOAD_SERVICE;
 import static android.os.Environment.DIRECTORY_DOWNLOADS;
 import static personal.wl.jspos.method.PosHandleDB.UpGradeSqlScript;
-import static personal.wl.jspos.method.SystemSettingConstant.SETTING_APP_APK_FIlE;
-import static personal.wl.jspos.method.SystemSettingConstant.SETTING_UPGRADE_SQL_FILE;
+import static personal.wl.jspos.Config.Beans.SystemSettingConstant.SETTING_APP_APK_FIlE;
+import static personal.wl.jspos.Config.Beans.SystemSettingConstant.SETTING_UPGRADE_SQL_FILE;
 
 
 public class HttpToolsKits {

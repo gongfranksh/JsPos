@@ -1,4 +1,4 @@
-package personal.wl.jspos;
+package personal.wl.jspos.Config.Fragments;
 
 
 import android.os.Bundle;
@@ -11,7 +11,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import personal.wl.jspos.method.SystemHttpInfo;
+import personal.wl.jspos.Config.Beans.SystemHttpInfo;
+import personal.wl.jspos.R;
 
 
 /**
