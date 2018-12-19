@@ -22,7 +22,7 @@ public class QRCodeUtil {
 
 
 
-    public static String QR_PREX = "http://fapiao.buynow.com.cn:8090/invoice/qr?saleid=saleid&braid=braid&saledate=saledate";
+
 
     public static Bitmap createQRCodeBitmap(String content, int width, int height,
                                             String character_set, String error_correction_level,
@@ -75,7 +75,7 @@ public class QRCodeUtil {
         }
     }
 
-    public static String getQRcodeContent(List<SalePayMode> salePayModeList, List<SaleDaily> saleSaleDailyList) {
+    public static String getQRcodeContent(List<SalePayMode> salePayModeList, List<SaleDaily> saleSaleDailyList,String qr_url) {
 
         String tmp_qrcontent = null;
         String tmp_needcrpt = null;
@@ -93,7 +93,7 @@ public class QRCodeUtil {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        tmp_qrcontent = QR_PREX + tmp_aftercrpt;
+        tmp_qrcontent = qr_url + tmp_aftercrpt;
         return tmp_qrcontent;
     }
 

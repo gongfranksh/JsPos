@@ -1,7 +1,7 @@
 package personal.wl.jspos.Config.Beans;
 
 public class SystemSettingConstant {
-
+//    public static String QR_PREX = "http://fapiao.buynow.com.cn:8090/invoice/qr?saleid=saleid&braid=braid&saledate=saledate";
     public final static String SETTING_APP_APK_FIlE = "app-release.apk";
     public final static String SETTING_LOCAL_DB_NAME = "jsPos.db";
     public final static String SETTING_UPGRADE_SQL_FILE = "upgrade.sql";
@@ -23,6 +23,7 @@ public class SystemSettingConstant {
 
     public static final String SETTING_HTTP_CONF_NAME="HTTPSetting";
     public final static String SETTING_HTTP_URL = "SETTING_HTTP_URL";
+    public final static String SETTING_HTTP_QR_URL = "SETTING_HTTP_QR_URL";
 
 
     public final static int FTP_DOWNLOAD_OVER = 9100;

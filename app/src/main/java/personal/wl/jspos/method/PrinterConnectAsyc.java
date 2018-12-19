@@ -11,6 +11,7 @@ import android.util.Log;
 
 import java.util.List;
 
+import personal.wl.jspos.Config.Beans.SystemHttpInfo;
 import personal.wl.jspos.R;
 import personal.wl.jspos.adapter.PrintOrderStatusChange;
 import personal.wl.jspos.pos.SaleDaily;
@@ -34,6 +35,7 @@ public class PrinterConnectAsyc extends AsyncTask {
     private PosTabInfo posTabInfo;
     private Bitmap bitmapQRcode=null;
     boolean is1st;
+    private SystemHttpInfo systemHttpInfo;
 
     public PrinterConnectAsyc(Context context, BluetoothDevice mmDevice, Boolean NotTest, List<SaleDaily> saleDailyList, List<SalePayMode> salePayModeList, Boolean is1st) {
         this.context = context;
@@ -42,6 +44,7 @@ public class PrinterConnectAsyc extends AsyncTask {
         this.nottest = NotTest;
         this.salePayModeList = salePayModeList;
         this.posTabInfo = new PosTabInfo(context);
+        this.systemHttpInfo = new SystemHttpInfo(context);
         this.is1st = is1st;
         try {
             if (socket == null) {
@@ -125,7 +128,7 @@ public class PrinterConnectAsyc extends AsyncTask {
             int ii = posTabInfo.getPrinterTimes();
             for (int i = 0; i < posTabInfo.getPrinterTimes(); i++) {
                 if (i == 0 & posTabInfo.getNeedQRcode() &(!isReturn)) {
-                    String printqrstr = getQRcodeContent(this.salePayModeList, this.saleDailyList);
+                    String printqrstr = getQRcodeContent(this.salePayModeList, this.saleDailyList,systemHttpInfo.getQR_URL());
                     bitmapQRcode= createQRCodeBitmap(printqrstr, 200, 200,"UTF-8","H", "1", Color.BLACK, Color.WHITE);
                     PrintUtil.print_weight_56mm(socket, bitmapQRcode, this.saleDailyList, this.salePayModeList, posTabInfo, i + 1, is1st);
                 } else {

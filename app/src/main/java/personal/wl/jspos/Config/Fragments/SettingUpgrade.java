@@ -28,6 +28,7 @@ import personal.wl.jspos.R;
 public class SettingUpgrade extends Fragment {
     private  String VERSION_URL ;
     private EditText et_http_web;
+    private EditText et_http_qr_web;
     private SystemHttpInfo systemHttpInfo;
     private SystemFtpInfo  systemFtpInfo;
     private Button bt_savehttp;
@@ -60,10 +61,12 @@ public class SettingUpgrade extends Fragment {
     private void getValueFromConfig() {
         systemHttpInfo = new SystemHttpInfo(getActivity());
         et_http_web.setText(systemHttpInfo.getURL());
+        et_http_qr_web.setText(systemHttpInfo.getQR_URL());
     }
 
     private void initViews(View view) {
         et_http_web = view.findViewById(R.id.setting_http_web);
+        et_http_qr_web= view.findViewById(R.id.setting_http_QR_web);
         bt_savehttp= view.findViewById(R.id.bt_upgradeNeedSave);
         bt_testhttp= view.findViewById(R.id.bt_http_test);
         bt_testhttp.setOnClickListener(new View.OnClickListener() {
@@ -85,6 +88,8 @@ public class SettingUpgrade extends Fragment {
 
     protected void saveConfig() {
         systemHttpInfo.setURL(et_http_web.getText().toString());
+        systemHttpInfo.setQR_URL(et_http_qr_web.getText().toString());
+
     }
 
 

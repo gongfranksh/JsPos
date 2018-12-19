@@ -244,4 +244,5 @@
     <string name="label_setting_ftp_user">FTP账号:</string>
     <string name="label_setting_ftp_pwd">FTP密码:</string>
     <string name="label_settting_http_ip">升级服务器地址:</string>
+    <string name="setting_http_qr_url_lable">电子发票前置地址:</string>
 </resources>
