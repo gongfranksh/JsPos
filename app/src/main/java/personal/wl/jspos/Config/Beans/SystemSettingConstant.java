@@ -10,7 +10,6 @@ public class SystemSettingConstant {
     public static String DEFAULT_MSSQL_ACCOUNT = "syzy";
     public static String DEFAULT_MSSQL_ACCOUNT_PASSWORD = "7fad69fa0c";
 
-
     public static String DEFAULT_FTP_IP = "192.168.72.220";
     public static String DEFAULT_FTP_ACCOUNT = "sy";
     public static String DEFAULT_FTP_ACCOUNT_PASSWORD = "buynow";
@@ -18,10 +17,6 @@ public class SystemSettingConstant {
 
     public static String DEFAULT_README_FILE = "readme.txt";
     public static String DEFAULT_JOSON_FILE = "output.json";
-
-
-
-
 
     public final static String SETTING_APP_APK_FIlE = "app-release.apk";
     public final static String SETTING_LOCAL_DB_NAME = "jsPos.db";
@@ -45,7 +40,6 @@ public class SystemSettingConstant {
     public static final String SETTING_HTTP_CONF_NAME="HTTPSetting";
     public final static String SETTING_HTTP_URL = "SETTING_HTTP_URL";
     public final static String SETTING_HTTP_QR_URL = "SETTING_HTTP_QR_URL";
-
 
     public final static int FTP_DOWNLOAD_OVER = 9100;
     public final static int FTP_DOWNLOAD_UPDATE = 9110;
