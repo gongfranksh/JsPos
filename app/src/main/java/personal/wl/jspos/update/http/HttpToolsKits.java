@@ -48,14 +48,15 @@ public class HttpToolsKits {
     private String APK_URL;
 
 
-
     public HttpToolsKits(Context context, View v) {
         this.context = context;
         this.v = v;
-        systemFtpInfo= new SystemFtpInfo(context);
+        systemFtpInfo = new SystemFtpInfo(context);
         systemHttpInfo = new SystemHttpInfo(context);
-        VERSION_URL=systemHttpInfo.getURL() + systemFtpInfo.getFtp_joson_file();
-        APK_URL=systemHttpInfo.getURL() + SETTING_APP_APK_FIlE;
+        UPGRADE_URL = systemHttpInfo.getURL() + SETTING_UPGRADE_SQL_FILE;
+
+        VERSION_URL = systemHttpInfo.getURL() + systemFtpInfo.getFtp_joson_file();
+        APK_URL = systemHttpInfo.getURL() + SETTING_APP_APK_FIlE;
     }
 
     public void downloadVersionFile() {
@@ -129,7 +130,7 @@ public class HttpToolsKits {
                             InputStreamReader fis = new InputStreamReader(f);
                             BufferedReader buffreader = new BufferedReader(fis);
                             String line;
-                            while (( line = buffreader.readLine()) != null) {
+                            while ((line = buffreader.readLine()) != null) {
                                 String content = line + "\n";
                                 UpGradeSqlScript(content);
                             }

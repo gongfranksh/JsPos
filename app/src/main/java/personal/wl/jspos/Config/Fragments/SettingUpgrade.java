@@ -11,6 +11,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.FileCallBack;
+
+import java.io.File;
+
+import okhttp3.Call;
+import personal.wl.jspos.Config.Beans.SystemFtpInfo;
 import personal.wl.jspos.Config.Beans.SystemHttpInfo;
 import personal.wl.jspos.R;
 
@@ -19,10 +26,12 @@ import personal.wl.jspos.R;
  * A simple {@link Fragment} subclass.
  */
 public class SettingUpgrade extends Fragment {
+    private  String VERSION_URL ;
     private EditText et_http_web;
     private SystemHttpInfo systemHttpInfo;
+    private SystemFtpInfo  systemFtpInfo;
     private Button bt_savehttp;
-    private Button bu_testhttp;
+    private Button bt_testhttp;
 
     public SettingUpgrade() {
         // Required empty public constructor
@@ -56,7 +65,13 @@ public class SettingUpgrade extends Fragment {
     private void initViews(View view) {
         et_http_web = view.findViewById(R.id.setting_http_web);
         bt_savehttp= view.findViewById(R.id.bt_upgradeNeedSave);
-        bu_testhttp= view.findViewById(R.id.bt_http_test);
+        bt_testhttp= view.findViewById(R.id.bt_http_test);
+        bt_testhttp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TestHttpConnection();
+            }
+        });
 
         bt_savehttp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,5 +85,34 @@ public class SettingUpgrade extends Fragment {
 
     protected void saveConfig() {
         systemHttpInfo.setURL(et_http_web.getText().toString());
+    }
+
+
+
+    public void TestHttpConnection() {
+        systemFtpInfo= new SystemFtpInfo(getActivity());
+
+        VERSION_URL = systemHttpInfo.getURL() + systemFtpInfo.getFtp_joson_file();
+        //下载output.json版本信息文件
+        OkHttpUtils
+                .get()
+                .url(VERSION_URL)
+                .build()//
+                .execute(new FileCallBack(getActivity().getFilesDir().getPath(), systemFtpInfo.getFtp_joson_file())//
+                {
+                    @Override
+                    public void onError(Call call, Exception e) {
+                        Toast.makeText(getActivity(), "失败" + e.toString(), Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onResponse(Call call, File file) {
+                        Toast.makeText(getActivity(), "测试成功", Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void inProgress(float v, long l) {
+                    }
+                });
     }
 }
