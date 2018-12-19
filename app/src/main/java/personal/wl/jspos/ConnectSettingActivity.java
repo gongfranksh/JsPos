@@ -59,6 +59,6 @@ public class ConnectSettingActivity extends AppCompatActivity {
 
         SettingFragmentAdapter sfa = new SettingFragmentAdapter(getSupportFragmentManager(),tabLayout.getTabCount());
         viewPager.setAdapter(sfa);
-        viewPager.setCurrentItem(0);
+//        viewPager.setCurrentItem(0);
     }
 }
