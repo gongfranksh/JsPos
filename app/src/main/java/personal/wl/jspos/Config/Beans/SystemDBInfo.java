@@ -3,6 +3,10 @@ package personal.wl.jspos.Config.Beans;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import static personal.wl.jspos.Config.Beans.SystemSettingConstant.DEFAULT_MSSQL_ACCOUNT;
+import static personal.wl.jspos.Config.Beans.SystemSettingConstant.DEFAULT_MSSQL_ACCOUNT_PASSWORD;
+import static personal.wl.jspos.Config.Beans.SystemSettingConstant.DEFAULT_MSSQL_DB_IP;
+import static personal.wl.jspos.Config.Beans.SystemSettingConstant.DEFAULT_MSSQL_DB_NAME;
 import static personal.wl.jspos.Config.Beans.SystemSettingConstant.SETTING_DB_ACCOUNT;
 import static personal.wl.jspos.Config.Beans.SystemSettingConstant.SETTING_DB_CONF_NAME;
 import static personal.wl.jspos.Config.Beans.SystemSettingConstant.SETTING_DB_IP_ADDRESS;
@@ -19,7 +23,7 @@ public class SystemDBInfo {
 
 
     public String get_Db_IP_Address() {
-        db_ip_address=sPre.getString(SETTING_DB_IP_ADDRESS, "0.0.0.0");
+        db_ip_address=sPre.getString(SETTING_DB_IP_ADDRESS, DEFAULT_MSSQL_DB_IP);
         return db_ip_address;
     }
 
@@ -28,7 +32,7 @@ public class SystemDBInfo {
     }
 
     public String get_Db_Name() {
-        this.db_name=sPre.getString(SETTING_DB_NAME, "headquarters");
+        this.db_name=sPre.getString(SETTING_DB_NAME, DEFAULT_MSSQL_DB_NAME);
         return this.db_name;
     }
 
@@ -37,7 +41,7 @@ public class SystemDBInfo {
     }
 
     public String get_Db_Account() {
-        this.db_account=sPre.getString(SETTING_DB_ACCOUNT, "syzy");
+        this.db_account=sPre.getString(SETTING_DB_ACCOUNT, DEFAULT_MSSQL_ACCOUNT);
         return this.db_account;
     }
 
@@ -46,7 +50,7 @@ public class SystemDBInfo {
     }
 
     public String get_Db_Password() {
-        this.db_password=sPre.getString(SETTING_DB_PASSWORD, "7fad69fa0c");
+        this.db_password=sPre.getString(SETTING_DB_PASSWORD, DEFAULT_MSSQL_ACCOUNT_PASSWORD);
         return this.db_password;
     }
 

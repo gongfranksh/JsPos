@@ -3,6 +3,12 @@ package personal.wl.jspos.Config.Beans;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import static personal.wl.jspos.Config.Beans.SystemSettingConstant.DEFAULT_FTP_ACCOUNT;
+import static personal.wl.jspos.Config.Beans.SystemSettingConstant.DEFAULT_FTP_ACCOUNT_PASSWORD;
+import static personal.wl.jspos.Config.Beans.SystemSettingConstant.DEFAULT_FTP_IP;
+import static personal.wl.jspos.Config.Beans.SystemSettingConstant.DEFAULT_FTP_PATH;
+import static personal.wl.jspos.Config.Beans.SystemSettingConstant.DEFAULT_JOSON_FILE;
+import static personal.wl.jspos.Config.Beans.SystemSettingConstant.DEFAULT_README_FILE;
 import static personal.wl.jspos.Config.Beans.SystemSettingConstant.SETTING_FTP_CONF_NAME;
 import static personal.wl.jspos.Config.Beans.SystemSettingConstant.SETTING_FTP_IP_ADDRESS;
 import static personal.wl.jspos.Config.Beans.SystemSettingConstant.SETTING_FTP_LOGIN_ACCOUNT;
@@ -24,7 +30,7 @@ public class SystemFtpInfo {
     private Context context;
 
     public String getFtp_joson_file() {
-         ftp_joson_file=sPre.getString(SETTING_FTP_UPGRADE_JSON_FILE_NAME, "output.json");
+         ftp_joson_file=sPre.getString(SETTING_FTP_UPGRADE_JSON_FILE_NAME, DEFAULT_JOSON_FILE);
         return ftp_joson_file;
     }
 
@@ -33,7 +39,7 @@ public class SystemFtpInfo {
     }
 
     public String getFtp_readme_file() {
-        ftp_readme_file=sPre.getString(SETTING_FTP_UPGRADE_JSON_FILE_NAME_README, "readme.txt");
+        ftp_readme_file=sPre.getString(SETTING_FTP_UPGRADE_JSON_FILE_NAME_README, DEFAULT_README_FILE);
         return ftp_readme_file;
     }
 
@@ -42,7 +48,7 @@ public class SystemFtpInfo {
     }
 
     public String getFtp_path() {
-        ftp_path=sPre.getString(SETTING_FTP_UPLOAD_FILE_ADDRESS, "/posapp/");
+        ftp_path=sPre.getString(SETTING_FTP_UPLOAD_FILE_ADDRESS, DEFAULT_FTP_PATH);
         return ftp_path;
     }
 
@@ -53,7 +59,7 @@ public class SystemFtpInfo {
 
 
     public String getFtp_ip_address() {
-        ftp_ip_address=sPre.getString(SETTING_FTP_IP_ADDRESS, "192.168.72.220");
+        ftp_ip_address=sPre.getString(SETTING_FTP_IP_ADDRESS, DEFAULT_FTP_IP);
         return ftp_ip_address;
     }
 
@@ -70,7 +76,7 @@ public class SystemFtpInfo {
     }
 
     public String getFtp_iaccount() {
-        ftp_iaccount=sPre.getString(SETTING_FTP_LOGIN_ACCOUNT, "sy");
+        ftp_iaccount=sPre.getString(SETTING_FTP_LOGIN_ACCOUNT, DEFAULT_FTP_ACCOUNT);
         return ftp_iaccount;
     }
 
@@ -79,7 +85,7 @@ public class SystemFtpInfo {
     }
 
     public String getFtp_ipassword() {
-        ftp_ipassword=sPre.getString(SETTING_FTP_LOGIN_PASSWORD, "buynow");
+        ftp_ipassword=sPre.getString(SETTING_FTP_LOGIN_PASSWORD, DEFAULT_FTP_ACCOUNT_PASSWORD);
         return ftp_ipassword;
     }
 
