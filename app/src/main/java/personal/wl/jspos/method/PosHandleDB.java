@@ -206,7 +206,7 @@ public class PosHandleDB {
 
     public static List<Product> QueryProductBarCodeByCode(String BarCode) {
         String tmp_proid = BarCode;
-        //小于7位判断位店内码补齐13码
+        //小于7位判断为店内码=>补齐13码
         if (BarCode.length() <= 7) {
             tmp_proid = Long.toString(PROID + Long.parseLong(BarCode));
         }
@@ -217,7 +217,7 @@ public class PosHandleDB {
         ProductDao productDao = DBConnect.getInstances().getDaoSession().getProductDao();
         QueryBuilder condn = productBarCode.queryBuilder();
 
-        //判断是否为店内码
+        //2开头为店内码搜索proid,否则为国际码搜索barcode
         if (tmp_proid.subSequence(0, 1).toString().equals("2")) {
             condn.where(ProductBarCodeDao.Properties.Proid.eq(tmp_proid));
         } else {
