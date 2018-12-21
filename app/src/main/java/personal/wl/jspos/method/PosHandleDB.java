@@ -39,7 +39,7 @@ public class PosHandleDB {
     protected static long PROID = 2000000000000L;
     public static final String MOBILE_DEVICE_CAN_RUN = "1";
     public static final String MOBILE_DEVICE_CANNOT_RUN = "0";
-    private static final  String TAG="PosHandleDB";
+    private static final String TAG = "PosHandleDB";
 
     private static void ExecSqlVoid(String sql) {
         try {
@@ -49,7 +49,7 @@ public class PosHandleDB {
         }
     }
 
-    public static void UpGradeSqlScript(String sql){
+    public static void UpGradeSqlScript(String sql) {
         ExecSqlVoid(sql);
     }
 
@@ -87,10 +87,10 @@ public class PosHandleDB {
                 MobileDeviceDao.Properties.Status.eq(MOBILE_DEVICE_CAN_RUN),
                 MobileDeviceDao.Properties.Posno.eq(tmp_posno));
         List<MobileDevice> res = cond.build().list();
-        Log.i(TAG, "QueryMobileDevice:res===>"+res.size()+res);
-        Log.i(TAG, "QueryMobileDevice:tmp_device===> "+tmp_device);
-        Log.i(TAG, "QueryMobileDevice:MOBILE_DEVICE_CAN_RUN===> "+MOBILE_DEVICE_CAN_RUN);
-        Log.i(TAG, "QueryMobileDevice:tmp_posno===> "+tmp_posno);
+        Log.i(TAG, "QueryMobileDevice:res===>" + res.size() + res);
+        Log.i(TAG, "QueryMobileDevice:tmp_device===> " + tmp_device);
+        Log.i(TAG, "QueryMobileDevice:MOBILE_DEVICE_CAN_RUN===> " + MOBILE_DEVICE_CAN_RUN);
+        Log.i(TAG, "QueryMobileDevice:tmp_posno===> " + tmp_posno);
         if (res.size() == 1) {
             return res;
         } else {
@@ -170,7 +170,7 @@ public class PosHandleDB {
 
 
     public static List<PmtDmRel> QueryPmtDMBranchRelByCode(String proid, String storecode) {
-        Date curDate =  new Date(System.currentTimeMillis());
+        Date curDate = new Date(System.currentTimeMillis());
         String tmp_proid = proid;
         String tmp_streocode = storecode;
         if (proid.length() != 13) {
@@ -206,7 +206,8 @@ public class PosHandleDB {
 
     public static List<Product> QueryProductBarCodeByCode(String BarCode) {
         String tmp_proid = BarCode;
-        if (BarCode.length() != 13) {
+        //小于7位判断位店内码补齐13码
+        if (BarCode.length() <= 7) {
             tmp_proid = Long.toString(PROID + Long.parseLong(BarCode));
         }
 
@@ -216,9 +217,14 @@ public class PosHandleDB {
         ProductDao productDao = DBConnect.getInstances().getDaoSession().getProductDao();
         QueryBuilder condn = productBarCode.queryBuilder();
 
-        condn.whereOr(ProductBarCodeDao.Properties.Barcode.eq(BarCode),
-                ProductBarCodeDao.Properties.Proid.eq(tmp_proid)
-        );
+        //判断是否为店内码
+        if (tmp_proid.subSequence(0, 1).toString().equals("2")) {
+            condn.where(ProductBarCodeDao.Properties.Proid.eq(tmp_proid));
+        } else {
+            condn.where(ProductBarCodeDao.Properties.Barcode.eq(BarCode));
+        }
+
+
         barcodelist = condn.build().list();
         for (ProductBarCode pb : barcodelist) {
             QueryBuilder cond = productDao.queryBuilder();
@@ -350,7 +356,7 @@ public class PosHandleDB {
         }
     }
 
-    public static void UpdateSaleDailyForRetrun(List<SaleDaily> saleDailyList,SalePayMode salePaymode) {
+    public static void UpdateSaleDailyForRetrun(List<SaleDaily> saleDailyList, SalePayMode salePaymode) {
         SaleDailyDao saleDailyDao = DBConnect.getInstances().getDaoSession().getSaleDailyDao();
         for (int i = 0; i < saleDailyList.size(); i++) {
             saleDailyList.get(i).setIsReturn(true);
@@ -442,7 +448,7 @@ public class PosHandleDB {
     }
 
 
-       public static Integer getRecordLocalSaleDaily() {
+    public static Integer getRecordLocalSaleDaily() {
         String sql = null;
         sql = "select count(distinct sale_id) from sale_daily ;";
         return exce_sql(sql);

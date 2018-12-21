@@ -104,6 +104,7 @@ public class POS extends Activity {
     private String tmp_isDM = "0";
     private int presscount = 0;
     private PosLogin posLogin;
+    private String scaned_proid = null;
 
     private PrinterOrderWatcher printerOrderWatcher = new PrinterOrderWatcher() {
         @Override
@@ -243,6 +244,7 @@ public class POS extends Activity {
             @Override
             public boolean onQueryTextSubmit(String s) {
 
+
                 tmp_qty = 1.00;
                 tmp_price = 0.00;
                 tmp_amount = 0.00;
@@ -264,9 +266,10 @@ public class POS extends Activity {
                         return false;
                     }
                     prolist = getresult;
-
-
-                    List<ProductBranchRel> getproductbranchrel = QueryProductBranchRelByCode(s, posTabInfo.getBranchCode());
+                    //取得扫码商品的店内码进行下一步核查
+                    scaned_proid = getresult.get(0).getProid();
+                    //获取该门店该商品的零售价格
+                    List<ProductBranchRel> getproductbranchrel = QueryProductBranchRelByCode(scaned_proid, posTabInfo.getBranchCode());
                     if (getproductbranchrel == null) {
                         Toast.makeText(POS.this, "该编码的价格不存在！", Toast.LENGTH_LONG).show();
                         return false;
@@ -274,7 +277,8 @@ public class POS extends Activity {
                         tmp_price = getproductbranchrel.get(0).getNormalPrice();
                     }
 
-                    List<PmtDmRel> getproductdm = QueryPmtDMBranchRelByCode(s, posTabInfo.getBranchCode());
+                    //获取该门店该商品的是否有DM促销
+                    List<PmtDmRel> getproductdm = QueryPmtDMBranchRelByCode(scaned_proid, posTabInfo.getBranchCode());
                     if (getproductdm.size() == 0) {
                         Log.i(TAG, "商品DM检查-->" + s + "没有DM");
                     } else {
@@ -293,12 +297,10 @@ public class POS extends Activity {
                     productAdapter = new ProductAdapter(POS.this, prolist);
                     mRecyclerView.setAdapter(productAdapter);
 
-                    //获取该产品当店的销售价格
-
-
+                    //计算单行合计金额
                     tmp_amount = tmp_qty * tmp_price;
 
-
+                    //准备写入销售明细表
                     saleDaily = new SaleDaily();
                     saleDaily.setProId(prolist.get(0).getProid());
                     saleDaily.setBarCode(prolist.get(0).getBarcode());

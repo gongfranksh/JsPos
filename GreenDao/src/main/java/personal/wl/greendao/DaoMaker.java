@@ -33,6 +33,7 @@ public class DaoMaker {
         CreateTablePosMachine(schema);
         CreateTableMobileDevice(schema);
         CreateTablePromptDmBranchRel(schema);
+        CreateTableFrontCheck(schema);
     }
 
     private static void CreateTableProduct(Schema schema) {
@@ -259,6 +260,24 @@ public class DaoMaker {
         entity.addStringProperty("deviceid");
         entity.addStringProperty("posno");
         entity.addStringProperty("Status");
+        entity.addLongProperty("SourceId");
+    }
+
+    private static void CreateTableFrontCheck(Schema schema) {
+        Entity entity = schema.addEntity("FrontCheck");
+        entity.addIdProperty().autoincrement();
+        entity.addStringProperty("Braid");
+        entity.addDateProperty("InputDate");
+        entity.addStringProperty("PosNo");
+        entity.addStringProperty("OperatorId");
+        entity.addStringProperty("ProId");
+        entity.addStringProperty("BarCode");
+        entity.addStringProperty("ClassId");
+        entity.addDoubleProperty("CheckQty1");
+        entity.addDoubleProperty("CheckQty2");
+        entity.addStringProperty("ReceiptNo");
+        entity.addStringProperty("ShieldNo");
+        entity.addStringProperty("CheckInnerId");
         entity.addLongProperty("SourceId");
     }
 
