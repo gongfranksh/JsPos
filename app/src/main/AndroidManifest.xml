@@ -81,16 +81,20 @@
             android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="personal.wj.jspos.posinit" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".ConnectSettingActivity"
+        <activity
+            android:name=".ConnectSettingActivity"
             android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="personal.wj.jspos.ConnectSettingActivity" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="${applicationId}.provider"
@@ -117,7 +121,9 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
+        <activity
+            android:name=".FrontCheck"
+            android:label="@string/title_activity_front_check"></activity>
     </application>
 
 </manifest>

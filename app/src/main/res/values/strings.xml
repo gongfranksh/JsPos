@@ -233,6 +233,14 @@
         <item>ftp服务器设定</item>
     </string-array>
 
+
+    <string-array name="Front_check_Channel">
+        <item>盘点操作</item>
+        <item>盘点明细</item>
+        <item>盘点设定</item>
+    </string-array>
+
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="Setting_ToolBars">参数设置</string>
@@ -245,4 +253,8 @@
     <string name="label_setting_ftp_pwd">FTP密码:</string>
     <string name="label_settting_http_ip">升级服务器地址:</string>
     <string name="setting_http_qr_url_lable">电子发票前置地址:</string>
+    <string name="title_activity_front_check">FrontCheck</string>
+    <string name="menu_sync_set">数据同步</string>
+    <string name="menu_front_check">盘点作业</string>
+    <string name="frnt_check_canwei">仓位号:</string>
 </resources>

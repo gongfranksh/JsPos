@@ -1,30 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item
-        android:id="@+id/navigation_home"
-        android:icon="@drawable/ic_home_black_24dp"
-        android:title="@string/title_home" />
 
     <item
         android:id="@+id/navigation_dashboard"
-        android:icon="@drawable/ic_dashboard_black_24dp"
+        android:icon="@drawable/ic_business_center_black_24dp"
         android:title="@string/title_dashboard" />
 
     <item
         android:id="@+id/navigation_notifications"
         android:icon="@drawable/ic_sync_black_24dp"
-        android:title="@string/title_notifications" />
-    <!--<item-->
-        <!--android:id="@+id/navigation_uploadtranscation"-->
-        <!--android:icon="@drawable/ic_arrow_upward_black_24dp"-->
-        <!--android:title="@string/title_uploadtranscation" />-->
-
-    <!--<item-->
-        <!--android:id="@+id/navigation_login"-->
-        <!--android:icon="@drawable/ic_person_outline_black_24dp"-->
-        <!--android:title="登陆" />-->
-
+        android:title= "@string/menu_sync_set" />
+    <item
+        android:id="@+id/navigation_home"
+        android:icon="@drawable/ic_store_mall_directory_black_24dp"
+        android:title="@string/title_home" />
+    <item
+        android:id="@+id/navigation_frontcheck"
+        android:icon="@drawable/ic_style_black_24dp"
+        android:title="@string/menu_front_check" />
     <item
         android:id="@+id/navigation_setting"
         android:icon="@drawable/ic_settings_black_24dp"

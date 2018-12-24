@@ -80,11 +80,10 @@ public class MainActivity extends AppCompatActivity implements IReportBack {
                     LoadHelp();
                     showdetail();
 
-//                    showPreference();
                     return true;
-//                case R.id.navigation_uploadtranscation:
-//                    LoadHelp();
-//                    return true;
+                case R.id.navigation_frontcheck:
+                    LoadFrontSetting();
+                    return true;
 
                 case R.id.navigation_notifications:
                     mTextMessage.setText(R.string.title_notifications);
@@ -96,13 +95,7 @@ public class MainActivity extends AppCompatActivity implements IReportBack {
                     mTextMessage.setText("设置启动。。。。");
                     LoadSetting();
                     showdetail();
-
                     return true;
-//                case R.id.navigation_login:
-//                    LoadLogin();
-//                    showdetail();
-//
-//                    return true;
             }
             return false;
         }
@@ -193,6 +186,13 @@ public class MainActivity extends AppCompatActivity implements IReportBack {
         intent.setClass(MainActivity.this, SettingsActivity.class);
         startActivity(intent);
     }
+
+    private void LoadFrontSetting() {
+        Intent intent = new Intent();
+        intent.setClass(MainActivity.this, FrontCheck.class);
+        startActivity(intent);
+    }
+
 
     private void LoadLogin() {
         Intent intent = new Intent();
