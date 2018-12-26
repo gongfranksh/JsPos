@@ -1,113 +1,221 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     tools:context=".Front_check.Fragments.FrontCheckOperateFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <LinearLayout
+
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
         <LinearLayout
+            android:id="@+id/part1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="10dp"
-                    android:gravity="center"
-                    android:layout_weight="1"
-                    android:background="@drawable/button_decoration"
-                    android:text="@string/frnt_check_canwei"
-                    android:textColor="@color/white"
-                    android:textSize="20dp" />
-                <EditText
-                    android:id="@+id/front_check_shieldno"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:maxLines="1"
-                    android:inputType=""
-                    android:text=""
-                    android:textColor="#ea302e" />
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/button_decoration"
+                android:gravity="center"
+                android:text="日期："
+                android:textColor="@color/white"
+                android:textSize="@dimen/dp_10"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/front_check_shieldno"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="10dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:background="@drawable/button_decoration"
-                    android:text="@string/title_activity_pos"
-                    android:textColor="@color/white"
-                    android:textSize="20dp" />
-                <TextView
-                    android:id="@+id/front_check_manchine_no"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text=""
-                    android:textColor="#ea302e" />
+            <EditText
+                android:id="@+id/front_check_shieldno"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:inputType=""
+                android:maxLines="1"
+                android:text=""
+                android:textColor="#ea302e"
+                app:layout_constraintEnd_toStartOf="@+id/textView2"
+                app:layout_constraintStart_toEndOf="@+id/textView"
+                app:layout_constraintTop_toTopOf="parent" />
 
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/button_decoration"
+                android:gravity="center"
+                android:text="@string/title_activity_pos"
+                android:textColor="@color/white"
+                android:textSize="@dimen/dp_10"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/front_check_datetime"
+                app:layout_constraintStart_toEndOf="@+id/front_check_shieldno"
+                app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="10dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:background="@drawable/button_decoration"
-                    android:text="日期："
-                    android:textColor="@color/white"
-                    android:textSize="20dp" />
-                <TextView
-                    android:id="@+id/front_check_datetime"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:inputType=""
-                    android:text=""
-                    android:textColor="#ea302e" />
+            <TextView
+                android:id="@+id/front_check_datetime"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="9dp"
+                android:layout_marginRight="9dp"
+                android:layout_weight="1"
+                android:inputType=""
+                android:text=""
+                android:textColor="#ea302e"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/textView3"
+                app:layout_constraintStart_toEndOf="@+id/textView2"
+                app:layout_constraintTop_toTopOf="parent" />
 
-            </LinearLayout>
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/button_decoration"
+                android:gravity="center"
+                android:text="@string/frnt_check_canwei"
+                android:textColor="@color/white"
+                android:textSize="@dimen/dp_10"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/front_check_manchine_no"
+                app:layout_constraintStart_toEndOf="@+id/front_check_datetime"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <android.support.v7.widget.SearchView
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/front_check_manchine_no"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="#6666"
-                android:ems="13"
-                android:inputType="number"
-                android:textStyle="bold">
-
-            </android.support.v7.widget.SearchView>
+                android:text=""
+                android:textColor="#ea302e"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/textView3"
+                app:layout_constraintTop_toTopOf="parent" />
         </LinearLayout>
 
 
-        <android.support.v7.widget.RecyclerView
+        <android.support.v7.widget.SearchView
+            android:id="@+id/inputbarcode"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#ff22" >
+            android:background="#6666"
+            android:ems="13"
+            android:inputType="number"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@+id/part1"></android.support.v7.widget.SearchView>
 
-        </android.support.v7.widget.RecyclerView>
+        <TextView
+            android:id="@+id/text00001"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Hello"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@+id/inputbarcode"></TextView>
 
 
-    </LinearLayout>
+        <com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView
+            android:id="@+id/frontchecklist"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="#cccc"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text00001"></com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView>
+
+
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_dialog_dialer"
+            app:borderWidth="0dp"
+            app:fabSize="normal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+
+            app:rippleColor="@android:color/darker_gray" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginBottom="@dimen/dp_10"
+            android:src="@mipmap/ic_action_add"
+            app:backgroundTint="@android:color/holo_blue_dark"
+            app:borderWidth="0dp"
+            app:fabSize="mini"
+            app:layout_constraintBottom_toTopOf="@+id/fab"
+            app:layout_constraintRight_toRightOf="parent"
+            app:rippleColor="@android:color/darker_gray" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginBottom="@dimen/dp_10"
+            android:src="@mipmap/ic_action_delete"
+            app:backgroundTint="@android:color/holo_purple"
+            app:borderWidth="0dp"
+
+            app:fabSize="mini"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/fab1"
+            app:rippleColor="@android:color/darker_gray" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_mode_edit_black_24dp"
+            android:layout_marginBottom="@dimen/dp_10"
+            app:backgroundTint="@android:color/holo_green_dark"
+            app:borderWidth="0dp"
+            app:fabSize="mini"
+
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/fab2"
+            app:rippleColor="@android:color/darker_gray" />
+
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_find_in_page_black_24dp"
+            android:layout_marginBottom="@dimen/dp_10"
+            app:backgroundTint="@android:color/holo_blue_dark"
+            app:borderWidth="0dp"
+            app:fabSize="mini"
+
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/fab3"
+            app:rippleColor="@android:color/darker_gray" />
+    </android.support.constraint.ConstraintLayout>
 </FrameLayout>

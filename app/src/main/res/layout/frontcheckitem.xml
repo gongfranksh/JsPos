@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="personal.wl.jspos.db.InverseMethodTools" />
+
+        <variable
+            name="frontcheck"
+            type="personal.wl.jspos.pos.FrontCheck" />
+    </data>
+
+    <LinearLayout
+        android:id="@+id/fci_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/frontcheckproid"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:gravity="right"
+            android:text="@{frontcheck.proId}"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/frontcheckbarcide"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:gravity="right"
+            android:text="@{frontcheck.barCode}"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/frontcheckproname"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:gravity="right"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/frontcheckunitprice"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            />
+
+
+        <EditText
+            android:id="@+id/frontcheckinputqty"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:inputType="number"
+            android:lines="1"
+            android:maxLength="5"
+            android:text="@={ frontcheck.checkQty1}"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+        />
+
+    </LinearLayout>
+</layout>
