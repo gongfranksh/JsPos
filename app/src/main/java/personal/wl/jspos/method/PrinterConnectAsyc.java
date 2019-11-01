@@ -17,7 +17,7 @@ import personal.wl.jspos.adapter.PrintOrderStatusChange;
 import personal.wl.jspos.pos.SaleDaily;
 import personal.wl.jspos.pos.SalePayMode;
 
-import static android.support.constraint.Constraints.TAG;
+import static android.content.ContentValues.TAG;
 import static personal.wl.jspos.method.QRCodeUtil.createQRCodeBitmap;
 import static personal.wl.jspos.method.QRCodeUtil.getQRcodeContent;
 

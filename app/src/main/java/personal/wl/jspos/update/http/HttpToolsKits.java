@@ -54,7 +54,7 @@ public class HttpToolsKits {
         systemFtpInfo = new SystemFtpInfo(context);
         systemHttpInfo = new SystemHttpInfo(context);
         UPGRADE_URL = systemHttpInfo.getURL() + SETTING_UPGRADE_SQL_FILE;
-
+        README_URL= systemHttpInfo.getURL()+systemFtpInfo.getFtp_readme_file();
         VERSION_URL = systemHttpInfo.getURL() + systemFtpInfo.getFtp_joson_file();
         APK_URL = systemHttpInfo.getURL() + SETTING_APP_APK_FIlE;
     }
